@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MC22 Performance</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div><h1>MC22 PERFORMANCE</h1><p>Agent KPI Dashboard</p></div>
+  <nav><a class="active" href="index.html">Dashboard</a><a href="performance.html">Performance Table</a><button id="logoutBtn" class="nav-btn">Logout</button></nav>
+</header>
+<main>
+  <div class="dashboard-head">
+    <div><h2>Agent Performance</h2><p id="agentCount">Loading...</p></div>
+    <label class="date-box">Report Date <input type="date" id="reportDate"></label>
+  </div>
+  <section class="kpi-grid">
+    <div class="kpi-header agent-header">AGENT</div>
+    <div class="kpi-header talk-header">☎ TALKTIME<small>Total Talktime in minutes</small></div>
+    <div class="kpi-header rpc-header">👥 RPC<small>Right Party Contacts</small></div>
+    <div class="kpi-header nptp-header">🤝 NPTP<small>New Promises to Pay</small></div>
+    <div class="kpi-header npay-header">▣ NPAYMENT<small>New Payments</small></div>
+    <div id="rows" class="dashboard-rows"></div>
+  </section>
+</main>
+<div id="toast" class="toast"></div>
+<script src="config.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
