@@ -1,0 +1,34 @@
+[
+    {
+        "id": "enbd",
+        "name": "ENBD",
+        "talkTarget": 670,
+        "rpcTarget": 33,
+        "ptpTarget": 44,
+        "paymentTarget": 22
+    },
+    {
+        "id": "hsbc",
+        "name": "HSBC",
+        "talkTarget": 670,
+        "rpcTarget": 33,
+        "ptpTarget": 44,
+        "paymentTarget": 22
+    },
+    {
+        "id": "eib",
+        "name": "EIB",
+        "talkTarget": 670,
+        "rpcTarget": 33,
+        "ptpTarget": 44,
+        "paymentTarget": 22
+    },
+    {
+        "id": "dib",
+        "name": "DIB",
+        "talkTarget": 670,
+        "rpcTarget": 33,
+        "ptpTarget": 44,
+        "paymentTarget": 22
+    }
+]
