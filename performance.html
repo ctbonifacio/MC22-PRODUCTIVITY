@@ -1,50 +1,308 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MC22 Performance Table</title>
-  <link rel="stylesheet" href="styles.css">
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width,initial-scale=1">
+
+    <title>MC22 Performance Table</title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css">
+
 </head>
+
 <body>
+
 <header class="topbar">
-  <div><h1>MC22 PERFORMANCE</h1><p>Shared Performance Data</p></div>
-  <nav><a href="index.html">Dashboard</a><a class="active" href="performance.html">Performance Table</a><button id="logoutBtn" class="nav-btn">Logout</button></nav>
-</header>
-<main>
-<section class="table-section">
-  <div class="section-title">
-    <div><h2>Performance Table</h2><p>Changes are shared with other leaders after saving.</p></div>
-    <div class="actions">
-      <button id="addBtn" class="btn primary">+ Add Agent</button>
-      <button id="refreshBtn" class="btn">Refresh</button>
-      <button id="exportBtn" class="btn">Export CSV</button>
+
+    <div>
+
+        <h1>MC22 PERFORMANCE</h1>
+
+        <p>Performance Management</p>
+
     </div>
-  </div>
-  <div class="table-container">
-    <table id="dataTable">
-      <thead><tr>
-        <th>Agent</th><th>Photo</th><th>Talk Target</th><th>Talk Actual</th>
-        <th>RPC Target</th><th>RPC Actual</th><th>NPTP Target</th><th>NPTP Actual</th>
-        <th>NPayment Target</th><th>NPayment Actual</th><th>Message</th><th>Color</th><th>Actions</th>
-      </tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
+
+
+    <nav>
+
+        <a href="index.html">
+            Dashboard
+        </a>
+
+        <a
+            class="active"
+            href="performance.html">
+            Performance Table
+        </a>
+
+        <a href="banks.html">
+            Bank Targets
+        </a>
+
+        <button
+            id="logoutBtn"
+            type="button"
+            class="nav-btn">
+            Logout
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+<section class="table-section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                Performance Table
+            </h2>
+
+            <p>
+                Add and update agent productivity.
+            </p>
+
+        </div>
+
+
+        <div class="actions">
+
+          <button id="addBtn" type="button" class="btn primary">
+    + Add Agent
+</button>
+
+
+       <button id="refreshBtn" type="button" class="btn">
+    Refresh
+</button>
+
+
+            <button
+                id="exportBtn"
+                type="button"
+                class="btn">
+                Export CSV
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table id="dataTable">
+
+            <thead>
+
+            <tr>
+
+                <th>Agent</th>
+
+                <th>Bank</th>
+
+                <th>Profile</th>
+
+                <th>Talktime Actual</th>
+
+                <th>RPC Actual</th>
+
+                <th>NPTP Actual</th>
+
+                <th>NPayment Actual</th>
+
+                <th>Message</th>
+
+                <th>Color</th>
+
+                <th>Actions</th>
+
+            </tr>
+
+            </thead>
+
+
+            <tbody></tbody>
+
+        </table>
+
+    </div>
+
 </section>
+
 </main>
-<div id="toast" class="toast"></div>
-<template id="rowTemplate"><tr>
-<td><input class="agent-name"></td>
-<td class="photo-cell"><input class="photo-file" type="file" accept="image/png,image/jpeg,image/webp"><img class="photo-preview"></td>
-<td><input class="talkTarget" type="number" min="0"></td><td><input class="talkActual" type="number" min="0"></td>
-<td><input class="rpcTarget" type="number" min="0"></td><td><input class="rpcActual" type="number" min="0"></td>
-<td><input class="nptpTarget" type="number" min="0"></td><td><input class="nptpActual" type="number" min="0"></td>
-<td><input class="npayTarget" type="number" min="0"></td><td><input class="npayActual" type="number" min="0"></td>
-<td><input class="message"></td><td><input class="accent" type="color"></td>
-<td><button class="btn save-row">Save</button><button class="delete-btn">Delete</button></td>
-</tr></template>
+
+
+<template id="rowTemplate">
+
+<tr>
+
+<td>
+
+<input
+    class="agent-name"
+    placeholder="Agent name">
+
+</td>
+
+
+<td>
+
+<select class="bank-select"></select>
+
+</td>
+
+
+<td class="photo-cell">
+
+<div class="profile-upload">
+
+    <div class="profile-photo-placeholder">
+        👤
+    </div>
+
+
+    <img
+        class="profile-photo-preview"
+        alt="Agent photo">
+
+
+    <input
+        class="profile-file"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        style="display:none;">
+
+
+    <button
+        type="button"
+        class="profile-upload-btn">
+        📷 Change Photo
+    </button>
+
+
+    <button
+        type="button"
+        class="profile-remove-btn"
+        style="display:none;">
+        Remove Photo
+    </button>
+
+</div>
+
+</td>
+
+
+<td>
+
+<input
+    class="talkActual"
+    type="number"
+    min="0"
+    value="0">
+
+</td>
+
+
+<td>
+
+<input
+    class="rpcActual"
+    type="number"
+    min="0"
+    value="0">
+
+</td>
+
+
+<td>
+
+<input
+    class="nptpActual"
+    type="number"
+    min="0"
+    value="0">
+
+</td>
+
+
+<td>
+
+<input
+    class="npayActual"
+    type="number"
+    min="0"
+    value="0">
+
+</td>
+
+
+<td>
+
+<input
+    class="message"
+    placeholder="Message">
+
+</td>
+
+
+<td>
+
+<input
+    class="accent"
+    type="color"
+    value="#1478c9">
+
+</td>
+
+
+<td>
+
+<button
+    type="button"
+    class="btn save-row">
+    Save
+</button>
+
+
+<button
+    type="button"
+    class="delete-btn">
+    Delete
+</button>
+
+</td>
+
+</tr>
+
+</template>
+
+
+<div
+    id="toast"
+    class="toast">
+</div>
+
+
 <script src="config.js"></script>
-<script type="module" src="app.js"></script>
+
+<script
+    type="module"
+    src="app.js">
+</script>
+
 </body>
+
 </html>
