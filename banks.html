@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width,initial-scale=1">
+
+    <title>MC22 Bank Targets</title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css">
+
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <div>
+
+        <h1>
+            MC22 PERFORMANCE
+        </h1>
+
+        <p>
+            Bank Target Settings
+        </p>
+
+    </div>
+
+
+    <nav>
+
+        <a href="index.html">
+            Dashboard
+        </a>
+
+
+        <a href="performance.html">
+            Performance Table
+        </a>
+
+
+        <a
+            class="active"
+            href="banks.html">
+            Bank Targets
+        </a>
+
+
+        <button
+            id="logoutBtn"
+            type="button"
+            class="nav-btn">
+            Logout
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+<section class="table-section">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+                Bank Target Settings
+            </h2>
+
+            <p>
+                Customize the productivity targets for each bank.
+            </p>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                id="addBankBtn"
+                type="button"
+                class="btn primary">
+
+                + Add Bank
+
+            </button>
+
+
+            <button
+                id="refreshBankBtn"
+                type="button"
+                class="btn">
+
+                Refresh
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table id="bankTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Bank
+                    </th>
+
+                    <th>
+                        Talktime Target
+                    </th>
+
+                    <th>
+                        RPC Target
+                    </th>
+
+                    <th>
+                        NPTP Target
+                    </th>
+
+                    <th>
+                        NPayment Target
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<div
+    id="toast"
+    class="toast">
+</div>
+
+
+<script src="config.js"></script>
+
+<script
+    type="module"
+    src="app.js">
+</script>
+
+</body>
+
+</html>
