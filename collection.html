@@ -1,1 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>MC22 Collection / Amounts</title>
+
+    <link
+        rel="stylesheet"
+        href="collection.css">
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand-area">
+
+        <div class="brand">
+            MC22 PERFORMANCE
+        </div>
+
+        <div class="subtitle">
+            Collection / Amount Dashboard
+        </div>
+
+    </div>
+
+    <div class="top-actions">
+
+        <a
+            href="index.html"
+            class="back-button">
+            KPI PERFORMANCE
+        </a>
+
+        <select id="monthSelect">
+
+            <option value="AUGUST">
+                AUGUST
+            </option>
+
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
+
+            <option value="OCTOBER">
+                OCTOBER
+            </option>
+
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
+
+            <option value="DECEMBER">
+                DECEMBER
+            </option>
+
+        </select>
+
+    </div>
+
+</header>
+
+
+<main class="dashboard">
+
+    <!-- TITLE -->
+
+    <div class="section-title">
+        OVERALL COLLECTION
+    </div>
+
+
+    <!-- TOP AREA -->
+
+    <section class="top-grid">
+
+
+        <!-- PAYMENT VS TARGET -->
+
+        <div class="card payment-target-card">
+
+            <div class="card-title">
+                PAYMENT VS TARGET
+            </div>
+
+            <div class="circle-wrapper">
+
+                <div
+                    class="progress-circle"
+                    id="paymentCircle">
+
+                    <div class="circle-inner">
+                        <span id="paymentPercent">
+                            72%
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="circle-info">
+
+                Current:
+                <strong id="currentPayment">
+                    20,065
+                </strong>
+
+                • Goal:
+
+                <strong id="paymentGoal">
+                    28,000
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- OVERALL PTP -->
+
+        <div class="card">
+
+            <div class="card-title">
+                OVERALL PTP
+            </div>
+
+            <div class="ptp-main">
+
+                <div>
+                    Conversion Rate
+                    <span>
+                        (Paid vs PTP)
+                    </span>
+                </div>
+
+                <strong id="overallPTP">
+                    7%
+                </strong>
+
+            </div>
+
+            <div class="progress-bar">
+                <div
+                    id="overallPTPBar"
+                    class="progress-fill">
+                </div>
+            </div>
+
+            <div class="small-text">
+                Current: 16 • Goal: 227
+            </div>
+
+
+            <div class="bank-grid">
+
+                <div class="bank-box">
+
+                    <div class="bank-header">
+                        <span>HSBC UAE</span>
+                        <strong>68%</strong>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div
+                            class="progress-fill"
+                            style="width:68%">
+                        </div>
+                    </div>
+
+                    <small>
+                        Current 12 • Goal 60
+                    </small>
+
+                </div>
+
+
+                <div class="bank-box">
+
+                    <div class="bank-header">
+                        <span>ENBD</span>
+                        <strong>82%</strong>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div
+                            class="progress-fill"
+                            style="width:82%">
+                        </div>
+                    </div>
+
+                    <small>
+                        Current 140 • Goal 120
+                    </small>
+
+                </div>
+
+
+                <div class="bank-box">
+
+                    <div class="bank-header">
+                        <span>EIB</span>
+                        <strong>100%</strong>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div
+                            class="progress-fill"
+                            style="width:100%">
+                        </div>
+                    </div>
+
+                    <small>
+                        Current 18 • Goal 18
+                    </small>
+
+                </div>
+
+
+                <div class="bank-box">
+
+                    <div class="bank-header">
+                        <span>DIB</span>
+                        <strong>54%</strong>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div
+                            class="progress-fill"
+                            style="width:54%">
+                        </div>
+                    </div>
+
+                    <small>
+                        Current 9 • Goal 29
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="summary-grid">
+
+        <div class="card stat-card">
+
+            <div class="card-title">
+                PAYMENT COUNT
+            </div>
+
+            <div
+                class="big-number"
+                id="paymentCount">
+                16
+            </div>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+            <div class="card-title">
+                TOTAL CF AMOUNT
+            </div>
+
+            <div
+                class="big-number"
+                id="totalCF">
+                4,414
+            </div>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+            <div class="card-title">
+                PROJECTED ENDING
+            </div>
+
+            <div
+                class="big-number"
+                id="projectedEnding">
+                233,648
+            </div>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+            <div class="card-title">
+                REMAINING PTP'S
+            </div>
+
+            <div
+                class="big-number"
+                id="remainingPTP">
+                213,583
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DISTRIBUTION + RANKINGS -->
+
+    <section class="middle-grid">
+
+
+        <!-- COLLECTION DISTRIBUTION -->
+
+        <div class="card distribution-card">
+
+            <div class="card-title">
+                AUGUST COLLECTION DISTRIBUTION
+            </div>
+
+            <div class="distribution-content">
+
+                <div class="donut">
+
+                    <div class="donut-hole">
+
+                        <strong>
+                            100%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="distribution-list">
+
+                    <div class="distribution-row">
+                        <span>
+                            <i class="dot hsbc"></i>
+                            HSBC UAE (SPMAN)
+                        </span>
+
+                        <strong>
+                            23,454
+                        </strong>
+
+                        <small>
+                            7.44%
+                        </small>
+                    </div>
+
+
+                    <div class="distribution-row">
+                        <span>
+                            <i class="dot enbd"></i>
+                            ENBD
+                        </span>
+
+                        <strong>
+                            236,089,45
+                        </strong>
+
+                        <small>
+                            74.92%
+                        </small>
+                    </div>
+
+
+                    <div class="distribution-row">
+                        <span>
+                            <i class="dot eib"></i>
+                            EIB
+                        </span>
+
+                        <strong>
+                            32,100
+                        </strong>
+
+                        <small>
+                            10.18%
+                        </small>
+                    </div>
+
+
+                    <div class="distribution-row">
+                        <span>
+                            <i class="dot dib"></i>
+                            DIB
+                        </span>
+
+                        <strong>
+                            27,400
+                        </strong>
+
+                        <small>
+                            7.46%
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT RANKING -->
+
+        <div class="card ranking-card">
+
+            <div class="card-title">
+                OVERALL PAYMENT RANKING
+            </div>
+
+            <div id="paymentRanking"></div>
+
+        </div>
+
+
+        <!-- PTP RANKING -->
+
+        <div class="card ranking-card">
+
+            <div class="card-title">
+                OVERALL PTP RANKING
+            </div>
+
+            <div id="ptpRanking"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TREND -->
+
+    <section class="card trend-card">
+
+        <div class="trend-header">
+
+            <div class="card-title">
+                MC22 COLLECTION TREND
+            </div>
+
+            <button>
+                ✨ Smart Analysis
+            </button>
+
+        </div>
+
+        <div class="chart">
+
+            <div class="chart-line blue-line"></div>
+
+            <div class="chart-line green-line"></div>
+
+            <div class="chart-labels">
+
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Mar</span>
+                <span>Apr</span>
+                <span>May</span>
+                <span>Jun</span>
+                <span>Jul</span>
+                <span>Aug</span>
+                <span>Sep</span>
+                <span>Oct</span>
+                <span>Nov</span>
+                <span>Dec</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FILTERS -->
+
+    <section class="card filters-card">
+
+        <div class="filter">
+
+            <label>
+                CHOOSE DATE
+            </label>
+
+            <select>
+                <option>8/10/2023</option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                CRITERIA
+            </label>
+
+            <select>
+                <option>(All)</option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                SECTOR
+            </label>
+
+            <select>
+                <option>(All)</option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                CLIENT
+            </label>
+
+            <select>
+                <option>(All)</option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                CAMPAIGN
+            </label>
+
+            <select>
+                <option>(All)</option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                SUB CAMPAIGN
+            </label>
+
+            <select>
+                <option>(All)</option>
+            </select>
+
+        </div>
+
+    </section>
+
+
+    <!-- METRIC CARDS -->
+
+    <section class="metrics-grid">
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                ENDORSEMENT
+            </div>
+
+            <div class="metric-number">
+                428,199
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 7.23%
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                WORKED
+            </div>
+
+            <div class="metric-number">
+                388,721
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 90.78%
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                RPC
+            </div>
+
+            <div class="metric-number">
+                63,969
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 16.46%
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                PTP
+            </div>
+
+            <div class="metric-number">
+                20,663
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 3.23%
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                KEPT
+            </div>
+
+            <div class="metric-number">
+                5,320
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 25.75%
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                AMOUNT
+            </div>
+
+            <div class="metric-number">
+                106.1M
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 26.92%
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="collection.js"></script>
+
+</body>
+
+</html>
