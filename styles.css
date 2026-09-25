@@ -1307,7 +1307,42 @@ td select:focus {
 }
 
 
+/* =========================================================
+   PERFORMANCE TABLE SEARCH
+========================================================= */
 
+.agent-search {
+    width: 160px;
+    height: 36px;
+    padding: 0 12px;
+
+    border: 2px solid #d5dce5;
+    border-radius: 6px;
+
+    background: #ffffff;
+    color: #102b44;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.agent-search::placeholder {
+    color: #8a96a3;
+}
+
+.agent-search:focus {
+    border-color: #1478c9;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(20, 120, 201, 0.12);
+}
 /* =========================================================
    SETUP
 ========================================================= */
