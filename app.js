@@ -209,7 +209,7 @@ let autoBankRotationTimer = null;function startAutoBankRotation(banks) {
             await renderDashboard(false);
 
         },
-        .30 * 60 * 1000  // Rotate every 5 minutes
+        30 * 1000 // Rotate every 5 minutes
     );
 }
 
