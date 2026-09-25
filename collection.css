@@ -775,14 +775,14 @@ body {
         flex-direction: column;
     }
 
-}.dashboard-links {
+}.dashboard-tab {
     display: flex;
     gap: 8px;
     margin-top: 10px;
     flex-wrap: wrap;
 }
 
-.dashboard-link {
+.dashboard-tab {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -797,11 +797,11 @@ body {
     transition: 0.2s ease;
 }
 
-.dashboard-link:hover {
+.dashboard-tab:hover {
     background: #eaf2fb;
 }
 
-.dashboard-link.active {
+.dashboard-tab.active {
     background: #173b69;
     color: white;
     border-color: #173b69;
