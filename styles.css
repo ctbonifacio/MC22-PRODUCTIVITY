@@ -504,10 +504,8 @@ main {
 .metric-circle,
 .ring {
     position: relative;
-
     width: 100px;
     height: 100px;
-
     min-width: 100px;
 
     border-radius: 50%;
@@ -516,13 +514,13 @@ main {
     align-items: center;
     justify-content: center;
 
-    background:
-        conic-gradient(
-            var(--circle-color, #078b52) 0deg var(--circle-deg, 0deg),
-            #dedfe1 var(--circle-deg, 0deg) 360deg
-        );
+    background: conic-gradient(
+        var(--circle-color, #078b52) 0deg,
+        var(--circle-color, #078b52) var(--circle-deg, 0deg),
+        #dedfe1 var(--circle-deg, 0deg),
+        #dedfe1 360deg
+    );
 }
-
 /* =========================================================
    WHITE CENTER
 ========================================================= */
@@ -608,12 +606,7 @@ main {
    REMOVED - CIRCLE IS THE ONLY PROGRESS INDICATOR
 ========================================================= */
 
-.metric-progress,
-.metric-progress-fill,
-.progress,
-.progress div {
-    display: none !important;
-}
+
 
 .metric-progress-fill,
 .progress div {
