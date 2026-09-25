@@ -139,6 +139,11 @@ let banksCache = null;
 let activeBank = "OVERALL";
 
 /* =========================================================
+   PERFORMANCE TABLE SEARCH
+========================================================= */
+
+let performanceSearch = "";
+/* =========================================================
    LEADER AUTO BANK ROTATION
 ========================================================= */
 
@@ -194,6 +199,11 @@ let autoBankRotationTimer = null;function startAutoBankRotation(banks) {
 
             // Update target boxes
             renderMonthlyTargets(banks);
+
+
+
+
+
 
             // Update dashboard
             await renderDashboard(false);
@@ -2263,6 +2273,9 @@ async function deleteBank(
 /* =========================================================
    PERFORMANCE TABLE
 ========================================================= */
+/* =========================================================
+   PERFORMANCE TABLE
+========================================================= */
 
 async function renderPerformanceTable() {
 
@@ -2311,8 +2324,91 @@ async function renderPerformanceTable() {
     }
 
 
+    /* =====================================================
+       SEARCH FILTER
+    ===================================================== */
+
+    const search =
+        String(
+            performanceSearch || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    let filteredAgents =
+        agents;
+
+
+    if (search) {
+
+        filteredAgents =
+            agents.filter(
+                agent => {
+
+                    const name =
+                        String(
+                            agent.name || ""
+                        )
+                        .toLowerCase();
+
+
+                    const bank =
+                        String(
+                            agent.bank || ""
+                        )
+                        .toLowerCase();
+
+
+                    const profile =
+                        String(
+                            agent.profile || ""
+                        )
+                        .toLowerCase();
+
+
+                    return (
+                        name.includes(search) ||
+                        bank.includes(search) ||
+                        profile.includes(search)
+                    );
+
+                }
+            );
+    }
+
+
+    /* =====================================================
+       NO RESULTS
+    ===================================================== */
+
+    if (!filteredAgents.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="20"
+                    style="
+                        text-align:center;
+                        padding:30px;
+                        color:#777;
+                    "
+                >
+                    No agents found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    /* =====================================================
+       RENDER ROWS
+    ===================================================== */
+
     tbody.innerHTML =
-        agents.map(
+        filteredAgents.map(
             agent => `
 
             <tr
@@ -2489,6 +2585,7 @@ async function renderPerformanceTable() {
                         class="profile-file"
                     >
 
+
                     <button
                         type="button"
                         class="
@@ -2536,9 +2633,13 @@ async function renderPerformanceTable() {
         ).join("");
 
 
+    /* =====================================================
+       ROW EVENTS
+    ===================================================== */
+
     tbody
         .querySelectorAll(
-            "tr"
+            "tr[data-agent-id]"
         )
         .forEach(
             row => {
@@ -2568,6 +2669,7 @@ async function renderPerformanceTable() {
                         }
 
                         photoFile?.click();
+
                     }
                 );
 
@@ -2587,7 +2689,9 @@ async function renderPerformanceTable() {
                                 id,
                                 file
                             );
+
                         }
+
                     }
                 );
 
@@ -2601,6 +2705,7 @@ async function renderPerformanceTable() {
                         await removeAgentPhoto(
                             id
                         );
+
                     }
                 );
 
@@ -2625,10 +2730,12 @@ async function renderPerformanceTable() {
                                         ".agent-name"
                                     ).value.trim(),
 
+
                                 bank:
                                     row.querySelector(
                                         ".bank-select"
                                     ).value,
+
 
                                 talk_actual:
                                     number(
@@ -2637,12 +2744,14 @@ async function renderPerformanceTable() {
                                         ).value
                                     ),
 
+
                                 rpc_actual:
                                     number(
                                         row.querySelector(
                                             ".rpcActual"
                                         ).value
                                     ),
+
 
                                 nptp_actual:
                                     number(
@@ -2651,6 +2760,7 @@ async function renderPerformanceTable() {
                                         ).value
                                     ),
 
+
                                 npayment_actual:
                                     number(
                                         row.querySelector(
@@ -2658,20 +2768,24 @@ async function renderPerformanceTable() {
                                         ).value
                                     ),
 
+
                                 message:
                                     row.querySelector(
                                         ".messageInput"
                                     ).value,
 
+
                                 accent:
                                     row.querySelector(
                                         ".accent"
                                     ).value
+
                             }
                         );
 
 
                         await renderPerformanceTable();
+
                     }
                 );
 
@@ -2687,12 +2801,13 @@ async function renderPerformanceTable() {
                         );
 
                         await renderPerformanceTable();
+
                     }
                 );
+
             }
         );
 }
-
 
 /* =========================================================
    BANK TABLE
@@ -2919,7 +3034,21 @@ async function renderBankTable() {
             }
         );
 }
+/* =========================================================
+   PERFORMANCE TABLE SEARCH
+========================================================= */
 
+$("#agentSearch")?.addEventListener(
+    "input",
+    event => {
+
+        performanceSearch =
+            event.target.value;
+
+        renderPerformanceTable();
+
+    }
+);
 
 /* =========================================================
    ADD BUTTON
