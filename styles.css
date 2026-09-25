@@ -175,7 +175,43 @@ main {
 
     font-size: 13px;
 }
+.dashboard-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
 
+.dashboard-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 14px;
+
+    background: #ffffff;
+    color: #173b69;
+
+    border: 1px solid #d5dfeb;
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    transition: 0.2s ease;
+}
+
+.dashboard-tab:hover {
+    background: #eaf2fb;
+}
+
+.dashboard-tab.active {
+    background: #173b69;
+    color: #ffffff;
+    border-color: #173b69;
+}
 
 /* =========================================================
    MONTHLY TARGETS
