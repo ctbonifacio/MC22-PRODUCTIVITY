@@ -642,29 +642,21 @@ main {
 /* =========================================================
    METRIC COLORS
 ========================================================= */
-
-.metric-talk {
-    --metric-background: #e9f8f1;
+.metric-talk .metric-circle {
     --circle-color: #078b52;
 }
 
-.metric-rpc {
-    --metric-background: #edf5fc;
+.metric-rpc .metric-circle {
     --circle-color: #1769b4;
 }
 
-.metric-ptp,
-.metric-nptp {
-    --metric-background: #fff8e5;
+.metric-nptp .metric-circle {
     --circle-color: #dda000;
 }
 
-.metric-payment,
-.metric-npay {
-    --metric-background: #f4efff;
+.metric-npay .metric-circle {
     --circle-color: #6030b7;
 }
-
 
 /* =========================================================
    TOTAL ROW
