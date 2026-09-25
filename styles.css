@@ -1459,7 +1459,7 @@ td select:focus {
     min-width: 0 !important;
 }
 
-.dashboard-row .metric-values,pkill -f "node server.js"
+.dashboard-row .metric-values,
 .dashboard-row .metric-info {
     min-width: 0 !important;
 }
