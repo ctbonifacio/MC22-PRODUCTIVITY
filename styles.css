@@ -1479,6 +1479,12 @@ td select:focus {
     min-width: 0 !important;
 }
 
+/* CIRCLE PROGRESS ONLY */
+.metric-progress,
+.progress {
+    display: none !important;
+}
+
 
 /* =========================================================
    END
