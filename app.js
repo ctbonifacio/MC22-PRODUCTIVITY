@@ -1060,7 +1060,10 @@ function metricCard(
 
                 <div
                     class="metric-circle"
-                    style="--progress:${capped}%;"
+                       style="
+        --circle-deg:${capped * 3.6}deg;
+    "
+
                 >
                     <span>
                         ${Math.round(percent)}%
