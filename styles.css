@@ -617,24 +617,16 @@ main {
     font-weight: 900;
 }
 
-
 /* =========================================================
-   PROGRESS BAR
+   HORIZONTAL PROGRESS BAR
+   REMOVED - CIRCLE IS THE ONLY PROGRESS INDICATOR
 ========================================================= */
 
 .metric-progress,
-.progress {
-    width: 100%;
-
-    height: 14px;
-
-    margin-top: 10px;
-
-    background: #dedfe1;
-
-    border-radius: 20px;
-
-    overflow: hidden;
+.metric-progress-fill,
+.progress,
+.progress div {
+    display: none !important;
 }
 
 .metric-progress-fill,
