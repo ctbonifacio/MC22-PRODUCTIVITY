@@ -775,4 +775,34 @@ body {
         flex-direction: column;
     }
 
+}.dashboard-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
 }
+
+.dashboard-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 14px;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #173b69;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid #d5dfeb;
+    transition: 0.2s ease;
+}
+
+.dashboard-link:hover {
+    background: #eaf2fb;
+}
+
+.dashboard-link.active {
+    background: #173b69;
+    color: white;
+    border-color: #173b69;
+}t 3months)
