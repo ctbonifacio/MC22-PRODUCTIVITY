@@ -2465,6 +2465,67 @@ async function renderPerformanceTable() {
 
                 </td>
 
+    <td
+                    class="profile-photo-cell"
+                >
+
+                    ${
+                        getPhoto(agent)
+                        ?
+                        `
+                        <img
+                            class="
+                                profile-photo-preview
+                            "
+                            src="${getPhoto(
+                                agent
+                            )}"
+                            alt="Agent"
+                            style="
+                                display:block;
+                            "
+                        >
+                        `
+                        :
+                        `
+                        <div
+                            class="
+                                profile-photo-placeholder
+                            "
+                        >
+                            👤
+                        </div>
+                        `
+                    }
+
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        class="profile-file"
+                    >
+
+
+                    <button
+                        type="button"
+                        class="
+                            profile-upload-btn
+                        "
+                    >
+                        Photo
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="
+                            profile-remove-btn
+                        "
+                    >
+                        Remove
+                    </button>
+
+                </td>
 
                 <td>
 
@@ -2545,68 +2606,7 @@ async function renderPerformanceTable() {
                 </td>
 
 
-                <td
-                    class="profile-photo-cell"
-                >
-
-                    ${
-                        getPhoto(agent)
-                        ?
-                        `
-                        <img
-                            class="
-                                profile-photo-preview
-                            "
-                            src="${getPhoto(
-                                agent
-                            )}"
-                            alt="Agent"
-                            style="
-                                display:block;
-                            "
-                        >
-                        `
-                        :
-                        `
-                        <div
-                            class="
-                                profile-photo-placeholder
-                            "
-                        >
-                            👤
-                        </div>
-                        `
-                    }
-
-
-                    <input
-                        type="file"
-                        accept="image/*"
-                        class="profile-file"
-                    >
-
-
-                    <button
-                        type="button"
-                        class="
-                            profile-upload-btn
-                        "
-                    >
-                        Photo
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="
-                            profile-remove-btn
-                        "
-                    >
-                        Remove
-                    </button>
-
-                </td>
-
+            
 
                 <td>
 
