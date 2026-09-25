@@ -1040,7 +1040,6 @@ function metricCard(
             targetValueNumber
         );
 
-
     const capped =
         Math.max(
             0,
@@ -1050,11 +1049,9 @@ function metricCard(
             )
         );
 
-
     const variance =
         targetValueNumber -
         actualValue;
-
 
     return `
         <div class="metric-card ${colorClass}">
@@ -1063,80 +1060,48 @@ function metricCard(
 
                 <div
                     class="metric-circle"
-                    style="
-                        --progress:${capped}%;
-                    "
+                    style="--progress:${capped}%;"
                 >
-
                     <span>
                         ${Math.round(percent)}%
                     </span>
-
                 </div>
-
 
                 <div class="metric-values">
 
                     <div class="metric-line">
-
-                        <span>
-                            TARGET
-                        </span>
+                        <span>TARGET</span>
 
                         <strong>
                             ${formatNumber(
                                 targetValueNumber
                             )}
                         </strong>
-
                     </div>
 
-
                     <div class="metric-line">
-
-                        <span>
-                            ACTUAL
-                        </span>
+                        <span>ACTUAL</span>
 
                         <strong>
                             ${formatNumber(
                                 actualValue
                             )}
                         </strong>
-
                     </div>
 
-
                     <div class="metric-line">
-
-                        <span>
-                            VARIANCE
-                        </span>
+                        <span>VARIANCE</span>
 
                         <strong>
                             ${formatNumber(
                                 variance
                             )}
                         </strong>
-
                     </div>
 
                 </div>
 
             </div>
-
-
-            <div class="metric-progress">
-
-                <div
-                    class="metric-progress-fill"
-                    style="
-                        width:${capped}%;
-                    "
-                ></div>
-
-            </div>
-
 
             <div class="metric-ratio">
                 ${formatNumber(actualValue)}
@@ -1147,7 +1112,6 @@ function metricCard(
         </div>
     `;
 }
-
 
 /* =========================================================
    AGENT DASHBOARD CARD
