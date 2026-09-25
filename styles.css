@@ -513,29 +513,15 @@ main {
     border-radius: 50%;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     background:
         conic-gradient(
-            var(
-                --circle-color,
-                var(--accent, #078b52)
-            )
-            var(
-                --circle-deg,
-                var(--percent, 0%)
-            ),
-
-            #dedfe1
-            var(
-                --circle-deg,
-                var(--percent, 0%)
-            )
+            var(--circle-color, #078b52) 0deg var(--circle-deg, 0deg),
+            #dedfe1 var(--circle-deg, 0deg) 360deg
         );
 }
-
 
 /* =========================================================
    WHITE CENTER
