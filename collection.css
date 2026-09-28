@@ -1,1235 +1,1374 @@
-/* =========================================================
-   MC22 COLLECTION / AMOUNTS
-========================================================= */
+<!DOCTYPE html>
+<html lang="en">
 
-* {
-    box-sizing: border-box;
-}
+<head>
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-}
+    <meta charset="UTF-8">
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f1f3f6;
-    color: #172033;
-}
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
+    <title>MC22 Collection / Amounts</title>
 
-/* =========================================================
-   TOP NAVIGATION
-========================================================= */
+    <link
+        rel="stylesheet"
+        href="collection.css">
 
-.topbar {
-    height: 54px;
-    background: #102f54;
-    color: white;
+    <!-- Excel Reader -->
+    <script
+        src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js">
+    </script>
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+</head>
 
-    padding: 7px 18px;
-}
 
-.brand-area {
-    display: flex;
-    flex-direction: column;
-}
+<body>
 
-.brand {
-    font-size: 18px;
-    font-weight: 800;
-}
 
-.subtitle {
-    font-size: 11px;
-    opacity: .75;
-    margin-top: 2px;
-}
+<!-- =========================================================
+     TOP NAVIGATION
+========================================================= -->
 
-.top-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+<header class="topbar">
 
-.back-button {
-    color: white;
-    background: #244b77;
+    <div class="brand-area">
 
-    text-decoration: none;
+        <div class="brand">
+            MC22 PERFORMANCE
+        </div>
 
-    padding: 7px 12px;
+        <div class="subtitle">
+            Collection / Amounts
+        </div>
 
-    border-radius: 5px;
+    </div>
 
-    font-size: 11px;
-    font-weight: 700;
-}
 
-.top-actions select {
-    background: #244b77;
-    color: white;
+    <div class="top-actions">
 
-    border: 1px solid #42658b;
+        <a
+            href="index.html"
+            class="back-button">
 
-    border-radius: 5px;
+            <span class="back-icon">▣</span>
+            Agent KPI Dashboard
 
-    padding: 7px 10px;
+        </a>
 
-    font-size: 11px;
-}
 
+        <div class="month-label">
+            MONTH SELECTION
+        </div>
 
-/* =========================================================
-   MAIN
-========================================================= */
 
-.dashboard {
-    width: calc(100% - 70px);
-    max-width: 1500px;
+        <select
+            id="monthSelect">
 
-    margin: 18px auto 40px;
-}
+            <option value="AUGUST">
+                AUGUST
+            </option>
 
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
 
-/* =========================================================
-   COLLECTION NAV
-========================================================= */
+            <option value="OCTOBER">
+                OCTOBER
+            </option>
 
-.collection-tabs {
-    display: flex;
-    gap: 8px;
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
 
-    margin-bottom: 14px;
-}
+            <option value="DECEMBER">
+                DECEMBER
+            </option>
 
-.collection-tab {
-    background: white;
+        </select>
 
-    border: 1px solid #d4deea;
+    </div>
 
-    color: #173b69;
+</header>
 
-    padding: 9px 16px;
 
-    border-radius: 6px;
 
-    font-size: 11px;
-    font-weight: 800;
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-    cursor: pointer;
-}
+<main class="dashboard">
 
-.collection-tab.active {
-    background: #173b69;
-    border-color: #173b69;
 
-    color: white;
-}
+    <!-- =====================================================
+         PAGE TITLE
+    ====================================================== -->
 
-.collection-tab:hover {
-    background: #eaf2fb;
-}
+    <div class="section-title">
+        OVERALL COLLECTION
+    </div>
 
-.collection-tab.active:hover {
-    background: #173b69;
-}
 
 
-/* =========================================================
-   SECTION TITLE
-========================================================= */
+    <!-- =====================================================
+         EXCEL UPLOAD CONTAINER
+    ====================================================== -->
 
-.section-title {
-    background: #173a78;
-    color: white;
+    <section class="excel-upload-card">
 
-    text-align: center;
 
-    font-size: 12px;
-    font-weight: 800;
+        <div class="excel-upload-left">
 
-    padding: 8px;
+            <div class="excel-icon">
+                XLS
+            </div>
 
-    border-radius: 6px;
 
-    margin-bottom: 12px;
-}
+            <div>
 
+                <div class="excel-title">
+                    COLLECTION DATA
+                </div>
 
-/* =========================================================
-   CARD
-========================================================= */
+                <div class="excel-description">
 
-.card {
-    background: white;
+                    Upload one Excel workbook containing
+                    PTP, PAYMENTS, DAILY REMARKS and
+                    MASTERLIST INVENTORY sheets.
 
-    border: 1px solid #dce3eb;
+                </div>
 
-    border-radius: 9px;
+            </div>
 
-    padding: 13px;
+        </div>
 
-    box-shadow:
-        0 1px 2px rgba(0,0,0,.03);
-}
 
-.card-title {
-    color: #526b87;
 
-    font-size: 10px;
-    font-weight: 700;
+        <div class="excel-upload-center">
 
-    margin-bottom: 9px;
-}
+            <label
+                for="excelFile"
+                class="choose-excel">
 
+                CHOOSE EXCEL FILE
 
-/* =========================================================
-   TOP GRID
-========================================================= */
+            </label>
 
-.top-grid {
-    display: grid;
+            <input
+                type="file"
+                id="excelFile"
+                accept=".xlsx,.xls">
 
-    grid-template-columns:
-        1fr
-        1fr;
 
-    gap: 12px;
-}
+            <div
+                id="selectedFile"
+                class="selected-file">
 
+                No file selected
 
-/* =========================================================
-   PAYMENT CIRCLE
-========================================================= */
+            </div>
 
-.payment-card {
-    min-height: 255px;
+        </div>
 
-    display: flex;
-    flex-direction: column;
-}
 
-.circle-area {
-    flex: 1;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        <div class="excel-upload-right">
 
-.progress-circle {
-    width: 112px;
-    height: 112px;
+            <button
+                type="button"
+                id="uploadExcelButton"
+                class="upload-excel-button">
 
-    border-radius: 50%;
+                UPLOAD EXCEL
 
-    background:
-        conic-gradient(
-            #1672f5 0% 72%,
-            #e7edf5 72% 100%
-        );
+            </button>
 
-    display: flex;
+        </div>
 
-    justify-content: center;
-    align-items: center;
-}
 
-.circle-inner {
-    width: 84px;
-    height: 84px;
+    </section>
 
-    background: white;
 
-    border-radius: 50%;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    <!-- =====================================================
+         EXCEL STATUS
+    ====================================================== -->
 
-.circle-inner strong {
-    font-size: 21px;
-}
+    <section
+        id="excelStatus"
+        class="excel-status hidden">
 
-.circle-info {
-    text-align: center;
+        <div class="status-title">
+            WORKBOOK STATUS
+        </div>
 
-    color: #637891;
+        <div
+            id="statusMessage"
+            class="status-message">
+        </div>
 
-    font-size: 10px;
-}
 
+        <div class="sheet-status-grid">
 
-/* =========================================================
-   OVERALL PTP
-========================================================= */
 
-.ptp-header {
-    display: flex;
+            <div
+                id="sheetPTP"
+                class="sheet-status">
 
-    justify-content: space-between;
-    align-items: center;
+                <span class="status-dot"></span>
 
-    font-size: 10px;
+                <div>
 
-    color: #526b87;
-}
+                    <strong>
+                        PTP
+                    </strong>
 
-.ptp-header span {
-    display: block;
+                    <small>
+                        Not loaded
+                    </small>
 
-    font-size: 9px;
+                </div>
 
-    margin-top: 2px;
-}
+            </div>
 
-.ptp-header > strong {
-    color: #172033;
 
-    font-size: 19px;
-}
 
-.progress-bar {
-    height: 6px;
+            <div
+                id="sheetPayments"
+                class="sheet-status">
 
-    background: #e4eaf1;
+                <span class="status-dot"></span>
 
-    border-radius: 10px;
+                <div>
 
-    overflow: hidden;
+                    <strong>
+                        PAYMENTS
+                    </strong>
 
-    margin-top: 7px;
-}
+                    <small>
+                        Not loaded
+                    </small>
 
-.progress-fill {
-    height: 100%;
+                </div>
 
-    background: #176ff2;
+            </div>
 
-    border-radius: inherit;
-}
 
-.small-text {
-    color: #75869b;
 
-    font-size: 8px;
+            <div
+                id="sheetRemarks"
+                class="sheet-status">
 
-    margin-top: 5px;
-}
+                <span class="status-dot"></span>
 
+                <div>
 
-/* =========================================================
-   BANK GRID
-========================================================= */
+                    <strong>
+                        DAILY REMARKS
+                    </strong>
 
-.bank-grid {
-    display: grid;
+                    <small>
+                        Not loaded
+                    </small>
 
-    grid-template-columns:
-        1fr
-        1fr;
+                </div>
 
-    gap: 8px;
+            </div>
 
-    margin-top: 12px;
-}
 
-.bank-box {
-    border: 1px solid #dce4ed;
 
-    border-radius: 7px;
+            <div
+                id="sheetInventory"
+                class="sheet-status">
 
-    padding: 8px;
-}
+                <span class="status-dot"></span>
 
-.bank-header {
-    display: flex;
+                <div>
 
-    justify-content: space-between;
+                    <strong>
+                        MASTERLIST INVENTORY
+                    </strong>
 
-    font-size: 9px;
-    font-weight: 700;
-}
+                    <small>
+                        Not loaded
+                    </small>
 
-.bank-header strong {
-    color: #176ff2;
-}
+                </div>
 
-.bank-box small {
-    display: block;
+            </div>
 
-    margin-top: 5px;
 
-    color: #8090a3;
+        </div>
 
-    font-size: 8px;
-}
+    </section>
 
 
-/* =========================================================
-   SUMMARY
-========================================================= */
 
-.summary-grid {
-    display: grid;
+    <!-- =====================================================
+         DASHBOARD
+    ====================================================== -->
 
-    grid-template-columns:
-        1fr
-        1fr
-        1fr
-        1fr;
 
-    gap: 12px;
+    <!-- TOP ROW -->
 
-    margin-top: 12px;
-}
+    <section class="top-grid">
 
-.stat-card {
-    min-height: 108px;
-}
 
-.big-number {
-    margin-top: 16px;
+        <!-- PAYMENT VS TARGET -->
 
-    font-size: 23px;
-    font-weight: 800;
-}
+        <div class="card payment-target-card">
 
-.smart-button {
-    border: 0;
+            <div class="card-title">
+                PAYMENT VS TARGET
+            </div>
 
-    background: #eef5ff;
 
-    color: #176ff2;
+            <div class="circle-wrapper">
 
-    border-radius: 10px;
+                <div
+                    class="progress-circle"
+                    id="paymentCircle">
 
-    padding: 4px 8px;
+                    <div class="circle-inner">
 
-    font-size: 8px;
+                        <span id="paymentPercent">
+                            72%
+                        </span>
 
-    margin-top: 6px;
+                    </div>
 
-    cursor: pointer;
-}
+                </div>
 
+            </div>
 
-/* =========================================================
-   MIDDLE
-========================================================= */
 
-.middle-grid {
-    display: grid;
+            <div class="circle-info">
 
-    grid-template-columns:
-        1.7fr
-        1fr
-        1fr;
+                Current:
 
-    gap: 12px;
+                <strong id="currentPayment">
+                    20,065
+                </strong>
 
-    margin-top: 12px;
-}
+                • Goal:
 
+                <strong id="paymentGoal">
+                    28,000
+                </strong>
 
-/* =========================================================
-   DISTRIBUTION
-========================================================= */
+            </div>
 
-.distribution {
-    display: flex;
+        </div>
 
-    align-items: center;
 
-    gap: 25px;
 
-    min-height: 145px;
-}
+        <!-- OVERALL PTP -->
 
-.donut {
-    width: 125px;
-    height: 125px;
+        <div class="card">
 
-    min-width: 125px;
+            <div class="card-title">
+                OVERALL PTP
+            </div>
 
-    border-radius: 50%;
 
-    background:
-        conic-gradient(
-            #173a78 0% 74.92%,
-            #2779ef 74.92% 85.10%,
-            #4c8cf2 85.10% 92.56%,
-            #8cbcff 92.56% 100%
-        );
+            <div class="ptp-main">
 
-    display: flex;
+                <div>
 
-    justify-content: center;
-    align-items: center;
-}
+                    Conversion Rate
 
-.donut-hole {
-    width: 74px;
-    height: 74px;
+                    <span>
+                        (Paid vs PTP)
+                    </span>
 
-    background: white;
+                </div>
 
-    border-radius: 50%;
-}
 
-.distribution-list {
-    flex: 1;
-}
+                <strong id="overallPTP">
+                    7%
+                </strong>
 
-.distribution-row {
-    display: grid;
+            </div>
 
-    grid-template-columns:
-        1fr
-        auto
-        auto;
 
-    gap: 9px;
+            <div class="progress-bar">
 
-    align-items: center;
+                <div
+                    id="overallPTPBar"
+                    class="progress-fill"
+                    style="width:7%">
+                </div>
 
-    padding: 6px 0;
+            </div>
 
-    border-bottom: 1px solid #edf1f5;
 
-    font-size: 9px;
-}
+            <div class="small-text">
 
-.distribution-row strong {
-    font-size: 9px;
-}
+                Current: 16 • Goal: 227
 
-.distribution-row small {
-    color: #7c8da1;
-}
+            </div>
 
-.dot {
-    width: 8px;
-    height: 8px;
 
-    display: inline-block;
 
-    border-radius: 50%;
+            <div class="bank-grid">
 
-    margin-right: 5px;
-}
 
-.hsbc {
-    background: #1b73ef;
-}
+                <div class="bank-box">
 
-.enbd {
-    background: #173a78;
-}
+                    <div class="bank-header">
 
-.eib {
-    background: #4c8cf2;
-}
+                        <span>
+                            HSBC UAE
+                        </span>
 
-.dib {
-    background: #8cbcff;
-}
+                        <strong>
+                            68%
+                        </strong>
 
+                    </div>
 
-/* =========================================================
-   RANKINGS
-========================================================= */
 
-.ranking-card {
-    min-height: 210px;
-}
+                    <div class="progress-bar">
 
-.ranking-top {
-    display: grid;
+                        <div
+                            class="progress-fill"
+                            style="width:68%">
+                        </div>
 
-    grid-template-columns:
-        1fr
-        1fr
-        1fr;
+                    </div>
 
-    gap: 4px;
 
-    margin-bottom: 8px;
-}
+                    <small>
+                        Current 12 • Goal 60
+                    </small>
 
-.ranking-top > div {
-    text-align: center;
+                </div>
 
-    position: relative;
-}
 
-.rank-badge {
-    position: absolute;
 
-    top: -2px;
-    left: 8px;
+                <div class="bank-box">
 
-    width: 15px;
-    height: 15px;
+                    <div class="bank-header">
 
-    border-radius: 50%;
+                        <span>
+                            ENBD
+                        </span>
 
-    color: white;
+                        <strong>
+                            82%
+                        </strong>
 
-    font-size: 8px;
+                    </div>
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.first {
-    background: #ed9800;
-}
+                    <div class="progress-bar">
 
-.second {
-    background: #91a0b1;
-}
+                        <div
+                            class="progress-fill"
+                            style="width:82%">
+                        </div>
 
-.third {
-    background: #bb6013;
-}
+                    </div>
 
-.avatar {
-    width: 34px;
-    height: 34px;
 
-    border-radius: 50%;
+                    <small>
+                        Current 140 • Goal 120
+                    </small>
 
-    display: flex;
+                </div>
 
-    align-items: center;
-    justify-content: center;
 
-    background: #153a79;
 
-    color: white;
+                <div class="bank-box">
 
-    font-size: 9px;
-    font-weight: 800;
+                    <div class="bank-header">
 
-    margin: 0 auto 4px;
-}
+                        <span>
+                            EIB
+                        </span>
 
-.avatar.blue {
-    background: #176ff2;
-}
+                        <strong>
+                            100%
+                        </strong>
 
-.avatar.purple {
-    background: #695ce8;
-}
+                    </div>
 
-.avatar.gray {
-    background: #697a91;
-}
 
-.avatar.cyan {
-    background: #159cc8;
-}
+                    <div class="progress-bar">
 
-.avatar.violet {
-    background: #6360e8;
-}
+                        <div
+                            class="progress-fill"
+                            style="width:100%">
+                        </div>
 
-.ranking-top small {
-    display: block;
+                    </div>
 
-    font-size: 8px;
 
-    color: #687c94;
-}
+                    <small>
+                        Current 18 • Goal 18
+                    </small>
 
-.ranking-top strong {
-    display: block;
+                </div>
 
-    font-size: 9px;
 
-    margin-top: 2px;
-}
 
-.ranking-row {
-    display: grid;
+                <div class="bank-box">
 
-    grid-template-columns:
-        18px
-        27px
-        1fr
-        auto;
+                    <div class="bank-header">
 
-    align-items: center;
+                        <span>
+                            DIB
+                        </span>
 
-    gap: 5px;
+                        <strong>
+                            54%
+                        </strong>
 
-    padding: 5px 0;
+                    </div>
 
-    border-bottom: 1px solid #edf1f5;
 
-    font-size: 9px;
-}
+                    <div class="progress-bar">
 
-.ranking-row .avatar {
-    width: 25px;
-    height: 25px;
+                        <div
+                            class="progress-fill"
+                            style="width:54%">
+                        </div>
 
-    margin: 0;
-}
+                    </div>
 
 
-/* =========================================================
-   TREND
-========================================================= */
+                    <small>
+                        Current 9 • Goal 29
+                    </small>
 
-.trend-card {
-    margin-top: 12px;
-}
+                </div>
 
-.trend-header {
-    display: flex;
 
-    justify-content: space-between;
-    align-items: center;
-}
+            </div>
 
-.chart {
-    height: 210px;
+        </div>
 
-    position: relative;
 
-    margin-top: 5px;
+    </section>
 
-    overflow: hidden;
-}
 
-.chart-grid {
-    position: absolute;
 
-    left: 0;
-    right: 0;
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
 
-    border-top: 1px dashed #dfe6ef;
-}
+    <section class="summary-grid">
 
-.line1 {
-    top: 20%;
-}
 
-.line2 {
-    top: 50%;
-}
+        <div class="card stat-card">
 
-.line3 {
-    top: 80%;
-}
+            <div class="card-title">
+                PAYMENT COUNT
+            </div>
 
-.trend-svg {
-    width: 100%;
-    height: 180px;
+            <div
+                id="paymentCount"
+                class="big-number">
 
-    position: absolute;
+                16
 
-    left: 0;
-    top: 5px;
-}
+            </div>
 
-.blue-chart,
-.green-chart {
-    fill: none;
+        </div>
 
-    stroke-width: 2;
-}
 
-.blue-chart {
-    stroke: #176ff2;
-}
 
-.green-chart {
-    stroke: #12a05a;
-}
+        <div class="card stat-card">
 
-.months {
-    position: absolute;
+            <div class="card-title">
+                TOTAL CF AMOUNT
+            </div>
 
-    bottom: 10px;
+            <div
+                id="totalCF"
+                class="big-number">
 
-    left: 0;
-    right: 0;
+                4,414
 
-    display: flex;
+            </div>
 
-    justify-content: space-between;
+            <div class="smart-analysis">
+                ✨ Smart Analysis
+            </div>
 
-    color: #8292a7;
+        </div>
 
-    font-size: 8px;
-}
 
-.chart-legend {
-    text-align: center;
 
-    font-size: 9px;
+        <div class="card stat-card">
 
-    color: #526b87;
-}
+            <div class="card-title">
+                PROJECTED ENDING
+            </div>
 
-.chart-legend span {
-    margin: 0 5px;
-}
+            <div
+                id="projectedEnding"
+                class="big-number">
 
-.legend-blue,
-.legend-green {
-    width: 9px;
-    height: 9px;
+                233,648
 
-    display: inline-block;
+            </div>
 
-    border-radius: 50%;
+        </div>
 
-    margin-right: 3px;
-}
 
-.legend-blue {
-    background: #176ff2;
-}
 
-.legend-green {
-    background: #12a05a;
-}
+        <div class="card stat-card">
 
+            <div class="card-title">
+                REMAINING PTP'S
+            </div>
 
-/* =========================================================
-   FILTERS
-========================================================= */
+            <div
+                id="remainingPTP"
+                class="big-number">
 
-.filters-card {
-    display: grid;
+                213,583
 
-    grid-template-columns:
-        repeat(6, 1fr);
+            </div>
 
-    gap: 10px;
+            <div class="smart-analysis">
+                ✨ Smart Analysis
+            </div>
 
-    margin-top: 12px;
-}
+        </div>
 
-.filter label {
-    display: block;
 
-    color: #637891;
+    </section>
 
-    font-size: 8px;
-    font-weight: 700;
 
-    margin-bottom: 5px;
-}
 
-.filter select {
-    width: 100%;
+    <!-- =====================================================
+         DISTRIBUTION + RANKINGS
+    ====================================================== -->
 
-    padding: 8px;
+    <section class="middle-grid">
 
-    border: 1px solid #d7e0ea;
 
-    border-radius: 6px;
+        <!-- COLLECTION DISTRIBUTION -->
 
-    background: white;
+        <div class="card distribution-card">
 
-    color: #24384f;
+            <div class="card-title">
+                AUGUST COLLECTION DISTRIBUTION
+            </div>
 
-    font-size: 9px;
-}
 
+            <div class="distribution-content">
 
-/* =========================================================
-   METRICS
-========================================================= */
 
-.metrics-grid {
-    display: grid;
+                <div class="donut">
 
-    grid-template-columns:
-        repeat(6, 1fr);
+                    <div class="donut-hole">
+                    </div>
 
-    gap: 12px;
+                </div>
 
-    margin-top: 12px;
-}
 
-.metric-card {
-    background: white;
+                <div class="distribution-list">
 
-    border: 1px solid #dce3eb;
 
-    border-radius: 8px;
+                    <div class="distribution-row">
 
-    padding: 12px;
+                        <span>
+                            <span class="dot hsbc"></span>
+                            HSBC UAE (SPMAN)
+                        </span>
 
-    min-width: 0;
-}
+                        <strong>
+                            23,454
+                        </strong>
 
-.metric-title {
-    color: #637891;
+                        <small>
+                            (7.44%)
+                        </small>
 
-    font-size: 8px;
-    font-weight: 700;
-}
+                    </div>
 
-.metric-number {
-    font-size: 19px;
-    font-weight: 800;
 
-    margin-top: 5px;
-}
+                    <div class="distribution-row">
 
-.metric-change {
-    font-size: 8px;
+                        <span>
+                            <span class="dot enbd"></span>
+                            ENBD
+                        </span>
 
-    margin-top: 4px;
-}
+                        <strong>
+                            236,089.45
+                        </strong>
 
-.positive {
-    color: #0a9a57;
-}
+                        <small>
+                            (74.92%)
+                        </small>
 
-.metric-lines {
-    margin-top: 10px;
-}
+                    </div>
 
-.metric-lines span {
-    display: flex;
 
-    justify-content: space-between;
+                    <div class="distribution-row">
 
-    padding: 4px 0;
+                        <span>
+                            <span class="dot eib"></span>
+                            EIB
+                        </span>
 
-    border-bottom: 1px solid #edf1f5;
+                        <strong>
+                            32,100
+                        </strong>
 
-    font-size: 8px;
+                        <small>
+                            (10.18%)
+                        </small>
 
-    color: #647890;
-}
+                    </div>
 
-.metric-lines b {
-    color: #233a55;
-    font-weight: 600;
-}
 
+                    <div class="distribution-row">
 
-/* =========================================================
-   DATA PAGE
-========================================================= */
+                        <span>
+                            <span class="dot dib"></span>
+                            DIB
+                        </span>
 
-.upload-card {
-    background: white;
+                        <strong>
+                            27,400
+                        </strong>
 
-    border: 1px solid #dce3eb;
+                        <small>
+                            (7.46%)
+                        </small>
 
-    border-radius: 9px;
+                    </div>
 
-    padding: 13px;
 
-    display: flex;
+                </div>
 
-    justify-content: space-between;
+            </div>
 
-    align-items: center;
+        </div>
 
-    gap: 15px;
 
-    margin-bottom: 12px;
-}
 
-.upload-title {
-    color: #173a78;
+        <!-- PAYMENT RANKING -->
 
-    font-size: 11px;
-    font-weight: 800;
-}
+        <div class="card ranking-card">
 
-.upload-description {
-    color: #7a8ba0;
+            <div class="card-title">
+                OVERALL PAYMENT RANKING
+            </div>
 
-    font-size: 9px;
 
-    margin-top: 3px;
-}
+            <div class="ranking-item">
 
-.upload-controls {
-    display: flex;
+                <div class="rank gold">
+                    1
+                </div>
 
-    gap: 8px;
-}
+                <div>
 
-.file-button,
-.upload-button,
-.clear-button {
-    padding: 8px 12px;
+                    <span class="agent-avatar blue">
+                        AK
+                    </span>
 
-    border-radius: 6px;
+                    <span class="agent-name">
+                        A. Khalil
+                    </span>
 
-    font-size: 9px;
-    font-weight: 800;
+                </div>
 
-    cursor: pointer;
-}
+                <div class="agent-value">
+                    4,780
+                </div>
 
-.file-button {
-    background: #eef4fb;
+            </div>
 
-    border: 1px solid #d5dfeb;
 
-    color: #173b69;
-}
+            <div class="ranking-item">
 
-.file-button input {
-    display: none;
-}
+                <div class="rank silver">
+                    2
+                </div>
 
-.upload-button {
-    background: #173a78;
+                <div>
 
-    border: 1px solid #173a78;
+                    <span class="agent-avatar cyan">
+                        MS
+                    </span>
 
-    color: white;
-}
+                    <span class="agent-name">
+                        M. Saeed
+                    </span>
 
-.data-controls {
-    background: white;
+                </div>
 
-    border: 1px solid #dce3eb;
+                <div class="agent-value">
+                    7,725
+                </div>
 
-    border-radius: 9px;
+            </div>
 
-    padding: 11px;
 
-    display: grid;
+            <div class="ranking-item">
 
-    grid-template-columns:
-        2fr 1fr 1fr auto;
+                <div class="rank bronze">
+                    3
+                </div>
 
-    gap: 8px;
+                <div>
 
-    margin-bottom: 10px;
-}
+                    <span class="agent-avatar purple">
+                        LH
+                    </span>
 
-.data-controls input,
-.data-controls select {
-    width: 100%;
+                    <span class="agent-name">
+                        L. Haddad
+                    </span>
 
-    padding: 8px 9px;
+                </div>
 
-    border: 1px solid #d7e0ea;
+                <div class="agent-value">
+                    2,790
+                </div>
 
-    border-radius: 6px;
+            </div>
 
-    background: white;
 
-    font-size: 9px;
-}
+            <div class="ranking-item">
 
-.clear-button {
-    border: 1px solid #dce3eb;
+                <div class="rank">
+                    4
+                </div>
 
-    background: #f7f9fb;
+                <div>
 
-    color: #526b87;
-}
+                    <span class="agent-avatar gray">
+                        RN
+                    </span>
 
-.record-bar {
-    background: #173a78;
+                    <span class="agent-name">
+                        R. Nasser
+                    </span>
 
-    color: white;
+                </div>
 
-    padding: 8px 12px;
+                <div class="agent-value">
+                    1,980
+                </div>
 
-    text-align: right;
+            </div>
 
-    font-size: 9px;
 
-    border-radius: 6px 6px 0 0;
-}
+            <div class="ranking-item">
 
-.table-card {
-    background: white;
+                <div class="rank">
+                    5
+                </div>
 
-    border: 1px solid #dce3eb;
+                <div>
 
-    border-radius: 0 0 8px 8px;
+                    <span class="agent-avatar cyan">
+                        SO
+                    </span>
 
-    overflow: hidden;
-}
+                    <span class="agent-name">
+                        S. Omar
+                    </span>
 
-.table-wrapper {
-    overflow: auto;
+                </div>
 
-    max-height: 550px;
-}
+                <div class="agent-value">
+                    1,640
+                </div>
 
-table {
-    width: 100%;
+            </div>
 
-    min-width: 1400px;
 
-    border-collapse: collapse;
+            <div class="ranking-item">
 
-    font-size: 8px;
-}
+                <div class="rank">
+                    6
+                </div>
 
-th {
-    position: sticky;
+                <div>
 
-    top: 0;
+                    <span class="agent-avatar purple">
+                        TF
+                    </span>
 
-    z-index: 2;
+                    <span class="agent-name">
+                        T. Farouk
+                    </span>
 
-    background: #173a78;
+                </div>
 
-    color: white;
+                <div class="agent-value">
+                    1,320
+                </div>
 
-    padding: 8px;
+            </div>
 
-    text-align: left;
 
-    white-space: nowrap;
-}
+        </div>
 
-td {
-    padding: 7px 8px;
 
-    border-bottom: 1px solid #edf1f5;
 
-    white-space: nowrap;
-}
+        <!-- PTP RANKING -->
 
-.empty-message {
-    text-align: center;
+        <div class="card ranking-card">
 
-    color: #7c8da1;
+            <div class="card-title">
+                OVERALL PTP RANKING
+            </div>
 
-    padding: 35px;
-}
 
+            <div class="ranking-item">
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+                <div class="rank gold">
+                    1
+                </div>
 
-@media (max-width: 1100px) {
+                <div>
 
-    .middle-grid {
-        grid-template-columns: 1fr 1fr;
-    }
+                    <span class="agent-avatar blue">
+                        AK
+                    </span>
 
-    .distribution-card {
-        grid-column: span 2;
-    }
+                    <span class="agent-name">
+                        A. Khalil
+                    </span>
 
-    .metrics-grid {
-        grid-template-columns:
-            repeat(3, 1fr);
-    }
+                </div>
 
-    .filters-card {
-        grid-template-columns:
-            repeat(3, 1fr);
-    }
-}
+                <div class="agent-value">
+                    5,200
+                </div>
 
+            </div>
 
-@media (max-width: 800px) {
 
-    .dashboard {
-        width: calc(100% - 24px);
-    }
+            <div class="ranking-item">
 
-    .topbar {
-        height: auto;
+                <div class="rank silver">
+                    2
+                </div>
 
-        flex-direction: column;
+                <div>
 
-        align-items: flex-start;
+                    <span class="agent-avatar cyan">
+                        MS
+                    </span>
 
-        gap: 8px;
-    }
+                    <span class="agent-name">
+                        M. Saeed
+                    </span>
 
-    .top-actions {
-        width: 100%;
-    }
+                </div>
 
-    .top-actions select {
-        flex: 1;
-    }
+                <div class="agent-value">
+                    4,100
+                </div>
 
-    .top-grid,
-    .middle-grid {
-        grid-template-columns: 1fr;
-    }
+            </div>
 
-    .distribution-card {
-        grid-column: auto;
-    }
 
-    .summary-grid {
-        grid-template-columns:
-            1fr 1fr;
-    }
+            <div class="ranking-item">
 
-    .metrics-grid {
-        grid-template-columns:
-            1fr 1fr;
-    }
+                <div class="rank bronze">
+                    3
+                </div>
 
-    .filters-card {
-        grid-template-columns:
-            1fr 1fr;
-    }
-}
+                <div>
 
+                    <span class="agent-avatar purple">
+                        LH
+                    </span>
 
-@media (max-width: 600px) {
+                    <span class="agent-name">
+                        L. Haddad
+                    </span>
 
-    .collection-tabs {
-        overflow-x: auto;
-        padding-bottom: 4px;
-    }
+                </div>
 
-    .collection-tab {
-        white-space: nowrap;
-    }
+                <div class="agent-value">
+                    3,650
+                </div>
 
-    .summary-grid,
-    .metrics-grid,
-    .filters-card {
-        grid-template-columns: 1fr;
-    }
+            </div>
 
-    .upload-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 
-    .data-controls {
-        grid-template-columns: 1fr;
-    }
+            <div class="ranking-item">
 
-    .distribution {
-        flex-direction: column;
-    }
+                <div class="rank">
+                    4
+                </div>
 
-    .distribution-list {
-        width: 100%;
-    }
-}
+                <div>
+
+                    <span class="agent-avatar gray">
+                        RN
+                    </span>
+
+                    <span class="agent-name">
+                        R. Nasser
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    2,980
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    5
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar cyan">
+                        SO
+                    </span>
+
+                    <span class="agent-name">
+                        S. Omar
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    2,410
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    6
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar purple">
+                        TF
+                    </span>
+
+                    <span class="agent-name">
+                        T. Farouk
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    2,050
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         TREND
+    ====================================================== -->
+
+    <section class="card trend-card">
+
+        <div class="trend-header">
+
+            <div class="card-title">
+                MC22 COLLECTION TREND
+            </div>
+
+            <button>
+                ✨ Smart Analysis
+            </button>
+
+        </div>
+
+
+        <div class="chart">
+
+            <div class="blue-chart-line"></div>
+
+            <div class="green-chart-line"></div>
+
+
+            <div class="chart-labels">
+
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Mar</span>
+                <span>Apr</span>
+                <span>May</span>
+                <span>Jun</span>
+                <span>Jul</span>
+                <span>Aug</span>
+                <span>Sep</span>
+                <span>Oct</span>
+                <span>Nov</span>
+                <span>Dec</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-legend">
+
+            <span>
+                <i class="legend-blue"></i>
+                EIB
+            </span>
+
+            <span>
+                <i class="legend-green"></i>
+                DIB
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <section class="card filters-card">
+
+
+        <div class="filter">
+
+            <label>
+                CHOOSE DATE
+            </label>
+
+            <select>
+                <option>
+                    8/10/2023
+                </option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                CRITERIA
+            </label>
+
+            <select>
+                <option>
+                    (All)
+                </option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                SECTOR
+            </label>
+
+            <select>
+                <option>
+                    (All)
+                </option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                CLIENT
+            </label>
+
+            <select>
+                <option>
+                    (All)
+                </option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                CAMPAIGN
+            </label>
+
+            <select>
+                <option>
+                    (All)
+                </option>
+            </select>
+
+        </div>
+
+
+        <div class="filter">
+
+            <label>
+                SUB CAMPAIGN
+            </label>
+
+            <select>
+                <option>
+                    (All)
+                </option>
+            </select>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         METRICS
+    ====================================================== -->
+
+    <section class="metrics-grid">
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                ENDORSEMENT
+            </div>
+
+            <div class="metric-number">
+                428,199
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 7.23%
+            </div>
+
+        </div>
+
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                WORKED
+            </div>
+
+            <div class="metric-number">
+                388,721
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 90.78%
+            </div>
+
+        </div>
+
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                RPC
+            </div>
+
+            <div class="metric-number">
+                63,969
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 16.46%
+            </div>
+
+        </div>
+
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                PTP
+            </div>
+
+            <div class="metric-number">
+                20,663
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 32.3%
+            </div>
+
+        </div>
+
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                KEPT
+            </div>
+
+            <div class="metric-number">
+                5,320
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 25.75%
+            </div>
+
+        </div>
+
+
+
+        <div class="metric-card">
+
+            <div class="metric-title">
+                AMOUNT
+            </div>
+
+            <div class="metric-number">
+                106.1M
+            </div>
+
+            <div class="metric-change positive">
+                ↑ 26.92%
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<script src="collection.js"></script>
+
+</body>
+
+</html>
