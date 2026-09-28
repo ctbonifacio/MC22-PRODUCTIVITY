@@ -1,113 +1,58 @@
 /* =========================================================
    MC22 COLLECTION / AMOUNTS
+   EXCEL WORKBOOK READER
 ========================================================= */
 
-let currentTab = "dashboard";
 
-let uploadedData = {
+/* =========================================================
+   STORAGE
+   NO SUPABASE
+   NO DATABASE
+========================================================= */
+
+let collectionWorkbook = null;
+
+let collectionData = {
+
     ptp: [],
+
     payments: [],
+
     remarks: [],
+
     inventory: []
+
 };
 
 
 /* =========================================================
-   HEADERS
+   REQUIRED SHEETS
 ========================================================= */
 
-const requiredHeaders = {
+const requiredSheets = {
 
     ptp: [
-        "Agent",
-        "CH Code",
-        "Customer Name",
-        "Account Number",
-        "PTP AMOUNT",
-        "PTP DATE",
-        "ResultDate",
-        "Bank",
-        "CODE",
-        "VINTAGE",
-        "Placement",
-        "ACCOUNT STATUS",
-        "STATUS CODE",
-        "PTP TYPE",
-        "CALL",
-        "MONTH",
-        "YEAR",
-        "TYPE OF PAYMENT"
+        "PTP",
+        "PTP LIST"
     ],
 
     payments: [
-        "Agent",
-        "Customer Name",
-        "Account Number",
-        "Status",
-        "DISPO DATE",
-        "Bank",
-        "CODE",
-        "PAYMENT AMOUNT",
-        "DATE OF PAYMENT",
-        "ACCOUNT STATUS",
-        "PTP TYPE",
-        "Placement",
-        "Month",
-        "Year"
+        "PAYMENTS",
+        "PAYMENT",
+        "PAYMENTS LIST"
     ],
 
     remarks: [
-        "Agent",
-        "Customer Name",
-        "Account Number",
-        "DISPO DATE",
-        "Bank",
-        "PLACEMENT",
-        "VINTAGE",
-        "STATUS CODE",
-        "Remark",
-        "PRODUCT",
-        "ACCOUNT STATUS",
-        "Status",
-        "PHONE NUMBER",
-        "PAYMENT AMOUNT",
-        "DATE OF PAYMENT",
-        "PTP AMOUNT",
-        "PTP DATE"
+        "DAILY REMARKS",
+        "DAILY REMARK",
+        "REMARKS"
     ],
 
     inventory: [
-        "ACCOUNT NUMBER",
-        "PLACEMENT",
-        "CUSTOMER NAME",
-        "Bank",
-        "START DISPO",
-        "START DATE",
-        "PULL OUT DATE",
-        "DATE RANGE",
-        "Agent",
-        "RPC",
-        "PTP",
-        "PAYMENT",
-        "ACTIVE MONTH"
+        "MASTERLIST INVENTORY",
+        "MASTERLIST",
+        "INVENTORY"
     ]
-
-};
-
-
-/* =========================================================
-   TAB TITLES
-========================================================= */
-
-const tabTitles = {
-
-    ptp: "PTP LIST",
-
-    payments: "PAYMENTS LIST",
-
-    remarks: "DAILY REMARKS",
-
-    inventory: "MASTERLIST INVENTORY"
 
 };
 
@@ -116,295 +61,91 @@ const tabTitles = {
    ELEMENTS
 ========================================================= */
 
-const dashboardPage =
-    document.getElementById("dashboardPage");
+const excelFile =
+    document.getElementById(
+        "excelFile"
+    );
 
-const dataPage =
-    document.getElementById("dataPage");
+const selectedFile =
+    document.getElementById(
+        "selectedFile"
+    );
 
-const dataTitle =
-    document.getElementById("dataTitle");
+const uploadExcelButton =
+    document.getElementById(
+        "uploadExcelButton"
+    );
 
-const fileInput =
-    document.getElementById("fileInput");
+const excelStatus =
+    document.getElementById(
+        "excelStatus"
+    );
 
-const uploadButton =
-    document.getElementById("uploadButton");
-
-const tableHead =
-    document.getElementById("tableHead");
-
-const tableBody =
-    document.getElementById("tableBody");
-
-const emptyMessage =
-    document.getElementById("emptyMessage");
-
-const recordCount =
-    document.getElementById("recordCount");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const bankFilter =
-    document.getElementById("bankFilter");
-
-const monthFilter =
-    document.getElementById("monthFilter");
+const statusMessage =
+    document.getElementById(
+        "statusMessage"
+    );
 
 
 /* =========================================================
-   NAVIGATION
+   FILE SELECTED
 ========================================================= */
 
-document
-    .querySelectorAll(".collection-tab")
-    .forEach(button => {
+excelFile.addEventListener(
+    "change",
+    function () {
 
-        button.addEventListener(
-            "click",
-            function () {
+        const file =
+            this.files[0];
 
-                document
-                    .querySelectorAll(".collection-tab")
-                    .forEach(btn => {
+        if (!file) {
 
-                        btn.classList.remove(
-                            "active"
-                        );
+            selectedFile.textContent =
+                "No file selected";
 
-                    });
-
-                this.classList.add("active");
-
-                currentTab =
-                    this.dataset.tab;
-
-
-                if (
-                    currentTab === "dashboard"
-                ) {
-
-                    dashboardPage.style.display =
-                        "block";
-
-                    dataPage.style.display =
-                        "none";
-
-                    return;
-
-                }
-
-
-                dashboardPage.style.display =
-                    "none";
-
-                dataPage.style.display =
-                    "block";
-
-
-                dataTitle.textContent =
-                    tabTitles[currentTab];
-
-
-                if (searchInput) {
-                    searchInput.value = "";
-                }
-
-                if (bankFilter) {
-                    bankFilter.value = "";
-                }
-
-                if (monthFilter) {
-                    monthFilter.value = "";
-                }
-
-                if (fileInput) {
-                    fileInput.value = "";
-                }
-
-                renderTable();
-
-            }
-        );
-
-    });
-
-
-/* =========================================================
-   MASK ACCOUNT NUMBER
-========================================================= */
-
-function maskAccountNumber(value) {
-
-    if (
-        value === null ||
-        value === undefined ||
-        value === ""
-    ) {
-        return "";
-    }
-
-    let account =
-        String(value)
-            .trim()
-            .replace(/[\s-]/g, "");
-
-
-    /*
-       Excel scientific notation
-    */
-
-    if (
-        account.includes("E+") ||
-        account.includes("e+")
-    ) {
-
-        const number =
-            Number(account);
-
-        if (Number.isFinite(number)) {
-
-            try {
-
-                account =
-                    BigInt(
-                        Math.round(number)
-                    ).toString();
-
-            } catch (error) {
-
-                account =
-                    String(number);
-
-            }
+            return;
 
         }
 
-    }
-
-
-    if (account.length <= 4) {
-
-        return "****";
+        selectedFile.textContent =
+            file.name;
 
     }
-
-
-    if (account.length <= 8) {
-
-        return (
-            account.substring(0, 2) +
-            "*".repeat(
-                account.length - 4
-            ) +
-            account.substring(
-                account.length - 2
-            )
-        );
-
-    }
-
-
-    return (
-        account.substring(0, 4) +
-        "*".repeat(
-            account.length - 8
-        ) +
-        account.substring(
-            account.length - 4
-        )
-    );
-
-}
+);
 
 
 /* =========================================================
-   HEADER NORMALIZATION
+   UPLOAD BUTTON
 ========================================================= */
 
-function normalizeHeader(value) {
+uploadExcelButton.addEventListener(
+    "click",
+    function () {
 
-    return String(value || "")
-        .trim()
-        .replace(/\s+/g, " ")
-        .toUpperCase();
+        const file =
+            excelFile.files[0];
 
-}
+        if (!file) {
 
+            alert(
+                "Please choose an Excel file first."
+            );
 
-function isAccountHeader(header) {
-
-    const value =
-        normalizeHeader(header);
-
-    return (
-        value === "ACCOUNT NUMBER" ||
-        value === "ACCOUNT NO" ||
-        value === "ACCOUNT NO."
-    );
-
-}
-
-
-function isBankHeader(header) {
-
-    return (
-        normalizeHeader(header) === "BANK"
-    );
-
-}
-
-
-function isMonthHeader(header) {
-
-    const value =
-        normalizeHeader(header);
-
-    return (
-        value === "MONTH" ||
-        value === "ACTIVE MONTH"
-    );
-
-}
-
-
-/* =========================================================
-   UPLOAD
-========================================================= */
-
-if (uploadButton) {
-
-    uploadButton.addEventListener(
-        "click",
-        function () {
-
-            const file =
-                fileInput.files[0];
-
-            if (!file) {
-
-                alert(
-                    "Please choose an Excel or CSV file first."
-                );
-
-                return;
-
-            }
-
-            readExcelFile(file);
+            return;
 
         }
-    );
 
-}
+        readWorkbook(file);
+
+    }
+);
 
 
 /* =========================================================
-   READ EXCEL
+   READ EXCEL WORKBOOK
 ========================================================= */
 
-function readExcelFile(file) {
+function readWorkbook(file) {
 
     const reader =
         new FileReader();
@@ -431,51 +172,25 @@ function readExcelFile(file) {
                     );
 
 
-                const sheet =
-                    workbook.Sheets[
-                        workbook.SheetNames[0]
-                    ];
+                collectionWorkbook =
+                    workbook;
 
 
-                const rows =
-                    XLSX.utils.sheet_to_json(
-                        sheet,
-                        {
-                            defval: ""
-                        }
-                    );
-
-
-                if (!rows.length) {
-
-                    alert(
-                        "The uploaded file contains no records."
-                    );
-
-                    return;
-
-                }
-
-
-                uploadedData[currentTab] =
-                    rows;
-
-
-                renderTable();
-
-
-                alert(
-                    `${rows.length.toLocaleString()} records loaded successfully.`
+                processWorkbook(
+                    workbook
                 );
 
-            }
 
+            }
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Excel error:",
+                    error
+                );
 
-                alert(
-                    "Unable to read the Excel/CSV file."
+                showError(
+                    "Unable to read this Excel file. Please make sure it is a valid .xlsx or .xls workbook."
                 );
 
             }
@@ -483,367 +198,413 @@ function readExcelFile(file) {
         };
 
 
-    reader.readAsArrayBuffer(file);
+    reader.readAsArrayBuffer(
+        file
+    );
 
 }
 
 
 /* =========================================================
-   FILTER
+   PROCESS WORKBOOK
 ========================================================= */
 
-function getFilteredData() {
+function processWorkbook(workbook) {
 
-    const data =
-        uploadedData[currentTab] || [];
-
-
-    const search =
-        searchInput
-            ? searchInput.value
-                .trim()
-                .toLowerCase()
-            : "";
+    const sheets =
+        workbook.SheetNames;
 
 
-    const bank =
-        bankFilter
-            ? bankFilter.value
-                .trim()
-                .toLowerCase()
-            : "";
+    console.log(
+        "Workbook sheets:",
+        sheets
+    );
 
 
-    const month =
-        monthFilter
-            ? monthFilter.value
-                .trim()
-                .toLowerCase()
-            : "";
+    const ptpSheet =
+        findSheet(
+            sheets,
+            requiredSheets.ptp
+        );
 
 
-    return data.filter(row => {
+    const paymentsSheet =
+        findSheet(
+            sheets,
+            requiredSheets.payments
+        );
 
 
-        const values =
-            Object.values(row)
-                .map(value =>
-                    String(value)
-                        .toLowerCase()
-                );
+    const remarksSheet =
+        findSheet(
+            sheets,
+            requiredSheets.remarks
+        );
 
 
-        const matchesSearch =
-            !search ||
-            values.some(
-                value =>
-                    value.includes(search)
+    const inventorySheet =
+        findSheet(
+            sheets,
+            requiredSheets.inventory
+        );
+
+
+    let missing = [];
+
+
+    if (!ptpSheet) {
+        missing.push(
+            "PTP"
+        );
+    }
+
+    if (!paymentsSheet) {
+        missing.push(
+            "PAYMENTS"
+        );
+    }
+
+    if (!remarksSheet) {
+        missing.push(
+            "DAILY REMARKS"
+        );
+    }
+
+    if (!inventorySheet) {
+        missing.push(
+            "MASTERLIST INVENTORY"
+        );
+    }
+
+
+    if (missing.length) {
+
+        showError(
+            "Missing sheet(s): " +
+            missing.join(", ") +
+            ". Please check the sheet names in your Excel file."
+        );
+
+        updateSheetStatus(
+            "ptp",
+            !!ptpSheet
+        );
+
+        updateSheetStatus(
+            "payments",
+            !!paymentsSheet
+        );
+
+        updateSheetStatus(
+            "remarks",
+            !!remarksSheet
+        );
+
+        updateSheetStatus(
+            "inventory",
+            !!inventorySheet
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       READ ALL FOUR SHEETS
+    ===================================================== */
+
+    collectionData.ptp =
+        readSheet(
+            workbook.Sheets[
+                ptpSheet
+            ]
+        );
+
+
+    collectionData.payments =
+        readSheet(
+            workbook.Sheets[
+                paymentsSheet
+            ]
+        );
+
+
+    collectionData.remarks =
+        readSheet(
+            workbook.Sheets[
+                remarksSheet
+            ]
+        );
+
+
+    collectionData.inventory =
+        readSheet(
+            workbook.Sheets[
+                inventorySheet
+            ]
+        );
+
+
+    /* =====================================================
+       UPDATE STATUS
+    ===================================================== */
+
+    updateSheetStatus(
+        "ptp",
+        true,
+        collectionData.ptp.length
+    );
+
+
+    updateSheetStatus(
+        "payments",
+        true,
+        collectionData.payments.length
+    );
+
+
+    updateSheetStatus(
+        "remarks",
+        true,
+        collectionData.remarks.length
+    );
+
+
+    updateSheetStatus(
+        "inventory",
+        true,
+        collectionData.inventory.length
+    );
+
+
+    excelStatus.classList.remove(
+        "hidden"
+    );
+
+
+    statusMessage.textContent =
+        "Excel workbook loaded successfully. " +
+        "All 4 sheets are ready for dashboard calculations.";
+
+
+    console.log(
+        "PTP:",
+        collectionData.ptp.length
+    );
+
+    console.log(
+        "PAYMENTS:",
+        collectionData.payments.length
+    );
+
+    console.log(
+        "DAILY REMARKS:",
+        collectionData.remarks.length
+    );
+
+    console.log(
+        "MASTERLIST INVENTORY:",
+        collectionData.inventory.length
+    );
+
+
+    /*
+       This is where we will connect
+       your conditions/calculations later.
+    */
+
+}
+
+
+/* =========================================================
+   FIND SHEET
+========================================================= */
+
+function findSheet(
+    sheetNames,
+    possibleNames
+) {
+
+    const normalizedNames =
+        sheetNames.map(
+            name => ({
+                original: name,
+                normalized:
+                    normalizeSheetName(name)
+            })
+        );
+
+
+    for (
+        const possibleName
+        of possibleNames
+    ) {
+
+        const normalizedPossible =
+            normalizeSheetName(
+                possibleName
             );
 
 
-        let matchesBank = true;
+        const found =
+            normalizedNames.find(
+                item =>
+                    item.normalized ===
+                    normalizedPossible
+            );
 
 
-        if (bank) {
+        if (found) {
 
-            const bankKey =
-                Object.keys(row)
-                    .find(
-                        key =>
-                            isBankHeader(key)
-                    );
-
-
-            if (bankKey) {
-
-                matchesBank =
-                    String(
-                        row[bankKey] || ""
-                    )
-                    .toLowerCase()
-                    .includes(bank);
-
-            }
+            return found.original;
 
         }
 
-
-        let matchesMonth = true;
-
-
-        if (month) {
-
-            const monthKey =
-                Object.keys(row)
-                    .find(
-                        key =>
-                            isMonthHeader(key)
-                    );
+    }
 
 
-            if (monthKey) {
-
-                matchesMonth =
-                    String(
-                        row[monthKey] || ""
-                    )
-                    .toLowerCase()
-                    .includes(month);
-
-            }
-
-        }
-
-
-        return (
-            matchesSearch &&
-            matchesBank &&
-            matchesMonth
-        );
-
-    });
+    return null;
 
 }
 
 
 /* =========================================================
-   RENDER TABLE
+   NORMALIZE SHEET NAME
 ========================================================= */
 
-function renderTable() {
+function normalizeSheetName(
+    value
+) {
 
-    if (
-        currentTab === "dashboard"
-    ) {
+    return String(value || "")
+        .trim()
+        .replace(
+            /\s+/g,
+            " "
+        )
+        .toUpperCase();
+
+}
+
+
+/* =========================================================
+   READ SHEET
+========================================================= */
+
+function readSheet(sheet) {
+
+    return XLSX.utils.sheet_to_json(
+        sheet,
+        {
+            defval: "",
+            raw: true
+        }
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE SHEET STATUS
+========================================================= */
+
+function updateSheetStatus(
+    type,
+    loaded,
+    count = 0
+) {
+
+    const elementMap = {
+
+        ptp:
+            "sheetPTP",
+
+        payments:
+            "sheetPayments",
+
+        remarks:
+            "sheetRemarks",
+
+        inventory:
+            "sheetInventory"
+
+    };
+
+
+    const element =
+        document.getElementById(
+            elementMap[type]
+        );
+
+
+    if (!element) {
         return;
     }
 
 
-    const rows =
-        getFilteredData();
-
-
-    const headers =
-        requiredHeaders[currentTab];
-
-
-    tableHead.innerHTML = "";
-
-    tableBody.innerHTML = "";
-
-
-    /*
-       HEADERS
-    */
-
-    const headerRow =
-        document.createElement("tr");
-
-
-    headers.forEach(header => {
-
-        const th =
-            document.createElement("th");
-
-        th.textContent =
-            header;
-
-        headerRow.appendChild(th);
-
-    });
-
-
-    tableHead.appendChild(
-        headerRow
+    element.classList.remove(
+        "loaded",
+        "error"
     );
 
 
-    /*
-       ROWS
-    */
-
-    rows.forEach(row => {
-
-        const tr =
-            document.createElement("tr");
+    const small =
+        element.querySelector(
+            "small"
+        );
 
 
-        headers.forEach(header => {
+    if (loaded) {
 
-            const td =
-                document.createElement("td");
+        element.classList.add(
+            "loaded"
+        );
 
+        small.textContent =
+            count.toLocaleString() +
+            " records loaded";
 
-            const actualKey =
-                Object.keys(row)
-                    .find(
-                        key =>
-                            normalizeHeader(key) ===
-                            normalizeHeader(header)
-                    );
+    }
+    else {
 
+        element.classList.add(
+            "error"
+        );
 
-            let value =
-                actualKey
-                    ? row[actualKey]
-                    : "";
+        small.textContent =
+            "Sheet not found";
 
-
-            /*
-               MASK ACCOUNT NUMBERS
-            */
-
-            if (
-                isAccountHeader(header)
-            ) {
-
-                value =
-                    maskAccountNumber(
-                        value
-                    );
-
-            }
-
-
-            /*
-               DATE
-            */
-
-            if (
-                value instanceof Date
-            ) {
-
-                value =
-                    value.toLocaleDateString();
-
-            }
-
-
-            td.textContent =
-                value === null ||
-                value === undefined
-                    ? ""
-                    : value;
-
-
-            tr.appendChild(td);
-
-        });
-
-
-        tableBody.appendChild(tr);
-
-    });
-
-
-    recordCount.textContent =
-        rows.length.toLocaleString();
-
-
-    emptyMessage.style.display =
-        rows.length
-            ? "none"
-            : "block";
+    }
 
 }
 
 
 /* =========================================================
-   FILTER EVENTS
+   ERROR
 ========================================================= */
 
-if (searchInput) {
+function showError(
+    message
+) {
 
-    searchInput.addEventListener(
-        "input",
-        renderTable
+    excelStatus.classList.remove(
+        "hidden"
     );
 
-}
+
+    statusMessage.textContent =
+        message;
 
 
-if (bankFilter) {
-
-    bankFilter.addEventListener(
-        "change",
-        renderTable
-    );
-
-}
-
-
-if (monthFilter) {
-
-    monthFilter.addEventListener(
-        "change",
-        renderTable
-    );
+    statusMessage.style.color =
+        "#dc3545";
 
 }
 
 
 /* =========================================================
-   CLEAR
-========================================================= */
-
-const clearButton =
-    document.getElementById(
-        "clearDataButton"
-    );
-
-
-if (clearButton) {
-
-    clearButton.addEventListener(
-        "click",
-        function () {
-
-            if (
-                currentTab === "dashboard"
-            ) {
-                return;
-            }
-
-
-            if (
-                !uploadedData[currentTab].length
-            ) {
-
-                return;
-
-            }
-
-
-            const confirmed =
-                confirm(
-                    `Clear all ${tabTitles[currentTab]} data?`
-                );
-
-
-            if (!confirmed) {
-                return;
-            }
-
-
-            uploadedData[currentTab] =
-                [];
-
-
-            if (fileInput) {
-                fileInput.value = "";
-            }
-
-
-            renderTable();
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MONTH NAV
+   MONTH SELECT
 ========================================================= */
 
 const monthSelect =
@@ -852,26 +613,33 @@ const monthSelect =
     );
 
 
-const distributionMonth =
-    document.getElementById(
-        "distributionMonth"
-    );
+monthSelect.addEventListener(
+    "change",
+    function () {
+
+        console.log(
+            "Selected month:",
+            this.value
+        );
+
+        /*
+           Later this will filter the
+           Excel data and calculate the
+           dashboard for the selected month.
+        */
+
+    }
+);
 
 
-if (monthSelect) {
+/* =========================================================
+   INITIAL STATE
+========================================================= */
 
-    monthSelect.addEventListener(
-        "change",
-        function () {
+console.log(
+    "MC22 Collection / Amounts loaded."
+);
 
-            if (distributionMonth) {
-
-                distributionMonth.textContent =
-                    this.value;
-
-            }
-
-        }
-    );
-
-}
+console.log(
+    "Waiting for Excel workbook..."
+);
