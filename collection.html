@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -14,15 +15,20 @@
         rel="stylesheet"
         href="collection.css">
 
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <!-- Excel Reader -->
+    <script
+        src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js">
+    </script>
+
 </head>
+
 
 <body>
 
-<!-- =====================================================
+
+<!-- =========================================================
      TOP NAVIGATION
-     KEEPING YOUR EXISTING NAVIGATION
-===================================================== -->
+========================================================= -->
 
 <header class="topbar">
 
@@ -38,21 +44,46 @@
 
     </div>
 
+
     <div class="top-actions">
 
         <a
             href="index.html"
             class="back-button">
-            KPI PERFORMANCE
+
+            <span class="back-icon">▣</span>
+            Agent KPI Dashboard
+
         </a>
 
-        <select id="monthSelect">
 
-            <option value="AUGUST">AUGUST</option>
-            <option value="SEPTEMBER">SEPTEMBER</option>
-            <option value="OCTOBER">OCTOBER</option>
-            <option value="NOVEMBER">NOVEMBER</option>
-            <option value="DECEMBER">DECEMBER</option>
+        <div class="month-label">
+            MONTH SELECTION
+        </div>
+
+
+        <select
+            id="monthSelect">
+
+            <option value="AUGUST">
+                AUGUST
+            </option>
+
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
+
+            <option value="OCTOBER">
+                OCTOBER
+            </option>
+
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
+
+            <option value="DECEMBER">
+                DECEMBER
+            </option>
 
         </select>
 
@@ -61,86 +92,248 @@
 </header>
 
 
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
 <main class="dashboard">
 
 
-<!-- =====================================================
-     COLLECTION NAVIGATION
-===================================================== -->
-
-<div class="collection-tabs">
-
-    <button
-        class="collection-tab active"
-        data-tab="dashboard">
-        DASHBOARD
-    </button>
-
-    <button
-        class="collection-tab"
-        data-tab="ptp">
-        PTP
-    </button>
-
-    <button
-        class="collection-tab"
-        data-tab="payments">
-        PAYMENTS
-    </button>
-
-    <button
-        class="collection-tab"
-        data-tab="remarks">
-        DAILY REMARKS
-    </button>
-
-    <button
-        class="collection-tab"
-        data-tab="inventory">
-        MASTERLIST INVENTORY
-    </button>
-
-</div>
-
-
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
-
-<section id="dashboardPage">
-
-
-    <!-- SECTION TITLE -->
+    <!-- =====================================================
+         PAGE TITLE
+    ====================================================== -->
 
     <div class="section-title">
         OVERALL COLLECTION
     </div>
 
 
-    <!-- =================================================
-         TOP AREA
-    ================================================= -->
 
-    <div class="top-grid">
+    <!-- =====================================================
+         EXCEL UPLOAD CONTAINER
+    ====================================================== -->
+
+    <section class="excel-upload-card">
+
+
+        <div class="excel-upload-left">
+
+            <div class="excel-icon">
+                XLS
+            </div>
+
+
+            <div>
+
+                <div class="excel-title">
+                    COLLECTION DATA
+                </div>
+
+                <div class="excel-description">
+
+                    Upload one Excel workbook containing
+                    PTP, PAYMENTS, DAILY REMARKS and
+                    MASTERLIST INVENTORY sheets.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="excel-upload-center">
+
+            <label
+                for="excelFile"
+                class="choose-excel">
+
+                CHOOSE EXCEL FILE
+
+            </label>
+
+            <input
+                type="file"
+                id="excelFile"
+                accept=".xlsx,.xls">
+
+
+            <div
+                id="selectedFile"
+                class="selected-file">
+
+                No file selected
+
+            </div>
+
+        </div>
+
+
+
+        <div class="excel-upload-right">
+
+            <button
+                type="button"
+                id="uploadExcelButton"
+                class="upload-excel-button">
+
+                UPLOAD EXCEL
+
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         EXCEL STATUS
+    ====================================================== -->
+
+    <section
+        id="excelStatus"
+        class="excel-status hidden">
+
+        <div class="status-title">
+            WORKBOOK STATUS
+        </div>
+
+        <div
+            id="statusMessage"
+            class="status-message">
+        </div>
+
+
+        <div class="sheet-status-grid">
+
+
+            <div
+                id="sheetPTP"
+                class="sheet-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>
+                        PTP
+                    </strong>
+
+                    <small>
+                        Not loaded
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                id="sheetPayments"
+                class="sheet-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>
+                        PAYMENTS
+                    </strong>
+
+                    <small>
+                        Not loaded
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                id="sheetRemarks"
+                class="sheet-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>
+                        DAILY REMARKS
+                    </strong>
+
+                    <small>
+                        Not loaded
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                id="sheetInventory"
+                class="sheet-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>
+                        MASTERLIST INVENTORY
+                    </strong>
+
+                    <small>
+                        Not loaded
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         DASHBOARD
+    ====================================================== -->
+
+
+    <!-- TOP ROW -->
+
+    <section class="top-grid">
 
 
         <!-- PAYMENT VS TARGET -->
 
-        <div class="card payment-card">
+        <div class="card payment-target-card">
 
             <div class="card-title">
                 PAYMENT VS TARGET
             </div>
 
-            <div class="circle-area">
 
-                <div class="progress-circle">
+            <div class="circle-wrapper">
+
+                <div
+                    class="progress-circle"
+                    id="paymentCircle">
 
                     <div class="circle-inner">
 
-                        <strong>
+                        <span id="paymentPercent">
                             72%
-                        </strong>
+                        </span>
 
                     </div>
 
@@ -148,54 +341,73 @@
 
             </div>
 
+
             <div class="circle-info">
 
-                Current
-                <strong>20,065</strong>
+                Current:
 
-                • Goal
-                <strong>28,000</strong>
+                <strong id="currentPayment">
+                    20,065
+                </strong>
+
+                • Goal:
+
+                <strong id="paymentGoal">
+                    28,000
+                </strong>
 
             </div>
 
         </div>
 
 
+
         <!-- OVERALL PTP -->
 
-        <div class="card overall-ptp">
+        <div class="card">
 
             <div class="card-title">
                 OVERALL PTP
             </div>
 
-            <div class="ptp-header">
+
+            <div class="ptp-main">
 
                 <div>
+
                     Conversion Rate
+
                     <span>
                         (Paid vs PTP)
                     </span>
+
                 </div>
 
-                <strong>
+
+                <strong id="overallPTP">
                     7%
                 </strong>
 
             </div>
 
+
             <div class="progress-bar">
 
                 <div
+                    id="overallPTPBar"
                     class="progress-fill"
                     style="width:7%">
                 </div>
 
             </div>
 
+
             <div class="small-text">
+
                 Current: 16 • Goal: 227
+
             </div>
+
 
 
             <div class="bank-grid">
@@ -204,16 +416,27 @@
                 <div class="bank-box">
 
                     <div class="bank-header">
-                        <span>HSBC UAE</span>
-                        <strong>68%</strong>
+
+                        <span>
+                            HSBC UAE
+                        </span>
+
+                        <strong>
+                            68%
+                        </strong>
+
                     </div>
 
+
                     <div class="progress-bar">
+
                         <div
                             class="progress-fill"
                             style="width:68%">
                         </div>
+
                     </div>
+
 
                     <small>
                         Current 12 • Goal 60
@@ -222,19 +445,31 @@
                 </div>
 
 
+
                 <div class="bank-box">
 
                     <div class="bank-header">
-                        <span>ENBD</span>
-                        <strong>82%</strong>
+
+                        <span>
+                            ENBD
+                        </span>
+
+                        <strong>
+                            82%
+                        </strong>
+
                     </div>
 
+
                     <div class="progress-bar">
+
                         <div
                             class="progress-fill"
                             style="width:82%">
                         </div>
+
                     </div>
+
 
                     <small>
                         Current 140 • Goal 120
@@ -243,19 +478,31 @@
                 </div>
 
 
+
                 <div class="bank-box">
 
                     <div class="bank-header">
-                        <span>EIB</span>
-                        <strong>100%</strong>
+
+                        <span>
+                            EIB
+                        </span>
+
+                        <strong>
+                            100%
+                        </strong>
+
                     </div>
 
+
                     <div class="progress-bar">
+
                         <div
                             class="progress-fill"
                             style="width:100%">
                         </div>
+
                     </div>
+
 
                     <small>
                         Current 18 • Goal 18
@@ -264,19 +511,31 @@
                 </div>
 
 
+
                 <div class="bank-box">
 
                     <div class="bank-header">
-                        <span>DIB</span>
-                        <strong>54%</strong>
+
+                        <span>
+                            DIB
+                        </span>
+
+                        <strong>
+                            54%
+                        </strong>
+
                     </div>
 
+
                     <div class="progress-bar">
+
                         <div
                             class="progress-fill"
                             style="width:54%">
                         </div>
+
                     </div>
+
 
                     <small>
                         Current 9 • Goal 29
@@ -284,18 +543,21 @@
 
                 </div>
 
+
             </div>
 
         </div>
 
-    </div>
+
+    </section>
 
 
-    <!-- =================================================
+
+    <!-- =====================================================
          SUMMARY CARDS
-    ================================================= -->
+    ====================================================== -->
 
-    <div class="summary-grid">
+    <section class="summary-grid">
 
 
         <div class="card stat-card">
@@ -304,11 +566,16 @@
                 PAYMENT COUNT
             </div>
 
-            <div class="big-number">
+            <div
+                id="paymentCount"
+                class="big-number">
+
                 16
+
             </div>
 
         </div>
+
 
 
         <div class="card stat-card">
@@ -317,15 +584,20 @@
                 TOTAL CF AMOUNT
             </div>
 
-            <div class="big-number">
+            <div
+                id="totalCF"
+                class="big-number">
+
                 4,414
+
             </div>
 
-            <button class="smart-button">
+            <div class="smart-analysis">
                 ✨ Smart Analysis
-            </button>
+            </div>
 
         </div>
+
 
 
         <div class="card stat-card">
@@ -334,11 +606,16 @@
                 PROJECTED ENDING
             </div>
 
-            <div class="big-number">
+            <div
+                id="projectedEnding"
+                class="big-number">
+
                 233,648
+
             </div>
 
         </div>
+
 
 
         <div class="card stat-card">
@@ -347,42 +624,48 @@
                 REMAINING PTP'S
             </div>
 
-            <div class="big-number">
+            <div
+                id="remainingPTP"
+                class="big-number">
+
                 213,583
+
             </div>
 
-            <button class="smart-button">
+            <div class="smart-analysis">
                 ✨ Smart Analysis
-            </button>
+            </div>
 
         </div>
 
-    </div>
+
+    </section>
 
 
-    <!-- =================================================
+
+    <!-- =====================================================
          DISTRIBUTION + RANKINGS
-    ================================================= -->
+    ====================================================== -->
 
-    <div class="middle-grid">
+    <section class="middle-grid">
 
 
-        <!-- DISTRIBUTION -->
+        <!-- COLLECTION DISTRIBUTION -->
 
         <div class="card distribution-card">
 
             <div class="card-title">
-                <span id="distributionMonth">
-                    AUGUST
-                </span>
-                COLLECTION DISTRIBUTION
+                AUGUST COLLECTION DISTRIBUTION
             </div>
 
-            <div class="distribution">
+
+            <div class="distribution-content">
+
 
                 <div class="donut">
 
-                    <div class="donut-hole"></div>
+                    <div class="donut-hole">
+                    </div>
 
                 </div>
 
@@ -393,7 +676,7 @@
                     <div class="distribution-row">
 
                         <span>
-                            <i class="dot hsbc"></i>
+                            <span class="dot hsbc"></span>
                             HSBC UAE (SPMAN)
                         </span>
 
@@ -411,7 +694,7 @@
                     <div class="distribution-row">
 
                         <span>
-                            <i class="dot enbd"></i>
+                            <span class="dot enbd"></span>
                             ENBD
                         </span>
 
@@ -429,7 +712,7 @@
                     <div class="distribution-row">
 
                         <span>
-                            <i class="dot eib"></i>
+                            <span class="dot eib"></span>
                             EIB
                         </span>
 
@@ -447,7 +730,7 @@
                     <div class="distribution-row">
 
                         <span>
-                            <i class="dot dib"></i>
+                            <span class="dot dib"></span>
                             DIB
                         </span>
 
@@ -461,11 +744,13 @@
 
                     </div>
 
+
                 </div>
 
             </div>
 
         </div>
+
 
 
         <!-- PAYMENT RANKING -->
@@ -476,65 +761,159 @@
                 OVERALL PAYMENT RANKING
             </div>
 
-            <div class="ranking-list">
 
-                <div class="ranking-top">
+            <div class="ranking-item">
 
-                    <div>
-                        <span class="rank-badge first">1</span>
-                        <span class="avatar">AK</span>
-                        <small>A. Khalil</small>
-                        <strong>4,780</strong>
-                    </div>
+                <div class="rank gold">
+                    1
+                </div>
 
-                    <div>
-                        <span class="rank-badge second">2</span>
-                        <span class="avatar blue">MS</span>
-                        <small>M. Saeed</small>
-                        <strong>7,725</strong>
-                    </div>
+                <div>
 
-                    <div>
-                        <span class="rank-badge third">3</span>
-                        <span class="avatar purple">LH</span>
-                        <small>L. Haddad</small>
-                        <strong>2,790</strong>
-                    </div>
+                    <span class="agent-avatar blue">
+                        AK
+                    </span>
+
+                    <span class="agent-name">
+                        A. Khalil
+                    </span>
 
                 </div>
 
-
-                <div class="ranking-row">
-                    <span>4</span>
-                    <span class="avatar gray">RN</span>
-                    <span>R. Nasser</span>
-                    <strong>1,980</strong>
-                </div>
-
-                <div class="ranking-row">
-                    <span>5</span>
-                    <span class="avatar cyan">SO</span>
-                    <span>S. Omar</span>
-                    <strong>1,640</strong>
-                </div>
-
-                <div class="ranking-row">
-                    <span>6</span>
-                    <span class="avatar violet">TF</span>
-                    <span>T. Farouk</span>
-                    <strong>1,320</strong>
-                </div>
-
-                <div class="ranking-row">
-                    <span>7</span>
-                    <span class="avatar purple">NY</span>
-                    <span>N. Yasin</span>
-                    <strong>1,110</strong>
+                <div class="agent-value">
+                    4,780
                 </div>
 
             </div>
 
+
+            <div class="ranking-item">
+
+                <div class="rank silver">
+                    2
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar cyan">
+                        MS
+                    </span>
+
+                    <span class="agent-name">
+                        M. Saeed
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    7,725
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank bronze">
+                    3
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar purple">
+                        LH
+                    </span>
+
+                    <span class="agent-name">
+                        L. Haddad
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    2,790
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    4
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar gray">
+                        RN
+                    </span>
+
+                    <span class="agent-name">
+                        R. Nasser
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    1,980
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    5
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar cyan">
+                        SO
+                    </span>
+
+                    <span class="agent-name">
+                        S. Omar
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    1,640
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    6
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar purple">
+                        TF
+                    </span>
+
+                    <span class="agent-name">
+                        T. Farouk
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    1,320
+                </div>
+
+            </div>
+
+
         </div>
+
 
 
         <!-- PTP RANKING -->
@@ -545,74 +924,169 @@
                 OVERALL PTP RANKING
             </div>
 
-            <div class="ranking-list">
 
-                <div class="ranking-top">
+            <div class="ranking-item">
 
-                    <div>
-                        <span class="rank-badge first">1</span>
-                        <span class="avatar">AK</span>
-                        <small>A. Khalil</small>
-                        <strong>5,200</strong>
-                    </div>
+                <div class="rank gold">
+                    1
+                </div>
 
-                    <div>
-                        <span class="rank-badge second">2</span>
-                        <span class="avatar blue">MS</span>
-                        <small>M. Saeed</small>
-                        <strong>4,100</strong>
-                    </div>
+                <div>
 
-                    <div>
-                        <span class="rank-badge third">3</span>
-                        <span class="avatar purple">LH</span>
-                        <small>L. Haddad</small>
-                        <strong>3,650</strong>
-                    </div>
+                    <span class="agent-avatar blue">
+                        AK
+                    </span>
+
+                    <span class="agent-name">
+                        A. Khalil
+                    </span>
 
                 </div>
 
-
-                <div class="ranking-row">
-                    <span>4</span>
-                    <span class="avatar gray">RN</span>
-                    <span>R. Nasser</span>
-                    <strong>2,980</strong>
-                </div>
-
-                <div class="ranking-row">
-                    <span>5</span>
-                    <span class="avatar cyan">SO</span>
-                    <span>S. Omar</span>
-                    <strong>2,410</strong>
-                </div>
-
-                <div class="ranking-row">
-                    <span>6</span>
-                    <span class="avatar violet">TF</span>
-                    <span>T. Farouk</span>
-                    <strong>2,050</strong>
-                </div>
-
-                <div class="ranking-row">
-                    <span>7</span>
-                    <span class="avatar purple">NY</span>
-                    <span>N. Yasin</span>
-                    <strong>1,820</strong>
+                <div class="agent-value">
+                    5,200
                 </div>
 
             </div>
 
+
+            <div class="ranking-item">
+
+                <div class="rank silver">
+                    2
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar cyan">
+                        MS
+                    </span>
+
+                    <span class="agent-name">
+                        M. Saeed
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    4,100
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank bronze">
+                    3
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar purple">
+                        LH
+                    </span>
+
+                    <span class="agent-name">
+                        L. Haddad
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    3,650
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    4
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar gray">
+                        RN
+                    </span>
+
+                    <span class="agent-name">
+                        R. Nasser
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    2,980
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    5
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar cyan">
+                        SO
+                    </span>
+
+                    <span class="agent-name">
+                        S. Omar
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    2,410
+                </div>
+
+            </div>
+
+
+            <div class="ranking-item">
+
+                <div class="rank">
+                    6
+                </div>
+
+                <div>
+
+                    <span class="agent-avatar purple">
+                        TF
+                    </span>
+
+                    <span class="agent-name">
+                        T. Farouk
+                    </span>
+
+                </div>
+
+                <div class="agent-value">
+                    2,050
+                </div>
+
+            </div>
+
+
         </div>
 
-    </div>
+
+    </section>
 
 
-    <!-- =================================================
+
+    <!-- =====================================================
          TREND
-    ================================================= -->
+    ====================================================== -->
 
-    <div class="card trend-card">
+    <section class="card trend-card">
 
         <div class="trend-header">
 
@@ -620,7 +1094,7 @@
                 MC22 COLLECTION TREND
             </div>
 
-            <button class="smart-button">
+            <button>
                 ✨ Smart Analysis
             </button>
 
@@ -629,41 +1103,12 @@
 
         <div class="chart">
 
-            <div class="chart-grid line1"></div>
-            <div class="chart-grid line2"></div>
-            <div class="chart-grid line3"></div>
+            <div class="blue-chart-line"></div>
+
+            <div class="green-chart-line"></div>
 
 
-            <svg
-                viewBox="0 0 1000 260"
-                preserveAspectRatio="none"
-                class="trend-svg">
-
-                <path
-                    class="blue-chart"
-                    d="
-                    M0 150
-                    C100 105 150 75 220 60
-                    C300 40 360 20 440 55
-                    C540 90 610 155 690 170
-                    C760 188 820 210 880 205
-                    C930 200 965 190 1000 175
-                    " />
-
-                <path
-                    class="green-chart"
-                    d="
-                    M0 60
-                    C100 70 150 90 220 120
-                    C300 150 360 180 440 185
-                    C540 195 620 180 700 150
-                    C800 110 900 80 1000 70
-                    " />
-
-            </svg>
-
-
-            <div class="months">
+            <div class="chart-labels">
 
                 <span>Jan</span>
                 <span>Feb</span>
@@ -697,14 +1142,16 @@
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- =================================================
+
+    <!-- =====================================================
          FILTERS
-    ================================================= -->
+    ====================================================== -->
 
-    <div class="card filters-card">
+    <section class="card filters-card">
+
 
         <div class="filter">
 
@@ -713,7 +1160,9 @@
             </label>
 
             <select>
-                <option>8/10/2023</option>
+                <option>
+                    8/10/2023
+                </option>
             </select>
 
         </div>
@@ -726,7 +1175,9 @@
             </label>
 
             <select>
-                <option>(All)</option>
+                <option>
+                    (All)
+                </option>
             </select>
 
         </div>
@@ -739,7 +1190,9 @@
             </label>
 
             <select>
-                <option>(All)</option>
+                <option>
+                    (All)
+                </option>
             </select>
 
         </div>
@@ -752,7 +1205,9 @@
             </label>
 
             <select>
-                <option>(All)</option>
+                <option>
+                    (All)
+                </option>
             </select>
 
         </div>
@@ -765,7 +1220,9 @@
             </label>
 
             <select>
-                <option>(All)</option>
+                <option>
+                    (All)
+                </option>
             </select>
 
         </div>
@@ -778,19 +1235,23 @@
             </label>
 
             <select>
-                <option>(All)</option>
+                <option>
+                    (All)
+                </option>
             </select>
 
         </div>
 
-    </div>
+
+    </section>
 
 
-    <!-- =================================================
+
+    <!-- =====================================================
          METRICS
-    ================================================= -->
+    ====================================================== -->
 
-    <div class="metrics-grid">
+    <section class="metrics-grid">
 
 
         <div class="metric-card">
@@ -807,22 +1268,8 @@
                 ↑ 7.23%
             </div>
 
-            <div class="metric-lines">
-                <span>NEW <b>31.0K</b> ↑ 4.1%</span>
-                <span>TLC <b>50.8B</b> ↓ 1.2%</span>
-                <span>ALC <b>118.6K</b> ↑ 3.4%</span>
-                <span>CW <b>1.2K</b> ↑ 0.8%</span>
-                <span>FC <b>5.1B</b> —</span>
-                <span>TAC <b>607.1M</b> ↓ 2.1%</span>
-                <span>HIT <b>11.8%</b> ↑ 0.4%</span>
-                <span>VAR <b>4.5B</b> ↑ 5.2%</span>
-                <span>RAC <b>2.9B</b> ↑ 1.7%</span>
-                <span>TRR <b>1.2%</b> ↑ 0.3%</span>
-                <span>CURED <b>3.6K</b> ↑ 1.1%</span>
-                <span>POUT <b>31.2K</b> ↑ 2.4%</span>
-            </div>
-
         </div>
+
 
 
         <div class="metric-card">
@@ -839,20 +1286,8 @@
                 ↑ 90.78%
             </div>
 
-            <div class="metric-lines">
-                <span>DGR <b>-5.8K</b> ↓ 3.2%</span>
-                <span>NET <b>354.3K</b> ↓ 1.1%</span>
-                <span>30D <b>285.8K</b> ↓ 0.9%</span>
-                <span>60D <b>36.4K</b> ↓ 2.4%</span>
-                <span>60D+ <b>28.8K</b> ↑ 1.6%</span>
-                <span>CURED <b>3.6K</b> ↑ 1.1%</span>
-                <span>JUNK <b>3.3K</b> ↑ 0.7%</span>
-                <span>TLC <b>46.7B</b> —</span>
-                <span>ALC <b>120.2K</b> ↑ 2.1%</span>
-                <span>RAC <b>2.9B</b> ↓ 1.7%</span>
-            </div>
-
         </div>
+
 
 
         <div class="metric-card">
@@ -869,21 +1304,8 @@
                 ↑ 16.46%
             </div>
 
-            <div class="metric-lines">
-                <span>DGR <b>-560</b> ↓ 2.8%</span>
-                <span>NET <b>54.6K</b> ↓ 1.4%</span>
-                <span>CVR <b>35.8%</b> ↓ 0.6%</span>
-                <span>XPAY <b>35.3K</b> ↓ 1.9%</span>
-                <span>WPAY <b>19.3K</b> ↓ 2.2%</span>
-                <span>MRR <b>2.0K</b> ↑ 0.9%</span>
-                <span>CURED <b>3.6K</b> ↑ 1.1%</span>
-                <span>JUNK <b>784</b> —</span>
-                <span>TLC <b>9.4B</b> ↓ 1.3%</span>
-                <span>ALC <b>146.9K</b> ↑ 0.8%</span>
-                <span>RAC <b>2.9B</b> ↓ 1.7%</span>
-            </div>
-
         </div>
+
 
 
         <div class="metric-card">
@@ -897,24 +1319,11 @@
             </div>
 
             <div class="metric-change positive">
-                ↑ 3.23%
-            </div>
-
-            <div class="metric-lines">
-                <span>DGR <b>338</b> ↓ 1.2%</span>
-                <span>NET <b>13.6K</b> ↓ 0.7%</span>
-                <span>AMT <b>202.0M</b> ↓ 3.1%</span>
-                <span>NPTP <b>5.0K</b> —</span>
-                <span>OPTP <b>8.4K</b> ↓ 1.5%</span>
-                <span>MRR <b>6.9K</b> ↓ 0.4%</span>
-                <span>CPTP <b>2.2K</b> ↑ 2.3%</span>
-                <span>TLC <b>3.4B</b> —</span>
-                <span>ALC <b>164.2K</b> ↓ 0.6%</span>
-                <span>TAC <b>341.4M</b> —</span>
-                <span>RAC <b>2.2B</b> ↓ 1.1%</span>
+                ↑ 32.3%
             </div>
 
         </div>
+
 
 
         <div class="metric-card">
@@ -931,20 +1340,8 @@
                 ↑ 25.75%
             </div>
 
-            <div class="metric-lines">
-                <span>DGR <b>300</b> ↓ 0.9%</span>
-                <span>NPAY <b>1.8K</b> ↑ 1.4%</span>
-                <span>OPAY <b>2.0K</b> ↑ 1.1%</span>
-                <span>MRR <b>2.0K</b> ↑ 0.8%</span>
-                <span>CURED <b>1.5K</b> ↑ 1.2%</span>
-                <span>XPTP <b>4.5K</b> ↓ 1.6%</span>
-                <span>XRAC <b>531.2M</b> —</span>
-                <span>TLC <b>819.5M</b> ↑ 2.7%</span>
-                <span>ALC <b>154.0K</b> —</span>
-                <span>RAC <b>490.5M</b> ↑ 1.9%</span>
-            </div>
-
         </div>
+
 
 
         <div class="metric-card">
@@ -961,161 +1358,10 @@
                 ↑ 26.92%
             </div>
 
-            <div class="metric-lines">
-                <span>DGR <b>5.9M</b> ↓ 2.3%</span>
-                <span>NPAY <b>22.2M</b> ↑ 3.1%</span>
-                <span>OPAY <b>14.2M</b> ↑ 2.4%</span>
-                <span>MRR <b>14.2M</b> ↑ 1.8%</span>
-                <span>CURED <b>69.6M</b> ↑ 4.2%</span>
-                <span>MEF <b>308.1M</b> ↑ 2.9%</span>
-                <span>TGT <b>10.1B</b> ↑ 1.3%</span>
-                <span>HIT <b>9.3%</b> ↑ 0.6%</span>
-                <span>VAR <b>1.0B</b> —</span>
-            </div>
-
         </div>
 
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     DATA PAGES
-===================================================== -->
-
-<section
-    id="dataPage"
-    class="data-page"
-    style="display:none;">
-
-
-    <div class="section-title">
-        <span id="dataTitle">
-            PTP LIST
-        </span>
-    </div>
-
-
-    <section class="upload-card">
-
-        <div>
-
-            <div class="upload-title">
-                UPLOAD DATA
-            </div>
-
-            <div class="upload-description">
-                Upload Excel or CSV file. Data remains in the browser.
-            </div>
-
-        </div>
-
-
-        <div class="upload-controls">
-
-            <label class="file-button">
-
-                CHOOSE FILE
-
-                <input
-                    type="file"
-                    id="fileInput"
-                    accept=".xlsx,.xls,.csv">
-
-            </label>
-
-            <button
-                id="uploadButton"
-                class="upload-button">
-
-                UPLOAD
-
-            </button>
-
-        </div>
 
     </section>
-
-
-    <section class="data-controls">
-
-        <input
-            id="searchInput"
-            type="text"
-            placeholder="Search Agent, Customer, Account...">
-
-        <select id="bankFilter">
-
-            <option value="">
-                ALL BANKS
-            </option>
-
-            <option>ENBD</option>
-            <option>HSBC</option>
-            <option>EIB</option>
-            <option>DIB</option>
-
-        </select>
-
-        <select id="monthFilter">
-
-            <option value="">
-                ALL MONTHS
-            </option>
-
-            <option>AUGUST</option>
-            <option>SEPTEMBER</option>
-            <option>OCTOBER</option>
-            <option>NOVEMBER</option>
-            <option>DECEMBER</option>
-
-        </select>
-
-        <button
-            id="clearDataButton"
-            class="clear-button">
-
-            CLEAR DATA
-
-        </button>
-
-    </section>
-
-
-    <div class="record-bar">
-
-        <strong id="recordCount">0</strong>
-        RECORDS
-
-    </div>
-
-
-    <section class="table-card">
-
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead id="tableHead"></thead>
-
-                <tbody id="tableBody"></tbody>
-
-            </table>
-
-        </div>
-
-        <div
-            id="emptyMessage"
-            class="empty-message">
-
-            No records uploaded yet.
-
-        </div>
-
-    </section>
-
-</section>
 
 
 </main>
@@ -1124,4 +1370,5 @@
 <script src="collection.js"></script>
 
 </body>
+
 </html>
