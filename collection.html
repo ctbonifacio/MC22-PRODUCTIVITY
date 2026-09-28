@@ -1,1155 +1,673 @@
-/* =========================================================
-   MC22 COLLECTION / AMOUNTS
-   LOCAL EXCEL / CSV READER
+<!DOCTYPE html>
+<html lang="en">
 
-   IMPORTANT:
-   - No Supabase
-   - No database
-   - No permanent storage
-   - Data exists only while this page is open
-========================================================= */
+<head>
 
+    <meta charset="UTF-8">
 
-/* =========================================================
-   CURRENT TAB
-========================================================= */
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-let currentTab = "ptp";
+    <title>MC22 Collection / Amounts</title>
 
+    <link
+        rel="stylesheet"
+        href="collection.css">
 
+    <!-- SheetJS -->
+    <script
+        src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js">
+    </script>
 
-/* =========================================================
-   TEMPORARY DATA
-========================================================= */
+</head>
 
-const uploadedData = {
 
-    ptp: [],
+<body>
 
-    payments: [],
 
-    remarks: [],
+<!-- =========================================================
+     TOPBAR
+========================================================= -->
 
-    inventory: []
+<header class="topbar">
 
-};
+    <div class="brand-area">
 
+        <div class="brand">
+            MC22 PERFORMANCE
+        </div>
 
 
-/* =========================================================
-   REQUIRED HEADERS
-========================================================= */
+        <div class="dashboard-links">
 
-const requiredHeaders = {
+            <a
+                href="index.html"
+                class="dashboard-link">
+                Agent KPI Dashboard
+            </a>
 
 
-    /* =====================================================
-       PTP
-    ====================================================== */
+            <a
+                href="collection.html"
+                class="dashboard-link active">
+                Collection / Amounts
+            </a>
 
-    ptp: [
+        </div>
 
-        "Agent",
-        "CH Code",
-        "Customer Name",
-        "Account Number",
-        "PTP AMOUNT",
-        "PTP DATE",
-        "ResultDate",
-        "Bank",
-        "CODE",
-        "VINTAGE",
-        "Placement",
-        "ACCOUNT STATUS",
-        "STATUS CODE",
-        "PTP TYPE",
-        "CALL",
-        "MONTH",
-        "YEAR",
-        "TYPE OF PAYMENT"
+    </div>
 
-    ],
 
+    <div class="top-actions">
 
+        <select id="monthSelect">
 
-    /* =====================================================
-       PAYMENTS
-    ====================================================== */
+            <option value="AUGUST">
+                AUGUST
+            </option>
 
-    payments: [
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
 
-        "Agent",
-        "Customer Name",
-        "Account Number",
-        "Status",
-        "DISPO DATE",
-        "Bank",
-        "CODE",
-        "PAYMENT AMOUNT",
-        "DATE OF PAYMENT",
-        "ACCOUNT STATUS",
-        "PTP TYPE",
-        "Placement",
-        "Month",
-        "Year"
+            <option value="OCTOBER">
+                OCTOBER
+            </option>
 
-    ],
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
 
+            <option value="DECEMBER">
+                DECEMBER
+            </option>
 
+        </select>
 
-    /* =====================================================
-       DAILY REMARKS
-    ====================================================== */
+    </div>
 
-    remarks: [
+</header>
 
-        "Agent",
-        "Customer Name",
-        "Account Number",
-        "DISPO DATE",
-        "Bank",
-        "PLACEMENT",
-        "VINTAGE",
-        "STATUS CODE",
-        "Remark",
-        "PRODUCT",
-        "ACCOUNT STATUS",
-        "Status",
-        "PHONE NUMBER",
-        "PAYMENT AMOUNT",
-        "DATE OF PAYMENT",
-        "PTP AMOUNT",
-        "PTP DATE"
 
-    ],
 
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
+<main class="dashboard">
 
-    /* =====================================================
-       MASTERLIST INVENTORY
-    ====================================================== */
 
-    inventory: [
+    <!-- =====================================================
+         TITLE
+    ====================================================== -->
 
-        "ACCOUNT NUMBER",
-        "PLACEMENT",
-        "CUSTOMER NAME",
-        "Bank",
-        "START DISPO",
-        "START DATE",
-        "PULL OUT DATE",
-        "DATE RANGE",
-        "Agent",
-        "RPC",
-        "PTP",
-        "PAYMENT",
-        "ACTIVE MONTH"
+    <div class="section-title">
+        COLLECTION / AMOUNTS
+    </div>
 
-    ]
 
-};
 
+    <!-- =====================================================
+         COLLECTION TABS
+    ====================================================== -->
 
+    <div class="collection-tabs">
 
-/* =========================================================
-   DISPLAY HEADERS
-========================================================= */
 
-const displayHeaders = {
+        <button
+            type="button"
+            class="collection-tab active"
+            data-tab="ptp">
 
-    ptp: requiredHeaders.ptp,
+            PTP
 
-    payments: requiredHeaders.payments,
+        </button>
 
-    remarks: requiredHeaders.remarks,
 
-    inventory: requiredHeaders.inventory
+        <button
+            type="button"
+            class="collection-tab"
+            data-tab="payments">
 
-};
+            PAYMENTS
 
+        </button>
 
 
-/* =========================================================
-   TAB TITLES
-========================================================= */
+        <button
+            type="button"
+            class="collection-tab"
+            data-tab="remarks">
 
-const tabTitles = {
+            DAILY REMARKS
 
-    ptp: "PTP LIST",
+        </button>
 
-    payments: "PAYMENTS LIST",
 
-    remarks: "DAILY REMARKS",
+        <button
+            type="button"
+            class="collection-tab"
+            data-tab="inventory">
 
-    inventory: "MASTERLIST INVENTORY"
+            MASTERLIST INVENTORY
 
-};
+        </button>
 
 
+    </div>
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
 
-const fileInput =
-    document.getElementById("fileInput");
 
+    <!-- =====================================================
+         UPLOAD CARD
+    ====================================================== -->
 
-const uploadButton =
-    document.getElementById("uploadButton");
+    <section class="upload-card">
 
 
-const selectedFile =
-    document.getElementById("selectedFile");
+        <div class="upload-info">
 
+            <div
+                class="upload-title"
+                id="uploadTitle">
 
-const tableHead =
-    document.getElementById("tableHead");
+                PTP LIST
 
+            </div>
 
-const tableBody =
-    document.getElementById("tableBody");
 
+            <div class="upload-description">
 
-const emptyMessage =
-    document.getElementById("emptyMessage");
+                Upload Excel or CSV file
 
+            </div>
 
-const recordCount =
-    document.getElementById("recordCount");
 
+            <div
+                class="selected-file"
+                id="selectedFile">
 
-const searchInput =
-    document.getElementById("searchInput");
+                No file selected
 
+            </div>
 
-const bankFilter =
-    document.getElementById("bankFilter");
+        </div>
 
 
-const monthFilter =
-    document.getElementById("monthFilter");
 
+        <div class="upload-controls">
 
-const uploadTitle =
-    document.getElementById("uploadTitle");
 
+            <label class="file-button">
 
-const clearDataButton =
-    document.getElementById("clearDataButton");
+                CHOOSE FILE
 
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept=".xlsx,.xls,.csv">
 
+            </label>
 
-/* =========================================================
-   NORMALIZE HEADER
-========================================================= */
 
-function normalizeHeader(value) {
 
-    return String(value || "")
+            <button
+                type="button"
+                id="uploadButton"
+                class="upload-button">
 
-        .trim()
+                UPLOAD
 
-        .replace(/\s+/g, " ")
+            </button>
 
-        .toUpperCase();
 
-}
+        </div>
 
 
+    </section>
 
-/* =========================================================
-   FIND COLUMN
-========================================================= */
 
-function findColumn(row, expectedHeader) {
 
-    const target =
-        normalizeHeader(expectedHeader);
+    <!-- =====================================================
+         SEARCH / FILTER
+    ====================================================== -->
 
+    <section class="data-controls">
 
-    return Object.keys(row).find(
-        key =>
-            normalizeHeader(key) === target
-    );
 
-}
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Agent, Customer, Account...">
 
 
 
-/* =========================================================
-   ACCOUNT NUMBER HEADER
-========================================================= */
+        <select id="bankFilter">
 
-function isAccountHeader(header) {
+            <option value="">
+                ALL BANKS
+            </option>
 
-    const value =
-        normalizeHeader(header);
+            <option value="ENBD">
+                ENBD
+            </option>
 
+            <option value="HSBC">
+                HSBC
+            </option>
 
-    return (
+            <option value="EIB">
+                EIB
+            </option>
 
-        value === "ACCOUNT NUMBER" ||
+            <option value="DIB">
+                DIB
+            </option>
 
-        value ===
-            "ACCOUNT NUMBER (IF UPLOAD, MASKED THE NUMBER)" ||
+        </select>
 
-        value === "ACCOUNT NO" ||
 
-        value === "ACCOUNT NO."
 
-    );
+        <select id="monthFilter">
 
-}
+            <option value="">
+                ALL MONTHS
+            </option>
 
+            <option value="AUGUST">
+                AUGUST
+            </option>
 
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
 
-/* =========================================================
-   MASK ACCOUNT NUMBER
-========================================================= */
+            <option value="OCTOBER">
+                OCTOBER
+            </option>
 
-function maskAccountNumber(value) {
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
 
-    if (
-        value === null ||
-        value === undefined ||
-        value === ""
-    ) {
+            <option value="DECEMBER">
+                DECEMBER
+            </option>
 
-        return "";
+        </select>
 
-    }
 
 
-    let account =
-        String(value).trim();
+        <button
+            type="button"
+            id="clearDataButton"
+            class="clear-button">
 
+            CLEAR DATA
 
-    /*
-       Remove spaces and dashes.
-    */
+        </button>
 
-    account =
-        account.replace(
-            /[\s-]/g,
-            ""
-        );
 
+    </section>
 
-    /*
-       Handle Excel scientific notation.
-    */
 
-    if (
-        account.includes("E+") ||
-        account.includes("e+")
-    ) {
 
-        const number =
-            Number(account);
+    <!-- =====================================================
+         RECORD COUNT
+    ====================================================== -->
 
+    <div class="record-bar">
 
-        if (
-            Number.isFinite(number)
-        ) {
+        <strong id="recordCount">
+            0
+        </strong>
 
-            account =
-                Math.trunc(number)
-                    .toString();
+        RECORDS
 
-        }
+    </div>
 
-    }
 
 
-    /*
-       Very short account.
-    */
+    <!-- =====================================================
+         TABLE
+    ====================================================== -->
 
-    if (account.length <= 4) {
+    <section class="table-card">
 
-        return "****";
 
-    }
+        <div class="table-wrapper">
 
+            <table>
 
-    /*
-       5-8 characters.
-    */
+                <thead id="tableHead"></thead>
 
-    if (account.length <= 8) {
+                <tbody id="tableBody"></tbody>
 
-        return (
+            </table>
 
-            account.substring(0, 2) +
+        </div>
 
-            "*".repeat(
-                Math.max(
-                    1,
-                    account.length - 4
-                )
-            ) +
 
-            account.substring(
-                account.length - 2
-            )
 
-        );
+        <div
+            id="emptyMessage"
+            class="empty-message">
 
-    }
+            No records uploaded yet.
 
+        </div>
 
-    /*
-       Normal account number.
 
-       Example:
+    </section>
 
-       1234567890123456
 
-       becomes:
 
-       1234********3456
-    */
+    <!-- =====================================================
+         OVERALL COLLECTION
+    ====================================================== -->
 
-    const first =
-        account.substring(0, 4);
+    <div class="section-title dashboard-section-title">
 
+        OVERALL COLLECTION
 
-    const last =
-        account.substring(
-            account.length - 4
-        );
+    </div>
 
 
-    const hidden =
-        account.length - 8;
 
+    <section class="top-grid">
 
-    return (
 
-        first +
+        <!-- =================================================
+             PAYMENT VS TARGET
+        ================================================== -->
 
-        "*".repeat(hidden) +
+        <div class="card payment-target-card">
 
-        last
 
-    );
+            <div class="card-title">
 
-}
+                PAYMENT VS TARGET
 
+            </div>
 
 
-/* =========================================================
-   BANK HEADER
-========================================================= */
 
-function isBankHeader(header) {
+            <div class="circle-wrapper">
 
-    return (
-        normalizeHeader(header) === "BANK"
-    );
 
-}
+                <div
+                    class="progress-circle"
+                    id="paymentCircle">
 
 
+                    <div class="circle-inner">
 
-/* =========================================================
-   MONTH HEADER
-========================================================= */
+                        <span id="paymentPercent">
+                            0%
+                        </span>
 
-function isMonthHeader(header) {
+                    </div>
 
-    const value =
-        normalizeHeader(header);
 
+                </div>
 
-    return (
 
-        value === "MONTH" ||
+            </div>
 
-        value === "ACTIVE MONTH"
 
-    );
 
-}
+            <div class="circle-info">
 
+                Current:
 
+                <strong id="currentPayment">
+                    0
+                </strong>
 
-/* =========================================================
-   CHANGE TAB
-========================================================= */
+                &nbsp;•&nbsp;
 
-document
-    .querySelectorAll(".collection-tab")
-    .forEach(button => {
+                Goal:
 
+                <strong id="paymentGoal">
+                    0
+                </strong>
 
-        button.addEventListener(
-            "click",
-            function () {
+            </div>
 
 
-                /*
-                   Remove active
-                   from all tabs.
-                */
+        </div>
 
-                document
-                    .querySelectorAll(
-                        ".collection-tab"
-                    )
-                    .forEach(btn => {
 
-                        btn.classList.remove(
-                            "active"
-                        );
 
-                    });
+        <!-- =================================================
+             OVERALL PTP
+        ================================================== -->
 
+        <div class="card">
 
-                /*
-                   Activate clicked tab.
-                */
 
-                this.classList.add(
-                    "active"
-                );
+            <div class="card-title">
 
+                OVERALL PTP
 
-                /*
-                   Change current tab.
-                */
+            </div>
 
-                currentTab =
-                    this.dataset.tab;
 
 
-                /*
-                   Change title.
-                */
+            <div class="ptp-main">
 
-                uploadTitle.textContent =
-                    tabTitles[currentTab];
 
+                <div>
 
-                /*
-                   Reset controls.
-                */
+                    Conversion Rate
 
-                fileInput.value = "";
+                    <span>
+                        (Paid vs PTP)
+                    </span>
 
-                selectedFile.textContent =
-                    "No file selected";
+                </div>
 
-                searchInput.value = "";
 
-                bankFilter.value = "";
+                <strong id="overallPTP">
+                    0%
+                </strong>
 
-                monthFilter.value = "";
 
+            </div>
 
-                /*
-                   Show that tab's data.
-                */
 
-                renderTable();
 
-            }
+            <div class="progress-bar">
 
-        );
+                <div
+                    id="overallPTPBar"
+                    class="progress-fill"
+                    style="width:0%">
+                </div>
 
-    });
+            </div>
 
 
 
-/* =========================================================
-   FILE SELECTION
-========================================================= */
+            <div class="small-text">
 
-fileInput.addEventListener(
-    "change",
-    function () {
+                Current: 0 • Goal: 0
 
+            </div>
 
-        if (this.files.length) {
 
-            selectedFile.textContent =
-                this.files[0].name;
 
-        }
-        else {
+            <div class="bank-grid">
 
-            selectedFile.textContent =
-                "No file selected";
 
-        }
+                <!-- HSBC -->
 
-    }
-);
+                <div class="bank-box">
 
 
+                    <div class="bank-header">
 
-/* =========================================================
-   UPLOAD BUTTON
-========================================================= */
+                        <span>
+                            HSBC UAE
+                        </span>
 
-uploadButton.addEventListener(
-    "click",
-    function () {
+                        <strong>
+                            0%
+                        </strong>
 
+                    </div>
 
-        const file =
-            fileInput.files[0];
 
+                    <div class="progress-bar">
 
-        if (!file) {
+                        <div
+                            class="progress-fill"
+                            style="width:0%">
+                        </div>
 
-            alert(
-                "Please choose an Excel or CSV file first."
-            );
+                    </div>
 
-            return;
 
-        }
+                    <small>
+                        Current 0 • Goal 0
+                    </small>
 
 
-        readExcelFile(file);
+                </div>
 
-    }
-);
 
 
+                <!-- ENBD -->
 
-/* =========================================================
-   READ EXCEL / CSV
-========================================================= */
+                <div class="bank-box">
 
-function readExcelFile(file) {
 
+                    <div class="bank-header">
 
-    const reader =
-        new FileReader();
+                        <span>
+                            ENBD
+                        </span>
 
+                        <strong>
+                            0%
+                        </strong>
 
-    reader.onload =
-        function (event) {
+                    </div>
 
 
-            try {
+                    <div class="progress-bar">
 
+                        <div
+                            class="progress-fill"
+                            style="width:0%">
+                        </div>
 
-                /*
-                   Convert file
-                   to binary array.
-                */
+                    </div>
 
-                const data =
-                    new Uint8Array(
-                        event.target.result
-                    );
 
+                    <small>
+                        Current 0 • Goal 0
+                    </small>
 
-                /*
-                   Read workbook.
-                */
 
-                const workbook =
-                    XLSX.read(
-                        data,
-                        {
-                            type: "array",
-                            cellDates: true
-                        }
-                    );
+                </div>
 
 
-                /*
-                   Make sure sheet exists.
-                */
 
-                if (
-                    !workbook.SheetNames.length
-                ) {
+                <!-- EIB -->
 
-                    alert(
-                        "No worksheet was found."
-                    );
+                <div class="bank-box">
 
-                    return;
 
-                }
+                    <div class="bank-header">
 
+                        <span>
+                            EIB
+                        </span>
 
-                /*
-                   Use first worksheet.
-                */
+                        <strong>
+                            0%
+                        </strong>
 
-                const firstSheet =
-                    workbook.Sheets[
-                        workbook.SheetNames[0]
-                    ];
+                    </div>
 
 
-                /*
-                   Convert worksheet
-                   into objects.
-                */
+                    <div class="progress-bar">
 
-                const rows =
-                    XLSX.utils.sheet_to_json(
-                        firstSheet,
-                        {
-                            defval: "",
-                            raw: false
-                        }
-                    );
+                        <div
+                            class="progress-fill"
+                            style="width:0%">
+                        </div>
 
+                    </div>
 
-                /*
-                   Empty file.
-                */
 
-                if (!rows.length) {
+                    <small>
+                        Current 0 • Goal 0
+                    </small>
 
-                    alert(
-                        "The uploaded file contains no records."
-                    );
 
-                    return;
+                </div>
 
-                }
 
 
-                /*
-                   Store ONLY in memory.
+                <!-- DIB -->
 
-                   No database.
-                   No Supabase.
-                   No localStorage.
-                */
+                <div class="bank-box">
 
-                uploadedData[currentTab] =
-                    rows;
 
+                    <div class="bank-header">
 
-                /*
-                   Display.
-                */
+                        <span>
+                            DIB
+                        </span>
 
-                renderTable();
+                        <strong>
+                            0%
+                        </strong>
 
+                    </div>
 
-            }
-            catch (error) {
 
+                    <div class="progress-bar">
 
-                console.error(
-                    "Excel reader error:",
-                    error
-                );
+                        <div
+                            class="progress-fill"
+                            style="width:0%">
+                        </div>
 
+                    </div>
 
-                alert(
-                    "Unable to read this file. Please check that it is a valid Excel or CSV file."
-                );
 
-            }
+                    <small>
+                        Current 0 • Goal 0
+                    </small>
 
-        };
 
+                </div>
 
-    reader.readAsArrayBuffer(file);
 
-}
+            </div>
 
 
+        </div>
 
-/* =========================================================
-   FILTER DATA
-========================================================= */
 
-function getFilteredData() {
+    </section>
 
 
-    const data =
-        uploadedData[currentTab] || [];
+</main>
 
 
-    const search =
-        searchInput.value
-            .trim()
-            .toLowerCase();
 
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
-    const bank =
-        bankFilter.value
-            .trim()
-            .toLowerCase();
+<script src="collection.js"></script>
 
 
-    const month =
-        monthFilter.value
-            .trim()
-            .toLowerCase();
+</body>
 
-
-    return data.filter(row => {
-
-
-        /* =================================================
-           SEARCH
-        ================================================== */
-
-        const values =
-            Object.values(row)
-                .map(value =>
-                    String(value)
-                        .toLowerCase()
-                );
-
-
-        const matchesSearch =
-            !search ||
-
-            values.some(
-                value =>
-                    value.includes(search)
-            );
-
-
-
-        /* =================================================
-           BANK
-        ================================================== */
-
-        let matchesBank = true;
-
-
-        if (bank) {
-
-
-            const bankKey =
-                Object.keys(row)
-                    .find(
-                        key =>
-                            isBankHeader(key)
-                    );
-
-
-            if (bankKey) {
-
-                matchesBank =
-                    String(
-                        row[bankKey] || ""
-                    )
-                    .toLowerCase()
-                    .includes(bank);
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           MONTH
-        ================================================== */
-
-        let matchesMonth = true;
-
-
-        if (month) {
-
-
-            const monthKey =
-                Object.keys(row)
-                    .find(
-                        key =>
-                            isMonthHeader(key)
-                    );
-
-
-            if (monthKey) {
-
-                matchesMonth =
-                    String(
-                        row[monthKey] || ""
-                    )
-                    .toLowerCase()
-                    .includes(month);
-
-            }
-
-        }
-
-
-
-        return (
-
-            matchesSearch &&
-
-            matchesBank &&
-
-            matchesMonth
-
-        );
-
-    });
-
-}
-
-
-
-/* =========================================================
-   RENDER TABLE
-========================================================= */
-
-function renderTable() {
-
-
-    const rows =
-        getFilteredData();
-
-
-    const headers =
-        displayHeaders[currentTab];
-
-
-    /*
-       Clear existing table.
-    */
-
-    tableHead.innerHTML = "";
-
-    tableBody.innerHTML = "";
-
-
-
-    /* =====================================================
-       HEADER
-    ====================================================== */
-
-    const headerRow =
-        document.createElement("tr");
-
-
-    headers.forEach(header => {
-
-
-        const th =
-            document.createElement("th");
-
-
-        th.textContent =
-            header;
-
-
-        headerRow.appendChild(th);
-
-    });
-
-
-    tableHead.appendChild(
-        headerRow
-    );
-
-
-
-    /* =====================================================
-       DATA
-    ====================================================== */
-
-    rows.forEach(row => {
-
-
-        const tr =
-            document.createElement("tr");
-
-
-        headers.forEach(header => {
-
-
-            const td =
-                document.createElement("td");
-
-
-            /*
-               Find matching uploaded
-               column.
-            */
-
-            const actualKey =
-                findColumn(
-                    row,
-                    header
-                );
-
-
-            let value =
-                actualKey !== undefined
-                    ? row[actualKey]
-                    : "";
-
-
-
-            /*
-               MASK ACCOUNT NUMBER
-               IN ALL FOUR TABS.
-            */
-
-            if (
-                isAccountHeader(header)
-            ) {
-
-                value =
-                    maskAccountNumber(
-                        value
-                    );
-
-            }
-
-
-
-            /*
-               Display blank instead
-               of null/undefined.
-            */
-
-            if (
-                value === null ||
-                value === undefined
-            ) {
-
-                value = "";
-
-            }
-
-
-            td.textContent =
-                value;
-
-
-            tr.appendChild(td);
-
-        });
-
-
-        tableBody.appendChild(tr);
-
-    });
-
-
-
-    /* =====================================================
-       RECORD COUNT
-    ====================================================== */
-
-    recordCount.textContent =
-        rows.length.toLocaleString();
-
-
-
-    /* =====================================================
-       EMPTY MESSAGE
-    ====================================================== */
-
-    emptyMessage.style.display =
-        rows.length
-            ? "none"
-            : "block";
-
-}
-
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-searchInput.addEventListener(
-    "input",
-    renderTable
-);
-
-
-
-/* =========================================================
-   BANK FILTER
-========================================================= */
-
-bankFilter.addEventListener(
-    "change",
-    renderTable
-);
-
-
-
-/* =========================================================
-   MONTH FILTER
-========================================================= */
-
-monthFilter.addEventListener(
-    "change",
-    renderTable
-);
-
-
-
-/* =========================================================
-   CLEAR CURRENT TAB
-========================================================= */
-
-clearDataButton.addEventListener(
-    "click",
-    function () {
-
-
-        if (
-            !uploadedData[currentTab].length
-        ) {
-
-            return;
-
-        }
-
-
-        const confirmed =
-            confirm(
-                `Clear all ${tabTitles[currentTab]} data?`
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        /*
-           Delete only the
-           current tab's data.
-        */
-
-        uploadedData[currentTab] =
-            [];
-
-
-        fileInput.value = "";
-
-        selectedFile.textContent =
-            "No file selected";
-
-
-        renderTable();
-
-    }
-);
-
-
-
-/* =========================================================
-   INITIAL TABLE
-========================================================= */
-
-renderTable();
+</html>
