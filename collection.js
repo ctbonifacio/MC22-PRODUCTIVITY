@@ -1,54 +1,24 @@
 /* =========================================================
    MC22 COLLECTION / AMOUNTS
-   LOCAL EXCEL / CSV READER
-
-   IMPORTANT:
-   - No Supabase
-   - No database
-   - No permanent storage
-   - Data exists only while this page is open
 ========================================================= */
 
+let currentTab = "dashboard";
 
-/* =========================================================
-   CURRENT TAB
-========================================================= */
-
-let currentTab = "ptp";
-
-
-
-/* =========================================================
-   TEMPORARY DATA
-========================================================= */
-
-const uploadedData = {
-
+let uploadedData = {
     ptp: [],
-
     payments: [],
-
     remarks: [],
-
     inventory: []
-
 };
 
 
-
 /* =========================================================
-   REQUIRED HEADERS
+   HEADERS
 ========================================================= */
 
 const requiredHeaders = {
 
-
-    /* =====================================================
-       PTP
-    ====================================================== */
-
     ptp: [
-
         "Agent",
         "CH Code",
         "Customer Name",
@@ -67,17 +37,9 @@ const requiredHeaders = {
         "MONTH",
         "YEAR",
         "TYPE OF PAYMENT"
-
     ],
 
-
-
-    /* =====================================================
-       PAYMENTS
-    ====================================================== */
-
     payments: [
-
         "Agent",
         "Customer Name",
         "Account Number",
@@ -92,17 +54,9 @@ const requiredHeaders = {
         "Placement",
         "Month",
         "Year"
-
     ],
 
-
-
-    /* =====================================================
-       DAILY REMARKS
-    ====================================================== */
-
     remarks: [
-
         "Agent",
         "Customer Name",
         "Account Number",
@@ -120,17 +74,9 @@ const requiredHeaders = {
         "DATE OF PAYMENT",
         "PTP AMOUNT",
         "PTP DATE"
-
     ],
 
-
-
-    /* =====================================================
-       MASTERLIST INVENTORY
-    ====================================================== */
-
     inventory: [
-
         "ACCOUNT NUMBER",
         "PLACEMENT",
         "CUSTOMER NAME",
@@ -144,29 +90,9 @@ const requiredHeaders = {
         "PTP",
         "PAYMENT",
         "ACTIVE MONTH"
-
     ]
 
 };
-
-
-
-/* =========================================================
-   DISPLAY HEADERS
-========================================================= */
-
-const displayHeaders = {
-
-    ptp: requiredHeaders.ptp,
-
-    payments: requiredHeaders.payments,
-
-    remarks: requiredHeaders.remarks,
-
-    inventory: requiredHeaders.inventory
-
-};
-
 
 
 /* =========================================================
@@ -186,122 +112,123 @@ const tabTitles = {
 };
 
 
-
 /* =========================================================
    ELEMENTS
 ========================================================= */
 
+const dashboardPage =
+    document.getElementById("dashboardPage");
+
+const dataPage =
+    document.getElementById("dataPage");
+
+const dataTitle =
+    document.getElementById("dataTitle");
+
 const fileInput =
     document.getElementById("fileInput");
-
 
 const uploadButton =
     document.getElementById("uploadButton");
 
-
-const selectedFile =
-    document.getElementById("selectedFile");
-
-
 const tableHead =
     document.getElementById("tableHead");
-
 
 const tableBody =
     document.getElementById("tableBody");
 
-
 const emptyMessage =
     document.getElementById("emptyMessage");
-
 
 const recordCount =
     document.getElementById("recordCount");
 
-
 const searchInput =
     document.getElementById("searchInput");
 
-
 const bankFilter =
     document.getElementById("bankFilter");
-
 
 const monthFilter =
     document.getElementById("monthFilter");
 
 
-const uploadTitle =
-    document.getElementById("uploadTitle");
-
-
-const clearDataButton =
-    document.getElementById("clearDataButton");
-
-
-
 /* =========================================================
-   NORMALIZE HEADER
+   NAVIGATION
 ========================================================= */
 
-function normalizeHeader(value) {
+document
+    .querySelectorAll(".collection-tab")
+    .forEach(button => {
 
-    return String(value || "")
+        button.addEventListener(
+            "click",
+            function () {
 
-        .trim()
+                document
+                    .querySelectorAll(".collection-tab")
+                    .forEach(btn => {
 
-        .replace(/\s+/g, " ")
+                        btn.classList.remove(
+                            "active"
+                        );
 
-        .toUpperCase();
+                    });
 
-}
+                this.classList.add("active");
 
-
-
-/* =========================================================
-   FIND COLUMN
-========================================================= */
-
-function findColumn(row, expectedHeader) {
-
-    const target =
-        normalizeHeader(expectedHeader);
-
-
-    return Object.keys(row).find(
-        key =>
-            normalizeHeader(key) === target
-    );
-
-}
+                currentTab =
+                    this.dataset.tab;
 
 
+                if (
+                    currentTab === "dashboard"
+                ) {
 
-/* =========================================================
-   ACCOUNT NUMBER HEADER
-========================================================= */
+                    dashboardPage.style.display =
+                        "block";
 
-function isAccountHeader(header) {
+                    dataPage.style.display =
+                        "none";
 
-    const value =
-        normalizeHeader(header);
+                    return;
+
+                }
 
 
-    return (
+                dashboardPage.style.display =
+                    "none";
 
-        value === "ACCOUNT NUMBER" ||
+                dataPage.style.display =
+                    "block";
 
-        value ===
-            "ACCOUNT NUMBER (IF UPLOAD, MASKED THE NUMBER)" ||
 
-        value === "ACCOUNT NO" ||
+                dataTitle.textContent =
+                    tabTitles[currentTab];
 
-        value === "ACCOUNT NO."
 
-    );
+                if (searchInput) {
+                    searchInput.value = "";
+                }
 
-}
+                if (bankFilter) {
+                    bankFilter.value = "";
+                }
 
+                if (monthFilter) {
+                    monthFilter.value = "";
+                }
+
+                if (fileInput) {
+                    fileInput.value = "";
+                }
+
+                renderTable();
+
+            }
+        );
+
+    });
 
 
 /* =========================================================
@@ -315,29 +242,17 @@ function maskAccountNumber(value) {
         value === undefined ||
         value === ""
     ) {
-
         return "";
-
     }
 
-
     let account =
-        String(value).trim();
+        String(value)
+            .trim()
+            .replace(/[\s-]/g, "");
 
 
     /*
-       Remove spaces and dashes.
-    */
-
-    account =
-        account.replace(
-            /[\s-]/g,
-            ""
-        );
-
-
-    /*
-       Handle Excel scientific notation.
+       Excel scientific notation
     */
 
     if (
@@ -348,23 +263,26 @@ function maskAccountNumber(value) {
         const number =
             Number(account);
 
+        if (Number.isFinite(number)) {
 
-        if (
-            Number.isFinite(number)
-        ) {
+            try {
 
-            account =
-                Math.trunc(number)
-                    .toString();
+                account =
+                    BigInt(
+                        Math.round(number)
+                    ).toString();
+
+            } catch (error) {
+
+                account =
+                    String(number);
+
+            }
 
         }
 
     }
 
-
-    /*
-       Very short account.
-    */
 
     if (account.length <= 4) {
 
@@ -373,75 +291,61 @@ function maskAccountNumber(value) {
     }
 
 
-    /*
-       5-8 characters.
-    */
-
     if (account.length <= 8) {
 
         return (
-
             account.substring(0, 2) +
-
             "*".repeat(
-                Math.max(
-                    1,
-                    account.length - 4
-                )
+                account.length - 4
             ) +
-
             account.substring(
                 account.length - 2
             )
-
         );
 
     }
 
 
-    /*
-       Normal account number.
-
-       Example:
-
-       1234567890123456
-
-       becomes:
-
-       1234********3456
-    */
-
-    const first =
-        account.substring(0, 4);
-
-
-    const last =
+    return (
+        account.substring(0, 4) +
+        "*".repeat(
+            account.length - 8
+        ) +
         account.substring(
             account.length - 4
-        );
-
-
-    const hidden =
-        account.length - 8;
-
-
-    return (
-
-        first +
-
-        "*".repeat(hidden) +
-
-        last
-
+        )
     );
 
 }
 
 
-
 /* =========================================================
-   BANK HEADER
+   HEADER NORMALIZATION
 ========================================================= */
+
+function normalizeHeader(value) {
+
+    return String(value || "")
+        .trim()
+        .replace(/\s+/g, " ")
+        .toUpperCase();
+
+}
+
+
+function isAccountHeader(header) {
+
+    const value =
+        normalizeHeader(header);
+
+    return (
+        value === "ACCOUNT NUMBER" ||
+        value === "ACCOUNT NO" ||
+        value === "ACCOUNT NO."
+    );
+
+}
+
 
 function isBankHeader(header) {
 
@@ -452,180 +356,55 @@ function isBankHeader(header) {
 }
 
 
-
-/* =========================================================
-   MONTH HEADER
-========================================================= */
-
 function isMonthHeader(header) {
 
     const value =
         normalizeHeader(header);
 
-
     return (
-
         value === "MONTH" ||
-
         value === "ACTIVE MONTH"
-
     );
 
 }
 
 
-
 /* =========================================================
-   CHANGE TAB
+   UPLOAD
 ========================================================= */
 
-document
-    .querySelectorAll(".collection-tab")
-    .forEach(button => {
+if (uploadButton) {
 
+    uploadButton.addEventListener(
+        "click",
+        function () {
 
-        button.addEventListener(
-            "click",
-            function () {
+            const file =
+                fileInput.files[0];
 
+            if (!file) {
 
-                /*
-                   Remove active
-                   from all tabs.
-                */
-
-                document
-                    .querySelectorAll(
-                        ".collection-tab"
-                    )
-                    .forEach(btn => {
-
-                        btn.classList.remove(
-                            "active"
-                        );
-
-                    });
-
-
-                /*
-                   Activate clicked tab.
-                */
-
-                this.classList.add(
-                    "active"
+                alert(
+                    "Please choose an Excel or CSV file first."
                 );
 
-
-                /*
-                   Change current tab.
-                */
-
-                currentTab =
-                    this.dataset.tab;
-
-
-                /*
-                   Change title.
-                */
-
-                uploadTitle.textContent =
-                    tabTitles[currentTab];
-
-
-                /*
-                   Reset controls.
-                */
-
-                fileInput.value = "";
-
-                selectedFile.textContent =
-                    "No file selected";
-
-                searchInput.value = "";
-
-                bankFilter.value = "";
-
-                monthFilter.value = "";
-
-
-                /*
-                   Show that tab's data.
-                */
-
-                renderTable();
+                return;
 
             }
 
-        );
+            readExcelFile(file);
 
-    });
+        }
+    );
 
+}
 
 
 /* =========================================================
-   FILE SELECTION
-========================================================= */
-
-fileInput.addEventListener(
-    "change",
-    function () {
-
-
-        if (this.files.length) {
-
-            selectedFile.textContent =
-                this.files[0].name;
-
-        }
-        else {
-
-            selectedFile.textContent =
-                "No file selected";
-
-        }
-
-    }
-);
-
-
-
-/* =========================================================
-   UPLOAD BUTTON
-========================================================= */
-
-uploadButton.addEventListener(
-    "click",
-    function () {
-
-
-        const file =
-            fileInput.files[0];
-
-
-        if (!file) {
-
-            alert(
-                "Please choose an Excel or CSV file first."
-            );
-
-            return;
-
-        }
-
-
-        readExcelFile(file);
-
-    }
-);
-
-
-
-/* =========================================================
-   READ EXCEL / CSV
+   READ EXCEL
 ========================================================= */
 
 function readExcelFile(file) {
-
 
     const reader =
         new FileReader();
@@ -634,24 +413,13 @@ function readExcelFile(file) {
     reader.onload =
         function (event) {
 
-
             try {
-
-
-                /*
-                   Convert file
-                   to binary array.
-                */
 
                 const data =
                     new Uint8Array(
                         event.target.result
                     );
 
-
-                /*
-                   Read workbook.
-                */
 
                 const workbook =
                     XLSX.read(
@@ -663,51 +431,20 @@ function readExcelFile(file) {
                     );
 
 
-                /*
-                   Make sure sheet exists.
-                */
-
-                if (
-                    !workbook.SheetNames.length
-                ) {
-
-                    alert(
-                        "No worksheet was found."
-                    );
-
-                    return;
-
-                }
-
-
-                /*
-                   Use first worksheet.
-                */
-
-                const firstSheet =
+                const sheet =
                     workbook.Sheets[
                         workbook.SheetNames[0]
                     ];
 
 
-                /*
-                   Convert worksheet
-                   into objects.
-                */
-
                 const rows =
                     XLSX.utils.sheet_to_json(
-                        firstSheet,
+                        sheet,
                         {
-                            defval: "",
-                            raw: false
+                            defval: ""
                         }
                     );
 
-
-                /*
-                   Empty file.
-                */
 
                 if (!rows.length) {
 
@@ -720,37 +457,25 @@ function readExcelFile(file) {
                 }
 
 
-                /*
-                   Store ONLY in memory.
-
-                   No database.
-                   No Supabase.
-                   No localStorage.
-                */
-
                 uploadedData[currentTab] =
                     rows;
 
 
-                /*
-                   Display.
-                */
-
                 renderTable();
 
 
-            }
-            catch (error) {
-
-
-                console.error(
-                    "Excel reader error:",
-                    error
+                alert(
+                    `${rows.length.toLocaleString()} records loaded successfully.`
                 );
 
+            }
+
+            catch (error) {
+
+                console.error(error);
 
                 alert(
-                    "Unable to read this file. Please check that it is a valid Excel or CSV file."
+                    "Unable to read the Excel/CSV file."
                 );
 
             }
@@ -763,42 +488,42 @@ function readExcelFile(file) {
 }
 
 
-
 /* =========================================================
-   FILTER DATA
+   FILTER
 ========================================================= */
 
 function getFilteredData() {
-
 
     const data =
         uploadedData[currentTab] || [];
 
 
     const search =
-        searchInput.value
-            .trim()
-            .toLowerCase();
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
 
 
     const bank =
-        bankFilter.value
-            .trim()
-            .toLowerCase();
+        bankFilter
+            ? bankFilter.value
+                .trim()
+                .toLowerCase()
+            : "";
 
 
     const month =
-        monthFilter.value
-            .trim()
-            .toLowerCase();
+        monthFilter
+            ? monthFilter.value
+                .trim()
+                .toLowerCase()
+            : "";
 
 
     return data.filter(row => {
 
-
-        /* =================================================
-           SEARCH
-        ================================================== */
 
         const values =
             Object.values(row)
@@ -810,23 +535,16 @@ function getFilteredData() {
 
         const matchesSearch =
             !search ||
-
             values.some(
                 value =>
                     value.includes(search)
             );
 
 
-
-        /* =================================================
-           BANK
-        ================================================== */
-
         let matchesBank = true;
 
 
         if (bank) {
-
 
             const bankKey =
                 Object.keys(row)
@@ -850,16 +568,10 @@ function getFilteredData() {
         }
 
 
-
-        /* =================================================
-           MONTH
-        ================================================== */
-
         let matchesMonth = true;
 
 
         if (month) {
-
 
             const monthKey =
                 Object.keys(row)
@@ -883,21 +595,15 @@ function getFilteredData() {
         }
 
 
-
         return (
-
             matchesSearch &&
-
             matchesBank &&
-
             matchesMonth
-
         );
 
     });
 
 }
-
 
 
 /* =========================================================
@@ -906,28 +612,29 @@ function getFilteredData() {
 
 function renderTable() {
 
+    if (
+        currentTab === "dashboard"
+    ) {
+        return;
+    }
+
 
     const rows =
         getFilteredData();
 
 
     const headers =
-        displayHeaders[currentTab];
+        requiredHeaders[currentTab];
 
-
-    /*
-       Clear existing table.
-    */
 
     tableHead.innerHTML = "";
 
     tableBody.innerHTML = "";
 
 
-
-    /* =====================================================
-       HEADER
-    ====================================================== */
+    /*
+       HEADERS
+    */
 
     const headerRow =
         document.createElement("tr");
@@ -935,14 +642,11 @@ function renderTable() {
 
     headers.forEach(header => {
 
-
         const th =
             document.createElement("th");
 
-
         th.textContent =
             header;
-
 
         headerRow.appendChild(th);
 
@@ -954,13 +658,11 @@ function renderTable() {
     );
 
 
-
-    /* =====================================================
-       DATA
-    ====================================================== */
+    /*
+       ROWS
+    */
 
     rows.forEach(row => {
-
 
         const tr =
             document.createElement("tr");
@@ -968,33 +670,27 @@ function renderTable() {
 
         headers.forEach(header => {
 
-
             const td =
                 document.createElement("td");
 
 
-            /*
-               Find matching uploaded
-               column.
-            */
-
             const actualKey =
-                findColumn(
-                    row,
-                    header
-                );
+                Object.keys(row)
+                    .find(
+                        key =>
+                            normalizeHeader(key) ===
+                            normalizeHeader(header)
+                    );
 
 
             let value =
-                actualKey !== undefined
+                actualKey
                     ? row[actualKey]
                     : "";
 
 
-
             /*
-               MASK ACCOUNT NUMBER
-               IN ALL FOUR TABS.
+               MASK ACCOUNT NUMBERS
             */
 
             if (
@@ -1009,24 +705,25 @@ function renderTable() {
             }
 
 
-
             /*
-               Display blank instead
-               of null/undefined.
+               DATE
             */
 
             if (
-                value === null ||
-                value === undefined
+                value instanceof Date
             ) {
 
-                value = "";
+                value =
+                    value.toLocaleDateString();
 
             }
 
 
             td.textContent =
-                value;
+                value === null ||
+                value === undefined
+                    ? ""
+                    : value;
 
 
             tr.appendChild(td);
@@ -1039,19 +736,9 @@ function renderTable() {
     });
 
 
-
-    /* =====================================================
-       RECORD COUNT
-    ====================================================== */
-
     recordCount.textContent =
         rows.length.toLocaleString();
 
-
-
-    /* =====================================================
-       EMPTY MESSAGE
-    ====================================================== */
 
     emptyMessage.style.display =
         rows.length
@@ -1061,95 +748,130 @@ function renderTable() {
 }
 
 
-
 /* =========================================================
-   SEARCH
+   FILTER EVENTS
 ========================================================= */
 
-searchInput.addEventListener(
-    "input",
-    renderTable
-);
+if (searchInput) {
 
+    searchInput.addEventListener(
+        "input",
+        renderTable
+    );
+
+}
+
+
+if (bankFilter) {
+
+    bankFilter.addEventListener(
+        "change",
+        renderTable
+    );
+
+}
+
+
+if (monthFilter) {
+
+    monthFilter.addEventListener(
+        "change",
+        renderTable
+    );
+
+}
 
 
 /* =========================================================
-   BANK FILTER
+   CLEAR
 ========================================================= */
 
-bankFilter.addEventListener(
-    "change",
-    renderTable
-);
+const clearButton =
+    document.getElementById(
+        "clearDataButton"
+    );
 
 
+if (clearButton) {
 
-/* =========================================================
-   MONTH FILTER
-========================================================= */
+    clearButton.addEventListener(
+        "click",
+        function () {
 
-monthFilter.addEventListener(
-    "change",
-    renderTable
-);
-
-
-
-/* =========================================================
-   CLEAR CURRENT TAB
-========================================================= */
-
-clearDataButton.addEventListener(
-    "click",
-    function () {
+            if (
+                currentTab === "dashboard"
+            ) {
+                return;
+            }
 
 
-        if (
-            !uploadedData[currentTab].length
-        ) {
+            if (
+                !uploadedData[currentTab].length
+            ) {
 
-            return;
+                return;
+
+            }
+
+
+            const confirmed =
+                confirm(
+                    `Clear all ${tabTitles[currentTab]} data?`
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            uploadedData[currentTab] =
+                [];
+
+
+            if (fileInput) {
+                fileInput.value = "";
+            }
+
+
+            renderTable();
 
         }
+    );
 
-
-        const confirmed =
-            confirm(
-                `Clear all ${tabTitles[currentTab]} data?`
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        /*
-           Delete only the
-           current tab's data.
-        */
-
-        uploadedData[currentTab] =
-            [];
-
-
-        fileInput.value = "";
-
-        selectedFile.textContent =
-            "No file selected";
-
-
-        renderTable();
-
-    }
-);
-
+}
 
 
 /* =========================================================
-   INITIAL TABLE
+   MONTH NAV
 ========================================================= */
 
-renderTable();
+const monthSelect =
+    document.getElementById(
+        "monthSelect"
+    );
+
+
+const distributionMonth =
+    document.getElementById(
+        "distributionMonth"
+    );
+
+
+if (monthSelect) {
+
+    monthSelect.addEventListener(
+        "change",
+        function () {
+
+            if (distributionMonth) {
+
+                distributionMonth.textContent =
+                    this.value;
+
+            }
+
+        }
+    );
+
+}
