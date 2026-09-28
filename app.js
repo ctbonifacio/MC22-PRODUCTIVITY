@@ -19,6 +19,7 @@ const sb = createClient(
 );
 
 
+
 /* =========================================================
    HELPERS
 ========================================================= */
@@ -209,7 +210,7 @@ let autoBankRotationTimer = null;function startAutoBankRotation(banks) {
             await renderDashboard(false);
 
         },
-       10 * 30 * 1000    // Rotate every 5 minutes
+       3 * 60 * 1000 // Rotate every 3 minutes   // Rotate every 5 minutes
     );
 }
 
