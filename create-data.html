@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>MC22 Performance - Table</title>
+
+    <link
+        rel="stylesheet"
+        href="collection-data.css">
+
+    <script
+        src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     TOPBAR
+===================================================== -->
+
+<header class="topbar">
+
+    <div class="brand-area">
+
+        <div class="brand">
+            MC22 PERFORMANCE
+        </div>
+
+        <div class="page-name">
+            TABLE
+        </div>
+
+    </div>
+
+
+    <div class="top-actions">
+
+        <a
+            href="collection.html"
+            class="back-button">
+
+            ← COLLECTION DASHBOARD
+
+        </a>
+
+
+        <a
+            href="index.html"
+            class="kpi-button">
+
+            ▣ AGENT KPI DASHBOARD
+
+        </a>
+
+
+        <div class="month-label">
+            MONTH SELECTION
+        </div>
+
+
+        <select id="monthSelect">
+
+            <option value="AUGUST">
+                AUGUST
+            </option>
+
+            <option value="SEPTEMBER">
+                SEPTEMBER
+            </option>
+
+            <option value="OCTOBER">
+                OCTOBER
+            </option>
+
+            <option value="NOVEMBER">
+                NOVEMBER
+            </option>
+
+            <option value="DECEMBER">
+                DECEMBER
+            </option>
+
+        </select>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="page-container">
+
+
+    <!-- =================================================
+         PAGE TITLE
+    ================================================== -->
+
+    <div class="section-title">
+
+        COLLECTION DATA
+
+    </div>
+
+
+
+    <!-- =================================================
+         EXCEL UPLOAD
+    ================================================== -->
+
+    <section class="upload-card">
+
+
+        <div class="upload-information">
+
+
+            <div class="excel-icon">
+                XLS
+            </div>
+
+
+            <div>
+
+                <div class="upload-title">
+
+                    COLLECTION DATA
+
+                </div>
+
+
+                <div class="upload-description">
+
+                    Upload one Excel workbook containing
+                    PTP, PAYMENTS, DAILY REMARKS and
+                    MASTERLIST INVENTORY sheets.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="upload-controls">
+
+
+            <label class="choose-file">
+
+                CHOOSE EXCEL FILE
+
+                <input
+                    type="file"
+                    id="excelFile"
+                    accept=".xlsx,.xls">
+
+            </label>
+
+
+            <span
+                id="fileName"
+                class="file-name">
+
+                No file selected
+
+            </span>
+
+
+            <button
+                type="button"
+                id="uploadButton"
+                class="upload-button">
+
+                UPLOAD EXCEL
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         STATUS
+    ================================================== -->
+
+    <div
+        id="statusMessage"
+        class="status-message">
+
+    </div>
+
+
+
+    <!-- =================================================
+         SHEET STATUS
+    ================================================== -->
+
+    <section
+        id="sheetStatus"
+        class="sheet-status hidden">
+
+
+        <div class="sheet-status-title">
+
+            WORKBOOK SHEETS
+
+        </div>
+
+
+        <div class="sheet-grid">
+
+
+            <div
+                class="sheet-box"
+                id="statusPTP">
+
+                <div class="sheet-name">
+                    PTP
+                </div>
+
+                <div class="sheet-records">
+                    Not uploaded
+                </div>
+
+            </div>
+
+
+            <div
+                class="sheet-box"
+                id="statusPayments">
+
+                <div class="sheet-name">
+                    PAYMENTS
+                </div>
+
+                <div class="sheet-records">
+                    Not uploaded
+                </div>
+
+            </div>
+
+
+            <div
+                class="sheet-box"
+                id="statusRemarks">
+
+                <div class="sheet-name">
+                    DAILY REMARKS
+                </div>
+
+                <div class="sheet-records">
+                    Not uploaded
+                </div>
+
+            </div>
+
+
+            <div
+                class="sheet-box"
+                id="statusInventory">
+
+                <div class="sheet-name">
+                    MASTERLIST INVENTORY
+                </div>
+
+                <div class="sheet-records">
+                    Not uploaded
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         DATA PREVIEW
+    ================================================== -->
+
+    <section
+        id="previewSection"
+        class="preview-section hidden">
+
+
+        <div class="preview-header">
+
+
+            <div>
+
+                <div class="preview-title">
+
+                    DATA PREVIEW
+
+                </div>
+
+
+                <div
+                    id="previewSubtitle"
+                    class="preview-subtitle">
+
+                    Select a sheet below.
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="previewCount"
+                class="preview-count">
+
+                0 RECORDS
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SHEET TABS -->
+
+        <div class="sheet-tabs">
+
+
+            <button
+                type="button"
+                class="sheet-tab active"
+                data-sheet="PTP">
+
+                PTP
+
+            </button>
+
+
+            <button
+                type="button"
+                class="sheet-tab"
+                data-sheet="PAYMENTS">
+
+                PAYMENTS
+
+            </button>
+
+
+            <button
+                type="button"
+                class="sheet-tab"
+                data-sheet="DAILY REMARKS">
+
+                DAILY REMARKS
+
+            </button>
+
+
+            <button
+                type="button"
+                class="sheet-tab"
+                data-sheet="MASTERLIST INVENTORY">
+
+                MASTERLIST INVENTORY
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- TABLE -->
+
+        <div class="table-card">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead id="tableHead"></thead>
+
+                    <tbody id="tableBody"></tbody>
+
+                </table>
+
+            </div>
+
+
+            <div
+                id="emptyMessage"
+                class="empty-message">
+
+                No records available.
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+</main>
+
+
+
+<script src="collection-data.js"></script>
+
+
+</body>
+
+</html>
