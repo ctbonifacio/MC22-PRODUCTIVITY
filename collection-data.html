@@ -11,13 +11,961 @@
 
     <title>MC22 Performance - Table</title>
 
-    <link
-        rel="stylesheet"
-        href="collection-data.css">
 
-    <script
-        src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js">
-    </script>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #eef2f6;
+
+            color: #162a43;
+
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+
+            height: 64px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #102b44,
+                    #1b527d
+                );
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 28px;
+
+        }
+
+
+        .brand-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+        }
+
+
+        .brand {
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            letter-spacing: .5px;
+
+        }
+
+
+        .page-name {
+
+            font-size: 12px;
+
+            opacity: .75;
+
+            border-left: 1px solid
+                rgba(255,255,255,.35);
+
+            padding-left: 18px;
+
+        }
+
+
+        .top-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+        }
+
+
+        .back-button,
+        .kpi-button {
+
+            text-decoration: none;
+
+            color: white;
+
+            border: 1px solid
+                rgba(255,255,255,.25);
+
+            background:
+                rgba(255,255,255,.08);
+
+            padding: 9px 13px;
+
+            border-radius: 5px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .back-button:hover,
+        .kpi-button:hover {
+
+            background:
+                rgba(255,255,255,.18);
+
+        }
+
+
+        .month-label {
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            margin-left: 10px;
+
+        }
+
+
+        #monthSelect {
+
+            height: 32px;
+
+            border-radius: 5px;
+
+            border: none;
+
+            padding: 0 9px;
+
+            font-weight: 700;
+
+            font-size: 10px;
+
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page-container {
+
+            width: 94%;
+
+            margin: 20px auto 40px;
+
+        }
+
+
+        .section-title {
+
+            background: #1d3f7c;
+
+            color: white;
+
+            border-radius: 7px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            margin-bottom: 13px;
+
+        }
+
+
+        /* =====================================================
+           MANUAL DATA CARD
+        ===================================================== */
+
+        .manual-card {
+
+            background: white;
+
+            border: 1px solid #d8e0e9;
+
+            border-radius: 9px;
+
+            padding: 17px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 13px;
+
+        }
+
+
+        .manual-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .data-icon {
+
+            width: 43px;
+
+            height: 43px;
+
+            background: #e8f5ed;
+
+            color: #16804b;
+
+            border-radius: 7px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 800;
+
+            font-size: 10px;
+
+        }
+
+
+        .manual-title {
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            color: #173e77;
+
+        }
+
+
+        .manual-description {
+
+            margin-top: 4px;
+
+            color: #75859a;
+
+            font-size: 9px;
+
+        }
+
+
+        .add-button {
+
+            background: #1d427f;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 5px;
+
+            padding: 11px 18px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+        }
+
+
+        .add-button:hover {
+
+            background: #163666;
+
+        }
+
+
+        /* =====================================================
+           DATA SUMMARY
+        ===================================================== */
+
+        .summary-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+
+            margin-bottom: 13px;
+
+        }
+
+
+        .summary-card {
+
+            background: white;
+
+            border: 1px solid #d8e0e9;
+
+            border-radius: 9px;
+
+            padding: 14px;
+
+            cursor: pointer;
+
+            transition: .15s;
+
+        }
+
+
+        .summary-card:hover {
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 4px 15px
+                rgba(20,50,90,.10);
+
+        }
+
+
+        .summary-name {
+
+            font-size: 9px;
+
+            color: #58708c;
+
+            font-weight: 800;
+
+        }
+
+
+        .summary-value {
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            margin-top: 9px;
+
+            color: #132e50;
+
+        }
+
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-card {
+
+            background: white;
+
+            border: 1px solid #d8e0e9;
+
+            border-radius: 9px;
+
+            overflow: hidden;
+
+        }
+
+
+        .table-header {
+
+            padding: 15px 16px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-bottom: 1px solid #e3e8ee;
+
+        }
+
+
+        .table-title {
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            color: #1d427f;
+
+        }
+
+
+        .record-count {
+
+            font-size: 9px;
+
+            color: #718096;
+
+        }
+
+
+        /* =====================================================
+           TABS
+        ===================================================== */
+
+        .sheet-tabs {
+
+            display: flex;
+
+            gap: 5px;
+
+            padding: 10px 12px;
+
+            background: #f6f8fa;
+
+            border-bottom: 1px solid #e1e6ec;
+
+            overflow-x: auto;
+
+        }
+
+
+        .sheet-tab {
+
+            border: 1px solid #d4dce6;
+
+            background: white;
+
+            color: #4d627b;
+
+            padding: 9px 15px;
+
+            border-radius: 5px;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+
+        }
+
+
+        .sheet-tab.active {
+
+            background: #1d427f;
+
+            color: white;
+
+            border-color: #1d427f;
+
+        }
+
+
+        /* =====================================================
+           TABLE WRAPPER
+        ===================================================== */
+
+        .table-wrapper {
+
+            width: 100%;
+
+            overflow-x: auto;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 850px;
+
+        }
+
+
+        thead {
+
+            background: #f1f5f9;
+
+        }
+
+
+        th {
+
+            padding: 11px 10px;
+
+            text-align: left;
+
+            font-size: 9px;
+
+            color: #415a76;
+
+            border-bottom: 1px solid #dce3eb;
+
+            white-space: nowrap;
+
+        }
+
+
+        td {
+
+            padding: 10px;
+
+            font-size: 9px;
+
+            border-bottom: 1px solid #edf0f4;
+
+            white-space: nowrap;
+
+        }
+
+
+        tbody tr:hover {
+
+            background: #f8fafc;
+
+        }
+
+
+        .action-button {
+
+            border: none;
+
+            padding: 5px 8px;
+
+            border-radius: 4px;
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            margin-right: 3px;
+
+        }
+
+
+        .edit-button {
+
+            background: #eaf2ff;
+
+            color: #1d5ca8;
+
+        }
+
+
+        .delete-button {
+
+            background: #fff0f0;
+
+            color: #c33232;
+
+        }
+
+
+        .empty-message {
+
+            padding: 45px;
+
+            text-align: center;
+
+            color: #8492a5;
+
+            font-size: 11px;
+
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 1000;
+
+            background:
+                rgba(9,25,43,.55);
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+        }
+
+
+        .modal.show {
+
+            display: flex;
+
+        }
+
+
+        .modal-box {
+
+            width: 650px;
+
+            max-width: 96vw;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            background: white;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 15px 50px
+                rgba(0,0,0,.25);
+
+        }
+
+
+        .modal-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 16px 19px;
+
+            border-bottom:
+                1px solid #e1e6ec;
+
+        }
+
+
+        .modal-title {
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            color: #183f78;
+
+        }
+
+
+        .close-button {
+
+            border: none;
+
+            background: none;
+
+            font-size: 23px;
+
+            color: #718096;
+
+            cursor: pointer;
+
+        }
+
+
+        .modal-body {
+
+            padding: 20px;
+
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 13px;
+
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .form-group.full {
+
+            grid-column: 1 / -1;
+
+        }
+
+
+        .form-group label {
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            color: #526981;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+
+            width: 100%;
+
+            border: 1px solid #cfd9e4;
+
+            border-radius: 5px;
+
+            padding: 9px;
+
+            font-size: 11px;
+
+            outline: none;
+
+            font-family: inherit;
+
+        }
+
+
+        .form-group textarea {
+
+            min-height: 70px;
+
+            resize: vertical;
+
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+
+            border-color: #2477e8;
+
+        }
+
+
+        .save-button {
+
+            width: 100%;
+
+            border: none;
+
+            background: #1d427f;
+
+            color: white;
+
+            height: 40px;
+
+            border-radius: 5px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            margin-top: 17px;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           PROGRESS POPUP
+        ===================================================== */
+
+        .progress-box {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .progress-heading {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .progress-track {
+
+            width: 100%;
+
+            height: 9px;
+
+            background: #e5eaf0;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+        }
+
+
+        .progress-fill {
+
+            height: 100%;
+
+            background: #2477e8;
+
+            border-radius: 10px;
+
+        }
+
+
+        .big-progress {
+
+            font-size: 29px;
+
+            font-weight: 800;
+
+            color: #173e77;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:900px) {
+
+            .topbar {
+
+                height: auto;
+
+                padding: 12px;
+
+                gap: 12px;
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+            }
+
+            .top-actions {
+
+                flex-wrap: wrap;
+
+            }
+
+            .summary-grid {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .page-container {
+
+                width: 96%;
+
+            }
+
+            .summary-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+            .manual-card {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+
+            }
+
+            .form-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+            .form-group.full {
+
+                grid-column: auto;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -30,6 +978,7 @@
 ===================================================== -->
 
 <header class="topbar">
+
 
     <div class="brand-area">
 
@@ -45,6 +994,7 @@
 
 
     <div class="top-actions">
+
 
         <a
             href="collection.html"
@@ -65,7 +1015,7 @@
 
 
         <div class="month-label">
-            MONTH SELECTION
+            MONTH
         </div>
 
 
@@ -93,6 +1043,7 @@
 
         </select>
 
+
     </div>
 
 </header>
@@ -106,10 +1057,6 @@
 <main class="page-container">
 
 
-    <!-- =================================================
-         PAGE TITLE
-    ================================================== -->
-
     <div class="section-title">
 
         COLLECTION DATA
@@ -119,232 +1066,192 @@
 
 
     <!-- =================================================
-         EXCEL UPLOAD
+         MANUAL ENTRY
     ================================================== -->
 
-    <section class="upload-card">
+    <section class="manual-card">
 
 
-        <div class="upload-information">
+        <div class="manual-left">
 
 
-            <div class="excel-icon">
-                XLS
+            <div class="data-icon">
+                DATA
             </div>
 
 
             <div>
 
-                <div class="upload-title">
+                <div class="manual-title">
 
-                    COLLECTION DATA
+                    MANUAL COLLECTION DATA
 
                 </div>
 
 
-                <div class="upload-description">
+                <div class="manual-description">
 
-                    Upload one Excel workbook containing
-                    PTP, PAYMENTS, DAILY REMARKS and
-                    MASTERLIST INVENTORY sheets.
+                    Enter PTP, payment and collection
+                    information manually. No Excel upload
+                    is required.
 
                 </div>
 
             </div>
 
-        </div>
-
-
-
-        <div class="upload-controls">
-
-
-            <label class="choose-file">
-
-                CHOOSE EXCEL FILE
-
-                <input
-                    type="file"
-                    id="excelFile"
-                    accept=".xlsx,.xls">
-
-            </label>
-
-
-            <span
-                id="fileName"
-                class="file-name">
-
-                No file selected
-
-            </span>
-
-
-            <button
-                type="button"
-                id="uploadButton"
-                class="upload-button">
-
-                UPLOAD EXCEL
-
-            </button>
 
         </div>
+
+
+        <button
+            class="add-button"
+            onclick="openAddModal()">
+
+            + ADD DATA
+
+        </button>
+
 
     </section>
 
 
 
     <!-- =================================================
-         STATUS
+         SUMMARY
     ================================================== -->
 
-    <div
-        id="statusMessage"
-        class="status-message">
+    <div class="summary-grid">
+
+
+        <div
+            class="summary-card"
+            onclick="openProgress('PTP')">
+
+            <div class="summary-name">
+                TOTAL PTP
+            </div>
+
+            <div
+                class="summary-value"
+                id="totalPtp">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="summary-card"
+            onclick="openProgress('PAYMENTS')">
+
+            <div class="summary-name">
+                TOTAL PAYMENT
+            </div>
+
+            <div
+                class="summary-value"
+                id="totalPayment">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="summary-card"
+            onclick="openProgress('CONVERSION')">
+
+            <div class="summary-name">
+                PAYMENT VS PTP
+            </div>
+
+            <div
+                class="summary-value"
+                id="conversion">
+
+                0%
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="summary-card"
+            onclick="openProgress('COUNT')">
+
+            <div class="summary-name">
+                TOTAL RECORDS
+            </div>
+
+            <div
+                class="summary-value"
+                id="totalRecords">
+
+                0
+
+            </div>
+
+        </div>
+
 
     </div>
 
 
 
     <!-- =================================================
-         SHEET STATUS
+         TABLE
     ================================================== -->
 
-    <section
-        id="sheetStatus"
-        class="sheet-status hidden">
+    <section class="table-card">
 
 
-        <div class="sheet-status-title">
-
-            WORKBOOK SHEETS
-
-        </div>
-
-
-        <div class="sheet-grid">
-
-
-            <div
-                class="sheet-box"
-                id="statusPTP">
-
-                <div class="sheet-name">
-                    PTP
-                </div>
-
-                <div class="sheet-records">
-                    Not uploaded
-                </div>
-
-            </div>
-
-
-            <div
-                class="sheet-box"
-                id="statusPayments">
-
-                <div class="sheet-name">
-                    PAYMENTS
-                </div>
-
-                <div class="sheet-records">
-                    Not uploaded
-                </div>
-
-            </div>
-
-
-            <div
-                class="sheet-box"
-                id="statusRemarks">
-
-                <div class="sheet-name">
-                    DAILY REMARKS
-                </div>
-
-                <div class="sheet-records">
-                    Not uploaded
-                </div>
-
-            </div>
-
-
-            <div
-                class="sheet-box"
-                id="statusInventory">
-
-                <div class="sheet-name">
-                    MASTERLIST INVENTORY
-                </div>
-
-                <div class="sheet-records">
-                    Not uploaded
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =================================================
-         DATA PREVIEW
-    ================================================== -->
-
-    <section
-        id="previewSection"
-        class="preview-section hidden">
-
-
-        <div class="preview-header">
+        <div class="table-header">
 
 
             <div>
 
-                <div class="preview-title">
-
-                    DATA PREVIEW
-
+                <div class="table-title">
+                    COLLECTION DATA TABLE
                 </div>
-
 
                 <div
-                    id="previewSubtitle"
-                    class="preview-subtitle">
+                    class="record-count"
+                    id="recordCount">
 
-                    Select a sheet below.
+                    0 RECORDS
 
                 </div>
 
             </div>
 
 
-            <div
-                id="previewCount"
-                class="preview-count">
+            <button
+                class="add-button"
+                onclick="openAddModal()">
 
-                0 RECORDS
+                + ADD DATA
 
-            </div>
+            </button>
+
 
         </div>
 
 
 
-        <!-- SHEET TABS -->
+        <!-- TABS -->
 
         <div class="sheet-tabs">
 
 
             <button
-                type="button"
                 class="sheet-tab active"
-                data-sheet="PTP">
+                data-sheet="PTP"
+                onclick="selectSheet('PTP')">
 
                 PTP
 
@@ -352,9 +1259,9 @@
 
 
             <button
-                type="button"
                 class="sheet-tab"
-                data-sheet="PAYMENTS">
+                data-sheet="PAYMENTS"
+                onclick="selectSheet('PAYMENTS')">
 
                 PAYMENTS
 
@@ -362,9 +1269,9 @@
 
 
             <button
-                type="button"
                 class="sheet-tab"
-                data-sheet="DAILY REMARKS">
+                data-sheet="DAILY REMARKS"
+                onclick="selectSheet('DAILY REMARKS')">
 
                 DAILY REMARKS
 
@@ -372,9 +1279,9 @@
 
 
             <button
-                type="button"
                 class="sheet-tab"
-                data-sheet="MASTERLIST INVENTORY">
+                data-sheet="MASTERLIST INVENTORY"
+                onclick="selectSheet('MASTERLIST INVENTORY')">
 
                 MASTERLIST INVENTORY
 
@@ -385,30 +1292,26 @@
 
 
 
-        <!-- TABLE -->
-
-        <div class="table-card">
-
-            <div class="table-wrapper">
-
-                <table>
-
-                    <thead id="tableHead"></thead>
-
-                    <tbody id="tableBody"></tbody>
-
-                </table>
-
-            </div>
+        <div class="table-wrapper">
 
 
-            <div
-                id="emptyMessage"
-                class="empty-message">
+            <table>
 
-                No records available.
+                <thead id="tableHead"></thead>
 
-            </div>
+                <tbody id="tableBody"></tbody>
+
+            </table>
+
+
+        </div>
+
+
+        <div
+            id="emptyMessage"
+            class="empty-message">
+
+            No records available.
 
         </div>
 
@@ -416,12 +1319,1712 @@
     </section>
 
 
-
 </main>
 
 
 
-<script src="collection-data.js"></script>
+<!-- =====================================================
+     ADD / EDIT MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="dataModal">
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+
+            <div
+                class="modal-title"
+                id="modalTitle">
+
+                ADD PTP DATA
+
+            </div>
+
+
+            <button
+                class="close-button"
+                onclick="closeModal()">
+
+                ×
+
+            </button>
+
+
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <div
+                class="form-grid"
+                id="formFields">
+
+            </div>
+
+
+            <button
+                class="save-button"
+                onclick="saveRecord()">
+
+                SAVE DATA
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PROGRESS MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="progressModal">
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+
+            <div
+                class="modal-title"
+                id="progressTitle">
+
+                PROGRESS
+
+            </div>
+
+
+            <button
+                class="close-button"
+                onclick="closeProgress()">
+
+                ×
+
+            </button>
+
+
+        </div>
+
+
+        <div
+            class="modal-body"
+            id="progressBody">
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentMonth =
+    localStorage.getItem(
+        "mc22_collection_month"
+    ) || "AUGUST";
+
+
+let currentSheet = "PTP";
+
+
+let editingId = null;
+
+
+
+let database =
+    JSON.parse(
+        localStorage.getItem(
+            "mc22_manual_collection_data"
+        ) || "{}"
+    );
+
+
+if (!database[currentMonth]) {
+
+    database[currentMonth] = {
+
+        "PTP": [],
+        "PAYMENTS": [],
+        "DAILY REMARKS": [],
+        "MASTERLIST INVENTORY": []
+
+    };
+
+}
+
+
+
+/* =====================================================
+   MONTH
+===================================================== */
+
+const monthSelect =
+    document.getElementById(
+        "monthSelect"
+    );
+
+
+monthSelect.value =
+    currentMonth;
+
+
+monthSelect.addEventListener(
+    "change",
+    function () {
+
+        currentMonth =
+            this.value;
+
+
+        if (!database[currentMonth]) {
+
+            database[currentMonth] = {
+
+                "PTP": [],
+                "PAYMENTS": [],
+                "DAILY REMARKS": [],
+                "MASTERLIST INVENTORY": []
+
+            };
+
+        }
+
+
+        localStorage.setItem(
+            "mc22_collection_month",
+            currentMonth
+        );
+
+
+        renderTable();
+
+    }
+);
+
+
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function number(value) {
+
+    return Number(value || 0);
+
+}
+
+
+function money(value) {
+
+    return number(value)
+        .toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+function maskAccount(value) {
+
+    if (!value) {
+
+        return "";
+
+    }
+
+
+    const text =
+        String(value);
+
+
+    if (text.length <= 4) {
+
+        return "****";
+
+    }
+
+
+    return (
+        "*".repeat(
+            Math.max(
+                text.length - 4,
+                4
+            )
+        )
+        +
+        text.slice(-4)
+    );
+
+}
+
+
+
+/* =====================================================
+   SHEET SELECT
+===================================================== */
+
+function selectSheet(sheet) {
+
+    currentSheet = sheet;
+
+
+    document
+        .querySelectorAll(".sheet-tab")
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.sheet === sheet
+                );
+
+            }
+        );
+
+
+    renderTable();
+
+}
+
+
+
+/* =====================================================
+   FORM DEFINITIONS
+===================================================== */
+
+const fields = {
+
+
+    "PTP": [
+
+        {
+            id: "agent",
+            label: "AGENT",
+            type: "text"
+        },
+
+        {
+            id: "customer",
+            label: "CUSTOMER NAME",
+            type: "text"
+        },
+
+        {
+            id: "account",
+            label: "ACCOUNT NUMBER",
+            type: "text"
+        },
+
+        {
+            id: "ptpAmount",
+            label: "PTP AMOUNT",
+            type: "number"
+        },
+
+        {
+            id: "ptpDate",
+            label: "PTP DATE",
+            type: "date"
+        },
+
+        {
+            id: "resultDate",
+            label: "RESULT DATE",
+            type: "date"
+        },
+
+        {
+            id: "bank",
+            label: "BANK",
+            type: "select",
+            options: [
+                "HSBC UAE",
+                "ENBD",
+                "EIB",
+                "DIB"
+            ]
+        },
+
+        {
+            id: "code",
+            label: "CODE",
+            type: "text"
+        },
+
+        {
+            id: "vintage",
+            label: "VINTAGE",
+            type: "text"
+        },
+
+        {
+            id: "placement",
+            label: "PLACEMENT",
+            type: "text"
+        },
+
+        {
+            id: "status",
+            label: "ACCOUNT STATUS",
+            type: "text"
+        }
+
+    ],
+
+
+
+    "PAYMENTS": [
+
+        {
+            id: "agent",
+            label: "AGENT",
+            type: "text"
+        },
+
+        {
+            id: "customer",
+            label: "CUSTOMER NAME",
+            type: "text"
+        },
+
+        {
+            id: "account",
+            label: "ACCOUNT NUMBER",
+            type: "text"
+        },
+
+        {
+            id: "paymentAmount",
+            label: "PAYMENT AMOUNT",
+            type: "number"
+        },
+
+        {
+            id: "paymentDate",
+            label: "DATE OF PAYMENT",
+            type: "date"
+        },
+
+        {
+            id: "dispoDate",
+            label: "DISPO DATE",
+            type: "date"
+        },
+
+        {
+            id: "bank",
+            label: "BANK",
+            type: "select",
+            options: [
+                "HSBC UAE",
+                "ENBD",
+                "EIB",
+                "DIB"
+            ]
+        },
+
+        {
+            id: "code",
+            label: "CODE",
+            type: "text"
+        },
+
+        {
+            id: "status",
+            label: "ACCOUNT STATUS",
+            type: "text"
+        },
+
+        {
+            id: "ptpType",
+            label: "PTP TYPE",
+            type: "text"
+        },
+
+        {
+            id: "placement",
+            label: "PLACEMENT",
+            type: "text"
+        }
+
+    ],
+
+
+
+    "DAILY REMARKS": [
+
+        {
+            id: "agent",
+            label: "AGENT",
+            type: "text"
+        },
+
+        {
+            id: "customer",
+            label: "CUSTOMER NAME",
+            type: "text"
+        },
+
+        {
+            id: "account",
+            label: "ACCOUNT NUMBER",
+            type: "text"
+        },
+
+        {
+            id: "dispoDate",
+            label: "DISPO DATE",
+            type: "date"
+        },
+
+        {
+            id: "bank",
+            label: "BANK",
+            type: "select",
+            options: [
+                "HSBC UAE",
+                "ENBD",
+                "EIB",
+                "DIB"
+            ]
+        },
+
+        {
+            id: "placement",
+            label: "PLACEMENT",
+            type: "text"
+        },
+
+        {
+            id: "vintage",
+            label: "VINTAGE",
+            type: "text"
+        },
+
+        {
+            id: "statusCode",
+            label: "STATUS CODE",
+            type: "text"
+        },
+
+        {
+            id: "remark",
+            label: "REMARK",
+            type: "textarea",
+            full: true
+        },
+
+        {
+            id: "product",
+            label: "PRODUCT",
+            type: "text"
+        },
+
+        {
+            id: "status",
+            label: "ACCOUNT STATUS",
+            type: "text"
+        },
+
+        {
+            id: "phone",
+            label: "PHONE NUMBER",
+            type: "text"
+        },
+
+        {
+            id: "paymentAmount",
+            label: "PAYMENT AMOUNT",
+            type: "number"
+        },
+
+        {
+            id: "paymentDate",
+            label: "DATE OF PAYMENT",
+            type: "date"
+        },
+
+        {
+            id: "ptpAmount",
+            label: "PTP AMOUNT",
+            type: "number"
+        },
+
+        {
+            id: "ptpDate",
+            label: "PTP DATE",
+            type: "date"
+        }
+
+    ],
+
+
+
+    "MASTERLIST INVENTORY": [
+
+        {
+            id: "account",
+            label: "ACCOUNT NUMBER",
+            type: "text"
+        },
+
+        {
+            id: "customer",
+            label: "CUSTOMER NAME",
+            type: "text"
+        },
+
+        {
+            id: "placement",
+            label: "PLACEMENT",
+            type: "text"
+        },
+
+        {
+            id: "bank",
+            label: "BANK",
+            type: "select",
+            options: [
+                "HSBC UAE",
+                "ENBD",
+                "EIB",
+                "DIB"
+            ]
+        },
+
+        {
+            id: "vintage",
+            label: "VINTAGE",
+            type: "text"
+        },
+
+        {
+            id: "status",
+            label: "ACCOUNT STATUS",
+            type: "text"
+        },
+
+        {
+            id: "agent",
+            label: "AGENT",
+            type: "text"
+        }
+
+    ]
+
+};
+
+
+
+/* =====================================================
+   OPEN ADD
+===================================================== */
+
+function openAddModal() {
+
+    editingId = null;
+
+
+    document
+        .getElementById("modalTitle")
+        .textContent =
+        "ADD " + currentSheet + " DATA";
+
+
+    buildForm();
+
+
+    document
+        .getElementById("dataModal")
+        .classList.add("show");
+
+}
+
+
+
+/* =====================================================
+   BUILD FORM
+===================================================== */
+
+function buildForm(record = null) {
+
+    const container =
+        document.getElementById(
+            "formFields"
+        );
+
+
+    container.innerHTML = "";
+
+
+    fields[currentSheet]
+        .forEach(field => {
+
+
+            const group =
+                document.createElement(
+                    "div"
+                );
+
+
+            group.className =
+                "form-group"
+                +
+                (field.full
+                    ? " full"
+                    : "");
+
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+
+            label.textContent =
+                field.label;
+
+
+            group.appendChild(label);
+
+
+            let input;
+
+
+            if (
+                field.type === "select"
+            ) {
+
+                input =
+                    document.createElement(
+                        "select"
+                    );
+
+
+                field.options.forEach(
+                    option => {
+
+                        const item =
+                            document.createElement(
+                                "option"
+                            );
+
+                        item.value =
+                            option;
+
+                        item.textContent =
+                            option;
+
+                        input.appendChild(
+                            item
+                        );
+
+                    }
+                );
+
+            }
+
+            else if (
+                field.type === "textarea"
+            ) {
+
+                input =
+                    document.createElement(
+                        "textarea"
+                    );
+
+            }
+
+            else {
+
+                input =
+                    document.createElement(
+                        "input"
+                    );
+
+                input.type =
+                    field.type;
+
+            }
+
+
+            input.id =
+                "field_" + field.id;
+
+
+            input.dataset.field =
+                field.id;
+
+
+            if (record) {
+
+                input.value =
+                    record[field.id]
+                    || "";
+
+            }
+
+
+            group.appendChild(input);
+
+
+            container.appendChild(group);
+
+        });
+
+}
+
+
+
+/* =====================================================
+   SAVE RECORD
+===================================================== */
+
+function saveRecord() {
+
+    const record = {};
+
+
+    fields[currentSheet]
+        .forEach(field => {
+
+            const input =
+                document.getElementById(
+                    "field_" + field.id
+                );
+
+
+            record[field.id] =
+                input
+                    ? input.value
+                    : "";
+
+        });
+
+
+    if (
+        currentSheet === "PTP"
+        &&
+        number(record.ptpAmount) <= 0
+    ) {
+
+        alert(
+            "Please enter a PTP amount."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        currentSheet === "PAYMENTS"
+        &&
+        number(record.paymentAmount) <= 0
+    ) {
+
+        alert(
+            "Please enter a payment amount."
+        );
+
+        return;
+
+    }
+
+
+    if (editingId !== null) {
+
+        const index =
+            database[currentMonth]
+            [currentSheet]
+            .findIndex(
+                item =>
+                    item.id === editingId
+            );
+
+
+        if (index !== -1) {
+
+            database[currentMonth]
+            [currentSheet][index] =
+                {
+                    ...record,
+                    id: editingId
+                };
+
+        }
+
+    }
+
+    else {
+
+        record.id =
+            Date.now();
+
+
+        database[currentMonth]
+        [currentSheet]
+        .push(record);
+
+    }
+
+
+    saveDatabase();
+
+
+    closeModal();
+
+
+    renderTable();
+
+}
+
+
+
+/* =====================================================
+   EDIT
+===================================================== */
+
+function editRecord(id) {
+
+    const record =
+        database[currentMonth]
+        [currentSheet]
+        .find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!record) return;
+
+
+    editingId = id;
+
+
+    document
+        .getElementById("modalTitle")
+        .textContent =
+        "EDIT " + currentSheet + " DATA";
+
+
+    buildForm(record);
+
+
+    document
+        .getElementById("dataModal")
+        .classList.add("show");
+
+}
+
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+function deleteRecord(id) {
+
+    if (
+        !confirm(
+            "Delete this record?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    database[currentMonth]
+    [currentSheet] =
+        database[currentMonth]
+        [currentSheet]
+        .filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveDatabase();
+
+
+    renderTable();
+
+}
+
+
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+function saveDatabase() {
+
+    localStorage.setItem(
+        "mc22_manual_collection_data",
+        JSON.stringify(database)
+    );
+
+}
+
+
+
+/* =====================================================
+   CLOSE
+===================================================== */
+
+function closeModal() {
+
+    document
+        .getElementById("dataModal")
+        .classList.remove("show");
+
+}
+
+
+function closeProgress() {
+
+    document
+        .getElementById("progressModal")
+        .classList.remove("show");
+
+}
+
+
+
+/* =====================================================
+   TABLE HEADERS
+===================================================== */
+
+const tableHeaders = {
+
+    "PTP": [
+
+        "AGENT",
+        "CUSTOMER",
+        "ACCOUNT NUMBER",
+        "PTP AMOUNT",
+        "PTP DATE",
+        "RESULT DATE",
+        "BANK",
+        "CODE",
+        "VINTAGE",
+        "PLACEMENT",
+        "ACCOUNT STATUS",
+        "ACTION"
+
+    ],
+
+
+    "PAYMENTS": [
+
+        "AGENT",
+        "CUSTOMER",
+        "ACCOUNT NUMBER",
+        "PAYMENT AMOUNT",
+        "PAYMENT DATE",
+        "DISPO DATE",
+        "BANK",
+        "CODE",
+        "ACCOUNT STATUS",
+        "PTP TYPE",
+        "PLACEMENT",
+        "ACTION"
+
+    ],
+
+
+    "DAILY REMARKS": [
+
+        "AGENT",
+        "CUSTOMER",
+        "ACCOUNT NUMBER",
+        "DISPO DATE",
+        "BANK",
+        "PLACEMENT",
+        "VINTAGE",
+        "STATUS CODE",
+        "REMARK",
+        "PRODUCT",
+        "ACCOUNT STATUS",
+        "PHONE",
+        "PAYMENT AMOUNT",
+        "PAYMENT DATE",
+        "PTP AMOUNT",
+        "PTP DATE",
+        "ACTION"
+
+    ],
+
+
+    "MASTERLIST INVENTORY": [
+
+        "ACCOUNT NUMBER",
+        "CUSTOMER",
+        "PLACEMENT",
+        "BANK",
+        "VINTAGE",
+        "ACCOUNT STATUS",
+        "AGENT",
+        "ACTION"
+
+    ]
+
+};
+
+
+
+/* =====================================================
+   RENDER TABLE
+===================================================== */
+
+function renderTable() {
+
+    const records =
+        database[currentMonth]
+        [currentSheet] || [];
+
+
+    const head =
+        document.getElementById(
+            "tableHead"
+        );
+
+
+    const body =
+        document.getElementById(
+            "tableBody"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "emptyMessage"
+        );
+
+
+    head.innerHTML = "";
+
+
+    body.innerHTML = "";
+
+
+    const headerRow =
+        document.createElement(
+            "tr"
+        );
+
+
+    tableHeaders[currentSheet]
+        .forEach(header => {
+
+            const th =
+                document.createElement(
+                    "th"
+                );
+
+            th.textContent =
+                header;
+
+            headerRow.appendChild(th);
+
+        });
+
+
+    head.appendChild(headerRow);
+
+
+    if (records.length === 0) {
+
+        empty.style.display =
+            "block";
+
+    }
+
+    else {
+
+        empty.style.display =
+            "none";
+
+
+        records.forEach(record => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            fields[currentSheet]
+                .forEach(field => {
+
+                    const td =
+                        document.createElement(
+                            "td"
+                        );
+
+
+                    let value =
+                        record[field.id]
+                        || "";
+
+
+                    if (
+                        field.id ===
+                        "account"
+                    ) {
+
+                        value =
+                            maskAccount(value);
+
+                    }
+
+
+                    if (
+                        field.id ===
+                        "ptpAmount"
+                    ) {
+
+                        value =
+                            money(value);
+
+                    }
+
+
+                    if (
+                        field.id ===
+                        "paymentAmount"
+                    ) {
+
+                        value =
+                            money(value);
+
+                    }
+
+
+                    td.textContent =
+                        value;
+
+
+                    row.appendChild(td);
+
+                });
+
+
+            const action =
+                document.createElement(
+                    "td"
+                );
+
+
+            action.innerHTML = `
+
+                <button
+                    class="action-button edit-button"
+                    onclick="editRecord(${record.id})">
+
+                    EDIT
+
+                </button>
+
+                <button
+                    class="action-button delete-button"
+                    onclick="deleteRecord(${record.id})">
+
+                    DELETE
+
+                </button>
+
+            `;
+
+
+            row.appendChild(action);
+
+
+            body.appendChild(row);
+
+        });
+
+    }
+
+
+    document
+        .getElementById("recordCount")
+        .textContent =
+        records.length +
+        (
+            records.length === 1
+                ? " RECORD"
+                : " RECORDS"
+        );
+
+
+    updateSummary();
+
+}
+
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+function updateSummary() {
+
+    const ptp =
+        database[currentMonth]
+        ["PTP"] || [];
+
+
+    const payments =
+        database[currentMonth]
+        ["PAYMENTS"] || [];
+
+
+    const totalPtp =
+        ptp.reduce(
+            (sum,item) =>
+                sum +
+                number(item.ptpAmount),
+            0
+        );
+
+
+    const totalPayment =
+        payments.reduce(
+            (sum,item) =>
+                sum +
+                number(item.paymentAmount),
+            0
+        );
+
+
+    const totalRecords =
+        ptp.length +
+        payments.length +
+        (
+            database[currentMonth]
+            ["DAILY REMARKS"] || []
+        ).length +
+        (
+            database[currentMonth]
+            ["MASTERLIST INVENTORY"] || []
+        ).length;
+
+
+    const conversion =
+        totalPtp > 0
+            ? totalPayment /
+              totalPtp *
+              100
+            : 0;
+
+
+    document
+        .getElementById("totalPtp")
+        .textContent =
+        money(totalPtp);
+
+
+    document
+        .getElementById("totalPayment")
+        .textContent =
+        money(totalPayment);
+
+
+    document
+        .getElementById("conversion")
+        .textContent =
+        conversion.toFixed(2) + "%";
+
+
+    document
+        .getElementById("totalRecords")
+        .textContent =
+        totalRecords;
+
+}
+
+
+
+/* =====================================================
+   PROGRESS POPUP
+===================================================== */
+
+function openProgress(type) {
+
+    const ptp =
+        database[currentMonth]
+        ["PTP"] || [];
+
+
+    const payments =
+        database[currentMonth]
+        ["PAYMENTS"] || [];
+
+
+    const totalPtp =
+        ptp.reduce(
+            (sum,item) =>
+                sum +
+                number(item.ptpAmount),
+            0
+        );
+
+
+    const totalPayment =
+        payments.reduce(
+            (sum,item) =>
+                sum +
+                number(item.paymentAmount),
+            0
+        );
+
+
+    const conversion =
+        totalPtp > 0
+            ? totalPayment /
+              totalPtp *
+              100
+            : 0;
+
+
+    let title = "";
+
+    let body = "";
+
+
+    if (type === "PTP") {
+
+        title =
+            "TOTAL PTP PROGRESS";
+
+
+        body = `
+
+            <div class="big-progress">
+
+                ${money(totalPtp)}
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        PTP RECORDS
+                    </span>
+
+                    <span>
+                        ${ptp.length}
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    if (type === "PAYMENTS") {
+
+        title =
+            "TOTAL PAYMENT PROGRESS";
+
+
+        body = `
+
+            <div class="big-progress">
+
+                ${money(totalPayment)}
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        PAYMENT VS PTP
+                    </span>
+
+                    <span>
+                        ${conversion.toFixed(2)}%
+                    </span>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="
+                            width:${Math.min(
+                                conversion,
+                                100
+                            )}%
+                        ">
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    if (type === "CONVERSION") {
+
+        title =
+            "PAYMENT VS PTP";
+
+
+        body = `
+
+            <div class="big-progress">
+
+                ${conversion.toFixed(2)}%
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        PAYMENT
+                    </span>
+
+                    <span>
+                        ${money(totalPayment)}
+                    </span>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        style="
+                            width:${Math.min(
+                                conversion,
+                                100
+                            )}%
+                        ">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        PTP
+                    </span>
+
+                    <span>
+                        ${money(totalPtp)}
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    if (type === "COUNT") {
+
+        const total =
+            Object.values(
+                database[currentMonth]
+            )
+            .reduce(
+                (sum,list) =>
+                    sum +
+                    list.length,
+                0
+            );
+
+
+        title =
+            "TOTAL RECORDS";
+
+
+        body = `
+
+            <div class="big-progress">
+
+                ${total}
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        PTP
+                    </span>
+
+                    <span>
+                        ${ptp.length}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        PAYMENTS
+                    </span>
+
+                    <span>
+                        ${payments.length}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        DAILY REMARKS
+                    </span>
+
+                    <span>
+                        ${
+                            database[currentMonth]
+                            ["DAILY REMARKS"].length
+                        }
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="progress-box">
+
+                <div class="progress-heading">
+
+                    <span>
+                        MASTERLIST
+                    </span>
+
+                    <span>
+                        ${
+                            database[currentMonth]
+                            ["MASTERLIST INVENTORY"].length
+                        }
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    document
+        .getElementById("progressTitle")
+        .textContent =
+        title;
+
+
+    document
+        .getElementById("progressBody")
+        .innerHTML =
+        body;
+
+
+    document
+        .getElementById("progressModal")
+        .classList.add("show");
+
+}
+
+
+
+/* =====================================================
+   OUTSIDE CLICK
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target.classList
+                .contains("modal")
+        ) {
+
+            event.target
+                .classList
+                .remove("show");
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   INITIAL
+===================================================== */
+
+renderTable();
+
+</script>
 
 
 </body>
