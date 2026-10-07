@@ -611,8 +611,6 @@ const monthSelect =
     document.getElementById(
         "monthSelect"
     );
-
-
 monthSelect.addEventListener(
     "change",
     function () {
