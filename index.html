@@ -7,21 +7,24 @@
 
     <meta
         name="viewport"
-        content="width=device-width,initial-scale=1">
+        content="width=device-width, initial-scale=1"
+    >
 
     <title>MC22 Performance</title>
 
     <link
         rel="stylesheet"
-        href="styles.css">
+        href="styles.css"
+    >
 
 </head>
+
 
 <body>
 
 <header class="topbar">
 
-    <div>
+    <div class="topbar-left">
 
         <h1>
             MC22 PERFORMANCE
@@ -31,18 +34,16 @@
 
             <a
                 href="index.html"
-                class="dashboard-link active">
-
+                class="dashboard-link active"
+            >
                 KPI PERFORMANCE
-
             </a>
 
             <a
                 href="collection.html"
-                class="dashboard-link">
-
+                class="dashboard-link"
+            >
                 COLLECTION / AMOUNTS
-
             </a>
 
         </div>
@@ -54,31 +55,25 @@
 
         <a
             class="active"
-            href="index.html">
-
+            href="index.html"
+        >
             Dashboard
-
         </a>
 
         <a href="performance.html">
-
             Performance Table
-
         </a>
 
         <a href="banks.html">
-
             Bank Targets
-
         </a>
 
         <button
             id="logoutBtn"
             type="button"
-            class="nav-btn">
-
+            class="nav-btn"
+        >
             Logout
-
         </button>
 
     </nav>
@@ -88,11 +83,20 @@
 
 <main>
 
+    <!-- =====================================================
+         BANK TABS
+    ====================================================== -->
+
     <div
         id="bankTabs"
-        class="bank-tabs">
+        class="bank-tabs"
+    >
     </div>
 
+
+    <!-- =====================================================
+         MONTHLY TARGETS
+    ====================================================== -->
 
     <section class="monthly-targets">
 
@@ -106,63 +110,26 @@
 
         </div>
 
+
         <div
             id="monthlyValues"
-            class="monthly-values">
+            class="monthly-values"
+        >
         </div>
 
     </section>
 
 
-    <section class="kpi-grid">
+    <!-- =====================================================
+         AGENT DASHBOARD
+    ====================================================== -->
 
-        <div class="kpi-header agent-header">
-            AGENT
-        </div>
-
-        <div class="kpi-header talk-header">
-
-            ☎ TALKTIME
-
-            <small>
-                Total Talktime in minutes
-            </small>
-
-        </div>
-
-        <div class="kpi-header rpc-header">
-
-            👥 RPC
-
-            <small>
-                Right Party Contacts
-            </small>
-
-        </div>
-
-        <div class="kpi-header ptp-header">
-
-            🤝 NPTP
-
-            <small>
-                New Promises to Pay
-            </small>
-
-        </div>
-
-        <div class="kpi-header payment-header">
-
-            ▣ NPAYMENT
-
-            <small>
-                New Payments
-            </small>
-
-        </div>
+    <section class="agents-dashboard">
 
         <div
             id="rows"
-            class="dashboard-rows">
+            class="dashboard-rows"
+        >
         </div>
 
     </section>
@@ -170,9 +137,14 @@
 </main>
 
 
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
 <div
     id="toast"
-    class="toast">
+    class="toast"
+>
 </div>
 
 
@@ -180,8 +152,8 @@
 
 <script
     type="module"
-    src="app.js">
-</script>
+    src="app.js"
+></script>
 
 </body>
 
