@@ -1,24 +1,31 @@
 /* =========================================================
-   MC22 PERFORMANCE DASHBOARD
-   AGENT DATA LAYOUT
+   GLOBAL
 ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
+
 html,
 body {
     margin: 0;
     padding: 0;
-    width: 100%;
     min-height: 100%;
 }
 
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #eef4f8;
-    color: #172033;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        #f4f6f8;
+
+    color:
+        #172033;
 }
 
 
@@ -27,58 +34,193 @@ body {
 ========================================================= */
 
 .topbar {
-    background: linear-gradient(90deg, #102b44, #1b527d);
-    color: #fff;
-    padding: 15px 28px;
+
+    width: 100%;
+
+    min-height: 86px;
+
+    background:
+        #ffffff;
+
+    border-bottom:
+        1px solid #dce1e6;
 
     display: flex;
-    justify-content: space-between;
+
     align-items: center;
 
-    gap: 20px;
+    justify-content: space-between;
+
+    padding:
+        14px 28px;
+
+    gap: 30px;
 }
+
+
+.topbar-left {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
 
 .topbar h1 {
+
     margin: 0;
-    font-size: 25px;
+
+    font-size: 21px;
+
     font-weight: 900;
+
+    letter-spacing:
+        1.2px;
+
+    color:
+        #172033;
 }
 
-.topbar p {
-    margin: 4px 0 0;
-    font-size: 13px;
-    opacity: .8;
-}
 
-nav {
+/* =========================================================
+   DASHBOARD LINKS
+========================================================= */
+
+.dashboard-links {
+
     display: flex;
+
     align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
+
+    gap: 8px;
 }
 
-nav a,
-.nav-btn {
-    color: #fff;
+
+.dashboard-link {
+
     text-decoration: none;
 
-    padding: 9px 13px;
+    color:
+        #737b86;
 
-    border: 0;
-    border-radius: 7px;
+    font-size: 10px;
 
-    background: transparent;
+    font-weight: 800;
 
-    font-size: 14px;
-    font-weight: bold;
+    letter-spacing:
+        .5px;
+
+    padding:
+        5px 8px;
+
+    border-radius:
+        4px;
+}
+
+
+.dashboard-link:hover {
+
+    background:
+        #f0f3f6;
+
+    color:
+        #172033;
+}
+
+
+.dashboard-link.active {
+
+    background:
+        #172033;
+
+    color:
+        #ffffff;
+}
+
+
+/* =========================================================
+   NAV
+========================================================= */
+
+.topbar nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.topbar nav a {
+
+    text-decoration: none;
+
+    color:
+        #5e6874;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    padding:
+        9px 12px;
+
+    border-radius:
+        5px;
+}
+
+
+.topbar nav a:hover {
+
+    background:
+        #f0f3f6;
+
+    color:
+        #172033;
+}
+
+
+.topbar nav a.active {
+
+    background:
+        #172033;
+
+    color:
+        #ffffff;
+}
+
+
+.nav-btn {
+
+    border: none;
+
+    background:
+        #d93025;
+
+    color:
+        #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    padding:
+        9px 13px;
+
+    border-radius:
+        5px;
 
     cursor: pointer;
 }
 
-nav a:hover,
-nav a.active,
+
 .nav-btn:hover {
-    background: #ffffff22;
+
+    background:
+        #b9231a;
 }
 
 
@@ -87,11 +229,18 @@ nav a.active,
 ========================================================= */
 
 main {
-    width: 100%;
-    max-width: 1600px;
 
-    margin: 0 auto;
-    padding: 18px;
+    width:
+        calc(100% - 48px);
+
+    max-width:
+        1500px;
+
+    margin:
+        0 auto;
+
+    padding:
+        18px 0 40px;
 }
 
 
@@ -100,971 +249,851 @@ main {
 ========================================================= */
 
 .bank-tabs {
-    position: relative;
-    z-index: 20;
 
     display: flex;
-    gap: 8px;
 
-    margin-bottom: 16px;
+    align-items: center;
 
-    overflow-x: auto;
-    padding: 2px;
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-bottom:
+        14px;
 }
+
 
 .bank-tab {
-    position: relative;
-    z-index: 21;
 
-    flex-shrink: 0;
+    border:
+        1px solid #cfd6dd;
 
-    border: 0;
-    border-radius: 7px;
+    background:
+        #ffffff;
 
-    padding: 10px 22px;
+    color:
+        #59636e;
 
-    background: #d8e1e8;
-    color: #17344d;
+    padding:
+        8px 17px;
 
-    font-size: 13px;
-    font-weight: 800;
+    border-radius:
+        4px;
 
-    cursor: pointer;
-    white-space: nowrap;
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        .15s ease;
 }
+
 
 .bank-tab:hover {
-    background: #c8d5df;
+
+    border-color:
+        #172033;
+
+    color:
+        #172033;
 }
+
 
 .bank-tab.active {
-    background: #153b59;
-    color: #fff;
+
+    background:
+        #172033;
+
+    border-color:
+        #172033;
+
+    color:
+        #ffffff;
 }
 
-
-/* =========================================================
-   DASHBOARD HEADER
-========================================================= */
-
-.dashboard-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.dashboard-head h2 {
-    margin: 0;
-    font-size: 24px;
-}
-
-.dashboard-head p {
-    margin: 5px 0 0;
-    color: #667085;
-}
-
-.date-box {
-    background: #fff;
-
-    padding: 9px 12px;
-
-    border-radius: 8px;
-
-    font-size: 13px;
-}
-.dashboard-tabs {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-}
-
-.dashboard-tab {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 7px 14px;
-
-    background: #ffffff;
-    color: #173b69;
-
-    border: 1px solid #d5dfeb;
-    border-radius: 6px;
-
-    text-decoration: none;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    transition: 0.2s ease;
-}
-
-.dashboard-tab:hover {
-    background: #eaf2fb;
-}
-
-.dashboard-tab.active {
-    background: #173b69;
-    color: #ffffff;
-    border-color: #173b69;
-}
 
 /* =========================================================
    MONTHLY TARGETS
 ========================================================= */
 
 .monthly-targets {
-    width: min(700px, 100%);
 
-    margin: 0 auto 18px;
+    background:
+        #ffffff;
 
-    background: #fff;
+    border:
+        1px solid #dce1e6;
 
-    border-radius: 10px;
+    border-radius:
+        5px;
 
-    overflow: hidden;
+    padding:
+        13px 16px;
+
+    margin-bottom:
+        18px;
 
     box-shadow:
-        0 2px 8px rgba(17, 38, 58, .08);
+        0 2px 5px rgba(0,0,0,.04);
 }
+
 
 .monthly-title {
-    padding: 9px;
 
-    background: linear-gradient(
-        90deg,
-        #20966f,
-        #239e7a
-    );
+    font-size:
+        11px;
 
-    color: #fff;
+    font-weight:
+        900;
 
-    text-align: center;
+    letter-spacing:
+        .7px;
 
-    font-size: 18px;
-    font-weight: 900;
+    color:
+        #172033;
+
+    margin-bottom:
+        10px;
 }
+
 
 .monthly-title span {
-    font-size: 12px;
-    font-weight: 600;
-    opacity: .9;
+
+    color:
+        #89929d;
+
+    font-weight:
+        700;
+
+    margin-left:
+        5px;
 }
+
 
 .monthly-values {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:
+        9px;
 }
+
 
 .monthly-item {
-    padding: 9px 5px;
 
-    text-align: center;
+    min-height:
+        54px;
 
-    border-right: 1px solid #dce4e9;
+    border-radius:
+        4px;
+
+    padding:
+        8px 12px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid #e0e5ea;
+
+    background:
+        #f8fafb;
 }
 
-.monthly-item:last-child {
-    border-right: 0;
-}
 
 .monthly-item span {
-    display: block;
 
-    font-size: 11px;
-    font-weight: 800;
+    font-size:
+        9px;
+
+    font-weight:
+        900;
+
+    color:
+        #69737e;
+
+    letter-spacing:
+        .4px;
 }
+
 
 .monthly-item strong {
-    display: block;
 
-    margin-top: 3px;
+    margin-top:
+        3px;
 
-    font-size: 26px;
+    font-size:
+        16px;
+
+    color:
+        #172033;
+
+    font-weight:
+        900;
 }
 
-.talk-target-box strong {
-    color: #078b52;
+
+.talk-target-box {
+    border-left:
+        4px solid #078b52;
 }
 
-.rpc-target-box strong {
-    color: #1769b4;
+
+.rpc-target-box {
+    border-left:
+        4px solid #1769b4;
 }
 
-.ptp-target-box strong {
-    color: #dda000;
+
+.ptp-target-box {
+    border-left:
+        4px solid #dda000;
 }
 
-.payment-target-box strong {
-    color: #6030b7;
+
+.payment-target-box {
+    border-left:
+        4px solid #6030b7;
 }
 
 
 /* =========================================================
-   IMPORTANT
-   DASHBOARD TABLE-LIKE GRID
+   AGENTS DASHBOARD
 ========================================================= */
 
-.kpi-grid {
-    width: 100%;
+.agents-dashboard {
 
-    display: grid;
+    width:
+        100%;
+
+    padding:
+        2px 0 30px;
+}
+
+
+.dashboard-rows {
+
+    width:
+        100%;
+
+    display:
+        grid;
 
     grid-template-columns:
-        218px
-        minmax(245px, 1fr)
-        minmax(245px, 1fr)
-        minmax(245px, 1fr)
-        minmax(245px, 1fr);
+        repeat(4, minmax(220px, 1fr));
 
-    gap: 7px;
+    gap:
+        18px;
 
-    align-items: stretch;
+    align-items:
+        stretch;
 }
 
 
 /* =========================================================
-   KPI HEADER
+   AGENT CARD
 ========================================================= */
 
-.kpi-header {
-    min-height: 72px;
+.agent-dashboard-card {
 
-    border-radius: 9px;
+    width:
+        100%;
 
-    padding: 10px;
+    min-height:
+        235px;
 
-    color: #fff;
+    background:
+        #ffffff;
 
-    display: flex;
-    flex-direction: column;
+    border:
+        1px solid #d5dbe1;
 
-    justify-content: center;
-    align-items: center;
+    border-radius:
+        4px;
 
-    text-align: center;
+    padding:
+        17px;
 
-    font-size: 21px;
-    font-weight: 900;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        space-between;
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 2px 7px rgba(0,0,0,.08);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
 }
 
-.kpi-header small {
-    margin-top: 4px;
 
-    font-size: 11px;
-    font-weight: 700;
-}
+.agent-dashboard-card:hover {
 
-.agent-header {
-    background: #122d47;
-}
+    transform:
+        translateY(-2px);
 
-.talk-header {
-    background: #078b52;
-}
-
-.rpc-header {
-    background: #1769b4;
-}
-
-.nptp-header,
-.ptp-header {
-    background: #dda000;
-}
-
-.npay-header,
-.payment-header {
-    background: #6030b7;
+    box-shadow:
+        0 6px 16px rgba(0,0,0,.12);
 }
 
 
 /* =========================================================
-   DASHBOARD ROW
+   ACCENT LINE
 ========================================================= */
 
-.dashboard-row {
-    display: grid;
+.agent-dashboard-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    top:
+        0;
+
+    width:
+        5px;
+
+    height:
+        100%;
+
+    background:
+        var(--agent-accent, #1478c9);
+}
+
+
+/* =========================================================
+   FEATURED AGENT
+========================================================= */
+
+.agent-dashboard-card.featured-agent {
+
+    grid-column:
+        2 / 4;
+
+    min-height:
+        270px;
+
+    max-width:
+        560px;
+
+    justify-self:
+        center;
+
+    border:
+        2px solid #172033;
+
+    padding:
+        21px;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.10);
+}
+
+
+/* =========================================================
+   AGENT TOP
+========================================================= */
+
+.agent-card-top {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        17px;
+}
+
+
+.agent-profile-area {
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+}
+
+
+/* =========================================================
+   AGENT PHOTO
+========================================================= */
+
+.agent-dashboard-photo {
+
+    width:
+        78px;
+
+    height:
+        78px;
+
+    object-fit:
+        cover;
+
+    border-radius:
+        50%;
+
+    display:
+        block;
+
+    background:
+        #edf1f4;
+
+    border:
+        2px solid #222;
+}
+
+
+.agent-dashboard-placeholder {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-size:
+        26px;
+
+    color:
+        #555;
+
+    background:
+        #eef1f4;
+}
+
+
+.featured-agent .agent-dashboard-photo {
+
+    width:
+        91px;
+
+    height:
+        91px;
+}
+
+
+/* =========================================================
+   AGENT INFORMATION
+========================================================= */
+
+.agent-card-info {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+}
+
+
+.posted-label {
+
+    width:
+        100%;
+
+    border:
+        1px solid #222;
+
+    background:
+        #ffffff;
+
+    padding:
+        7px 9px;
+
+    font-size:
+        9px;
+
+    line-height:
+        1;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .5px;
+
+    color:
+        #222;
+}
+
+
+.agent-dashboard-name {
+
+    margin-top:
+        7px;
+
+    font-size:
+        16px;
+
+    font-weight:
+        900;
+
+    color:
+        #172033;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+}
+
+
+.agent-dashboard-ptp {
+
+    margin-top:
+        3px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        900;
+
+    color:
+        #172033;
+}
+
+
+/* =========================================================
+   KPI CONTAINER
+========================================================= */
+
+.agent-dashboard-metrics {
+
+    width:
+        100%;
+
+    display:
+        grid;
 
     grid-template-columns:
-        218px
-        minmax(245px, 1fr)
-        minmax(245px, 1fr)
-        minmax(245px, 1fr)
-        minmax(245px, 1fr);
+        repeat(4, 1fr);
 
-    gap: 7px;
+    gap:
+        6px;
 
-    grid-column: 1 / -1;
+    margin-top:
+        18px;
+}
 
-    width: 100%;
+
+.agent-kpi {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    min-width:
+        0;
+
+    text-align:
+        center;
 }
 
 
 /* =========================================================
-   AGENT PROFILE CARD
+   KPI RING
 ========================================================= */
 
-.agent-cell,
-.agent-card {
-    min-height: 185px;
+.agent-kpi-ring {
 
-    background: #fff;
+    --ring-progress:
+        0deg;
 
-    border-radius: 9px;
+    width:
+        56px;
 
-    padding: 8px;
+    height:
+        56px;
 
-    display: flex;
-    flex-direction: column;
+    border-radius:
+        50%;
 
-    justify-content: center;
-    align-items: center;
+    display:
+        flex;
 
-    text-align: center;
+    align-items:
+        center;
 
-    position: relative;
+    justify-content:
+        center;
 
-    overflow: hidden;
-
-    box-shadow:
-        0 2px 8px rgba(17, 38, 58, .08);
-}
-
-
-/* =========================================================
-   PROFILE IMAGE
-========================================================= */
-
-.agent-photo {
-    width: 105px;
-    height: 105px;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-
-    background: #e8edf1;
-
-    margin-bottom: 6px;
-
-    display: block;
-}
-
-.agent-photo.placeholder {
-    display: grid;
-    place-items: center;
-
-    font-size: 30px;
-    font-weight: 900;
-
-    color: #536273;
-}
-
-
-/* =========================================================
-   AGENT NAME
-========================================================= */
-
-.agent-name,
-.agent-name-display {
-    font-size: 16px;
-    font-weight: 900;
-
-    line-height: 1.15;
-}
-
-.agent-bank {
-    margin-top: 3px;
-
-    color: #657484;
-
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.agent-message {
-    margin-top: 5px;
-
-    font-size: 12px;
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   METRIC CARD
-========================================================= */
-
-.metric-cell,
-.metric-card {
-    min-height: 185px;
-
-    background: #fff;
-
-    border-radius: 9px;
-
-    padding: 12px;
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-
-    box-shadow:
-        0 2px 8px rgba(17, 38, 58, .08);
-}
-
-
-/* =========================================================
-   METRIC CONTENT
-========================================================= */
-
-.metric-main {
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-}
-
-
-/* =========================================================
-   CIRCULAR PROGRESS
-========================================================= */
-
-.metric-circle,
-.ring {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    min-width: 100px;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: conic-gradient(
-        var(--circle-color, #078b52) 0deg,
-        var(--circle-color, #078b52) var(--circle-deg, 0deg),
-        #dedfe1 var(--circle-deg, 0deg),
-        #dedfe1 360deg
-    );
-}
-/* =========================================================
-   WHITE CENTER
-========================================================= */
-
-.metric-circle::after,
-.ring::after {
-    content: "";
-
-    position: absolute;
-
-    width: 72px;
-    height: 72px;
-
-    border-radius: 50%;
-
-    background: #fff;
-}
-
-
-/* =========================================================
-   PERCENTAGE
-========================================================= */
-
-.metric-circle span,
-.ring span {
-    position: relative;
-
-    z-index: 2;
-
-    font-size: 20px;
-    font-weight: 900;
-
-    color: #172033;
-}
-
-
-/* =========================================================
-   METRIC INFO
-========================================================= */
-
-.metric-values,
-.metric-info {
-    flex: 1;
-
-    padding: 7px 9px;
-
-    border-radius: 7px;
+    position:
+        relative;
 
     background:
-        var(
-            --metric-background,
-            #f7fafc
+        conic-gradient(
+            var(--kpi-color) 0deg,
+            var(--kpi-color)
+                var(--ring-progress),
+            #dddddd
+                var(--ring-progress),
+            #dddddd
+                360deg
         );
 }
 
 
-/* =========================================================
-   TARGET / ACTUAL / VARIANCE
-========================================================= */
+.agent-kpi-ring::before {
 
-.metric-line,
-.metric-info div {
-    display: flex;
+    content:
+        "";
 
-    justify-content: space-between;
-    align-items: center;
+    position:
+        absolute;
 
-    gap: 10px;
+    width:
+        44px;
 
-    padding: 4px 0;
+    height:
+        44px;
 
-    font-size: 13px;
-}
-
-.metric-line strong,
-.metric-info strong {
-    font-size: 14px;
-    font-weight: 900;
-}
-
-/* =========================================================
-   HORIZONTAL PROGRESS BAR
-   REMOVED - CIRCLE IS THE ONLY PROGRESS INDICATOR
-========================================================= */
-
-
-
-.metric-progress-fill,
-.progress div {
-    height: 100%;
-
-    border-radius: 20px;
+    border-radius:
+        50%;
 
     background:
-        var(
-            --circle-color,
-            var(--accent, #078b52)
-        );
+        #ffffff;
+}
 
-    transition: width .5s ease;
+
+.agent-kpi-ring-inner {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+}
+
+
+.agent-kpi-ring-inner span {
+
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    color:
+        #172033;
+}
+
+
+.featured-agent .agent-kpi-ring {
+
+    width:
+        63px;
+
+    height:
+        63px;
+}
+
+
+.featured-agent .agent-kpi-ring::before {
+
+    width:
+        49px;
+
+    height:
+        49px;
+}
+
+
+.featured-agent .agent-kpi-ring-inner span {
+
+    font-size:
+        11px;
 }
 
 
 /* =========================================================
-   RATIO
+   KPI COLORS
 ========================================================= */
 
-.metric-ratio,
-.ratio {
-    margin-top: 5px;
+.agent-kpi-talk {
 
-    text-align: center;
+    --kpi-color:
+        #078b52;
+}
 
-    font-size: 13px;
-    font-weight: 800;
+
+.agent-kpi-rpc {
+
+    --kpi-color:
+        #1769b4;
+}
+
+
+.agent-kpi-nptp {
+
+    --kpi-color:
+        #dda000;
+}
+
+
+.agent-kpi-npayment {
+
+    --kpi-color:
+        #6030b7;
 }
 
 
 /* =========================================================
-   METRIC COLORS
+   KPI LABEL
 ========================================================= */
-.metric-talk .metric-circle {
-    --circle-color: #078b52;
+
+.agent-kpi-label {
+
+    margin-top:
+        7px;
+
+    font-size:
+        8px;
+
+    line-height:
+        1.1;
+
+    font-weight:
+        900;
+
+    color:
+        #252b31;
+
+    white-space:
+        nowrap;
 }
 
-.metric-rpc .metric-circle {
-    --circle-color: #1769b4;
+
+.agent-kpi-value {
+
+    margin-top:
+        3px;
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    color:
+        #747e88;
+
+    white-space:
+        nowrap;
 }
 
-.metric-nptp .metric-circle {
-    --circle-color: #dda000;
-}
-
-.metric-npay .metric-circle {
-    --circle-color: #6030b7;
-}
 
 /* =========================================================
-   TOTAL ROW
+   EMPTY STATE
 ========================================================= */
 
-.total-row {
-    margin-top: 15px;
-}
+.empty-state {
 
-.total-agent {
+    grid-column:
+        1 / -1;
+
+    min-height:
+        180px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
     background:
-        linear-gradient(
-            135deg,
-            #102b44,
-            #1b527d
-        );
-
-    color: #fff;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-}
-
-.total-title {
-    font-size: 24px;
-    font-weight: 900;
-}
-
-.total-agents {
-    margin-top: 5px;
-
-    font-size: 12px;
-
-    opacity: .8;
-}
-
-
-/* =========================================================
-   PERFORMANCE TABLE
-========================================================= */
-
-.table-section,
-.setup-card {
-    margin-top: 20px;
-
-    background: #fff;
-
-    border-radius: 12px;
-
-    padding: 20px;
-
-    box-shadow:
-        0 3px 15px rgba(0, 0, 0, .06);
-}
-
-.section-title {
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
-
-    gap: 15px;
-
-    margin-bottom: 15px;
-}
-
-.section-title h2 {
-    margin: 0 0 5px;
-}
-
-.section-title p {
-    margin: 0;
-
-    color: #667085;
-}
-
-.actions {
-    display: flex;
-
-    gap: 8px;
-
-    flex-wrap: wrap;
-}
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-.table-container {
-    width: 100%;
-
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-
-    min-width: 1450px;
-
-    border-collapse: collapse;
-}
-
-th {
-    position: sticky;
-
-    top: 0;
-
-    z-index: 2;
-
-    background: #102b44;
-
-    color: #fff;
-
-    padding: 10px 8px;
-
-    font-size: 12px;
-
-    text-align: left;
-}
-
-td {
-    padding: 7px;
-
-    border-bottom:
-        1px solid #e8edf2;
-
-    vertical-align: middle;
-}
-
-td input,
-td select {
-    width: 100%;
-
-    padding: 8px;
-
-    min-width: 80px;
-
-    background: #fff;
+        #ffffff;
 
     border:
-        1px solid #d6dde5;
+        1px solid #dce1e6;
 
-    border-radius: 5px;
-}
+    border-radius:
+        6px;
 
-td input:focus,
-td select:focus {
-    outline: none;
+    color:
+        #737d88;
 
-    border-color: #1769b4;
+    font-size:
+        13px;
 
-    box-shadow:
-        0 0 0 2px #1769b422;
-}
-
-
-/* =========================================================
-   PHOTO UPLOAD
-========================================================= */
-
-.photo-cell {
-    min-width: 180px;
-
-    text-align: center;
-}
-
-.photo-file {
-    width: 100%;
-}
-
-.photo-preview {
-    display: none;
-
-    width: 60px;
-    height: 60px;
-
-    object-fit: cover;
-
-    margin: 7px auto 0;
-
-    border:
-        3px solid #e5eaf0;
-
-    border-radius: 50%;
-
-    box-shadow:
-        0 2px 7px rgba(0, 0, 0, .12);
-}
-
-
-/* =========================================================
-   PROFILE UPLOAD
-========================================================= */
-
-.profile-upload {
-    min-width: 140px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-}
-
-.profile-photo-preview,
-.profile-photo-placeholder {
-    width: 82px;
-    height: 82px;
-
-    border-radius: 50%;
-}
-
-.profile-photo-preview {
-    display: none;
-
-    object-fit: cover;
-
-    border:
-        3px solid #e1e7ec;
-
-    box-shadow:
-        0 3px 10px rgba(0, 0, 0, .12);
-}
-
-.profile-photo-placeholder {
-    background:
-        linear-gradient(
-            135deg,
-            #e9f0f5,
-            #d8e3eb
-        );
-
-    border:
-        3px solid #e1e7ec;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    font-size: 28px;
-
-    color: #627486;
-}
-
-.profile-file {
-    display: none;
-}
-
-.profile-upload-btn {
-    border: 0;
-
-    background: #153b59;
-
-    color: #fff;
-
-    padding: 7px 10px;
-
-    border-radius: 6px;
-
-    font-size: 11px;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.profile-upload-btn:hover {
-    background: #0d2c44;
-}
-
-.profile-remove-btn {
-    display: none;
-
-    border: 0;
-
-    background: transparent;
-
-    color: #bd2424;
-
-    font-size: 10px;
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   BANK TARGET TABLE
-========================================================= */
-
-#bankTable {
-    width: 100%;
-}
-
-#bankTable input {
-    width: 100%;
-
-    padding: 8px;
-
-    background: #fff;
-
-    border:
-        1px solid #d6dde5;
-
-    border-radius: 5px;
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-.btn {
-    border: 0;
-
-    border-radius: 7px;
-
-    padding: 10px 14px;
-
-    background: #e9eef4;
-
-    color: #172033;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.btn:hover {
-    filter: brightness(.96);
-}
-
-.btn.primary,
-.primary {
-    background: #123b5a;
-
-    color: #fff;
-}
-
-.btn.success,
-.success {
-    background: #087f4d;
-
-    color: #fff;
-}
-
-.delete-btn {
-    border: 0;
-
-    background: #ffe8e8;
-
-    color: #bd2424;
-
-    padding: 8px;
-
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    font-weight: bold;
-
-    margin-left: 5px;
-}
-
-.delete-btn:hover {
-    background: #ffd4d4;
+    font-weight:
+        700;
 }
 
 
@@ -1073,285 +1102,61 @@ td select:focus {
 ========================================================= */
 
 .toast {
-    position: fixed;
 
-    right: 20px;
-    bottom: 20px;
+    position:
+        fixed;
 
-    z-index: 100;
+    right:
+        22px;
 
-    background: #102b44;
+    bottom:
+        22px;
 
-    color: #fff;
+    z-index:
+        9999;
 
-    padding: 12px 16px;
+    background:
+        #172033;
 
-    border-radius: 8px;
+    color:
+        #ffffff;
 
-    opacity: 0;
+    padding:
+        11px 16px;
 
-    transform: translateY(10px);
+    border-radius:
+        5px;
 
-    transition: .2s;
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.2);
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    transform:
+        translateY(10px);
+
+    transition:
+        .2s ease;
 }
+
 
 .toast.show {
-    opacity: 1;
 
-    transform: none;
-}
+    opacity:
+        1;
 
-/* =========================================================
-   LOGIN
-   MC22 PERFORMANCE THEME
-========================================================= */
-
-.login-page {
-    min-height: 100vh;
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #102b44 0%,
-            #153b59 45%,
-            #1b527d 100%
-        );
-}
-
-
-/* LOGIN CARD */
-
-.login-box {
-    width: 100%;
-    max-width: 390px;
-
-    padding: 36px 32px;
-
-    background: #ffffff;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 18px 45px rgba(0, 0, 0, .25);
-
-    border:
-        1px solid rgba(255,255,255,.2);
-}
-
-
-/* TITLE */
-
-.login-box h1 {
-    margin: 0;
-
-    color: #102b44;
-
-    font-size: 27px;
-    font-weight: 900;
-
-    letter-spacing: .3px;
-
-    text-align: center;
-}
-
-
-/* SUBTITLE */
-
-.login-box > p {
-    margin: 7px 0 28px;
-
-    color: #667085;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    text-align: center;
-}
-
-
-/* LABEL */
-
-.login-box label {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: #17344d;
-
-    font-size: 13px;
-    font-weight: 800;
-}
-
-
-/* USERNAME INPUT */
-
-.login-box input[type="text"] {
-    width: 100%;
-    height: 44px;
-
-    padding: 0 13px;
-
-    margin-bottom: 18px;
-
-    border:
-        1px solid #d6dde5;
-
-    border-radius: 7px;
-
-    background: #f8fafc;
-
-    color: #172033;
-
-    font-size: 13px;
-
-    outline: none;
-
-    transition:
-        border-color .2s,
-        box-shadow .2s,
-        background .2s;
-}
-
-
-.login-box input[type="text"]:focus {
-    border-color: #1769b4;
-
-    background: #fff;
-
-    box-shadow:
-        0 0 0 3px rgba(23,105,180,.12);
-}
-
-
-.login-box input[type="text"]::placeholder {
-    color: #98a2b3;
-}
-
-
-/* LOGIN BUTTON */
-
-.login-box #loginBtn {
-    width: 100%;
-    height: 44px;
-
-    border: 0;
-
-    border-radius: 7px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #102b44,
-            #1b527d
-        );
-
-    color: #fff;
-
-    font-size: 13px;
-    font-weight: 800;
-
-    cursor: pointer;
-
-    transition:
-        transform .15s,
-        box-shadow .2s,
-        filter .2s;
-}
-
-
-.login-box #loginBtn:hover {
-    filter: brightness(1.08);
-
-    box-shadow:
-        0 6px 16px rgba(16,43,68,.25);
-}
-
-
-.login-box #loginBtn:active {
-    transform: translateY(1px);
-}
-
-
-.login-box #loginBtn:disabled {
-    opacity: .65;
-
-    cursor: not-allowed;
-
-    box-shadow: none;
-}
-
-
-/* LOGIN MESSAGE */
-
-.login-message {
-    min-height: 18px;
-
-    margin-top: 12px !important;
-    margin-bottom: 0 !important;
-
-    color: #667085;
-
-    font-size: 11px !important;
-
-    line-height: 1.4;
-
-    text-align: center;
-}
-
-
-/* =========================================================
-   PERFORMANCE TABLE SEARCH
-========================================================= */
-
-.agent-search {
-    width: 160px;
-    height: 36px;
-    padding: 0 12px;
-
-    border: 2px solid #d5dce5;
-    border-radius: 6px;
-
-    background: #ffffff;
-    color: #102b44;
-
-    font-size: 14px;
-    font-weight: 500;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.agent-search::placeholder {
-    color: #8a96a3;
-}
-
-.agent-search:focus {
-    border-color: #1478c9;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(20, 120, 201, 0.12);
-}
-/* =========================================================
-   SETUP
-========================================================= */
-
-.setup-card {
-    max-width: 750px;
-
-    margin: 50px auto;
-
-    line-height: 1.6;
+    transform:
+        translateY(0);
 }
 
 
@@ -1361,184 +1166,100 @@ td select:focus {
 
 @media (max-width: 1200px) {
 
-    main {
-        overflow-x: auto;
+    .dashboard-rows {
+
+        grid-template-columns:
+            repeat(3, minmax(210px, 1fr));
     }
 
-    .kpi-grid {
-        min-width: 1260px;
+
+    .agent-dashboard-card.featured-agent {
+
+        grid-column:
+            1 / -1;
+
+        max-width:
+            560px;
     }
 }
 
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
 
     .topbar {
-        flex-direction: column;
 
-        align-items: flex-start;
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
     }
 
-    main {
-        overflow-x: auto;
+
+    .topbar nav {
+
+        width:
+            100%;
+
+        flex-wrap:
+            wrap;
     }
 
-    .monthly-targets {
-        width: 100%;
+
+    .dashboard-rows {
+
+        grid-template-columns:
+            repeat(2, minmax(200px, 1fr));
+
+        gap:
+            13px;
     }
+
 
     .monthly-values {
+
         grid-template-columns:
-            repeat(4, 1fr);
-    }
-
-    .monthly-item {
-        min-width: 0;
-
-        padding: 7px;
-    }
-
-    .monthly-item strong {
-        font-size: 20px;
-    }
-
-    .kpi-grid {
-        min-width: 1260px;
+            repeat(2, 1fr);
     }
 }
 
 
-/* =========================================================
-   FINAL DASHBOARD OVERRIDES
-   KEEP THESE AT THE VERY END
-========================================================= */
+@media (max-width: 600px) {
 
-.dashboard-rows {
-    display: contents;
+    main {
+
+        width:
+            calc(100% - 24px);
+    }
+
+
+    .dashboard-rows {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .agent-dashboard-card.featured-agent {
+
+        grid-column:
+            1;
+
+        max-width:
+            none;
+    }
+
+
+    .monthly-values {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .agent-dashboard-card {
+
+        min-height:
+            225px;
+    }
 }
-
-.dashboard-row {
-    display: grid !important;
-
-    grid-template-columns:
-        218px
-        minmax(245px, 1fr)
-        minmax(245px, 1fr)
-        minmax(245px, 1fr)
-        minmax(245px, 1fr) !important;
-
-    gap: 7px !important;
-
-    width: 100% !important;
-
-    grid-column: 1 / -1 !important;
-}
-
-.dashboard-row > * {
-    min-width: 0;
-}
-
-
-/* PROFILE */
-
-.dashboard-row .agent-cell,
-.dashboard-row .agent-card {
-    min-height: 185px !important;
-
-    display: flex !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-
-    overflow: hidden !important;
-}
-
-
-/* METRICS */
-
-.dashboard-row .metric-cell,
-.dashboard-row .metric-card {
-    min-height: 185px !important;
-
-    display: flex !important;
-
-    justify-content: center !important;
-}
-
-
-/* CIRCLE */
-
-.dashboard-row .metric-circle,
-.dashboard-row .ring {
-    flex-shrink: 0 !important;
-
-    width: 100px !important;
-    height: 100px !important;
-}
-
-
-/* IMAGE */
-
-.dashboard-row .agent-photo {
-    width: 105px !important;
-    height: 105px !important;
-
-    object-fit: cover !important;
-
-    border-radius: 50% !important;
-}
-
-
-/* PREVENT TEXT FROM DESTROYING GRID */
-
-.dashboard-row .metric-main {
-    min-width: 0 !important;
-}
-
-.dashboard-row .metric-values,
-.dashboard-row .metric-info {
-    min-width: 0 !important;
-}
-
-/* CIRCLE PROGRESS ONLY */
-.metric-progress,
-.progress {
-    display: none !important;
-}
-/* =========================================================
-    DASHBOARD KPI
-========================================================= */
-.dashboard-links {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-}
-.dashboard-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 7px 14px;
-    border-radius: 6px;
-    background: #ffffff;
-    color: #173b69;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 700;
-    border: 1px solid #d5dfeb;
-    transition: 0.2s ease;
-}
-
-.dashboard-link:hover {
-    background: #eaf2fb;
-}
-
-.dashboard-link.active {
-    background: #173b69;
-    color: white;
-    border-color: #173b69;
-}
-
-/* =========================================================
-   END
-========================================================= */
