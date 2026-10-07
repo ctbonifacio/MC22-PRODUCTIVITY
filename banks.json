@@ -6,8 +6,7 @@
         "rpcTarget": 33,
         "ptpTarget": 44,
         "paymentTarget": 22
-    },
-    {
+    },    {
         "id": "hsbc",
         "name": "HSBC",
         "talkTarget": 670,
