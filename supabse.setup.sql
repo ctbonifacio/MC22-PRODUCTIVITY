@@ -374,7 +374,6 @@ using (
     bucket_id = 'agent-photos'
 );
 
-
 create policy "leaders read agent photos"
 on storage.objects
 for select
