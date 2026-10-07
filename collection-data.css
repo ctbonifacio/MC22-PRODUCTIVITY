@@ -838,8 +838,6 @@ body {
             calc(100% - 20px);
 
     }
-
-
     .sheet-grid {
 
         grid-template-columns: 1fr;
