@@ -36,12 +36,10 @@ on public.agents for update
 to authenticated
 using (true)
 with check (true);
-
 create policy "leaders can delete agents"
 on public.agents for delete
 to authenticated
 using (true);
-
 -- Create the bucket in Storage UI with:
 -- Name: agent-photos
 -- Public bucket: ON
