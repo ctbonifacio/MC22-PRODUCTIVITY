@@ -7,57 +7,92 @@ import {
    CONFIG
 ========================================================= */
 
-const cfg = window.MC22_CONFIG;
+const cfg =
+    window.MC22_CONFIG;
+
 
 if (!cfg) {
-    throw new Error("MC22_CONFIG is missing.");
+
+    throw new Error(
+        "MC22_CONFIG is missing."
+    );
 }
 
-const sb = createClient(
-    cfg.SUPABASE_URL,
-    cfg.SUPABASE_ANON_KEY
-);
 
+const sb =
+    createClient(
+        cfg.SUPABASE_URL,
+        cfg.SUPABASE_ANON_KEY
+    );
 
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-const $ = selector =>
-    document.querySelector(selector);
+const $ =
+    selector =>
+        document.querySelector(
+            selector
+        );
 
-const $$ = selector =>
-    document.querySelectorAll(selector);
+
+const $$ =
+    selector =>
+        document.querySelectorAll(
+            selector
+        );
 
 
-function toast(message) {
+function toast(
+    message
+) {
 
-    let el = $("#toast");
+    let el =
+        $("#toast");
+
 
     if (!el) {
 
-        el = document.createElement("div");
+        el =
+            document.createElement(
+                "div"
+            );
 
-        el.id = "toast";
+        el.id =
+            "toast";
 
-        document.body.appendChild(el);
+        document.body.appendChild(
+            el
+        );
     }
 
-    el.textContent = message;
 
-    el.classList.add("show");
+    el.textContent =
+        message;
+
+
+    el.classList.add(
+        "show"
+    );
+
 
     clearTimeout(
         window.__toastTimer
     );
 
+
     window.__toastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            el.classList.remove("show");
+                el.classList.remove(
+                    "show"
+                );
 
-        }, 3000);
+            },
+            3000
+        );
 }
 
 
@@ -69,6 +104,7 @@ const username =
     localStorage.getItem(
         "mc22_username"
     );
+
 
 const currentRole =
     String(
@@ -133,86 +169,143 @@ function adminOnly() {
 /* =========================================================
    CACHE
 ========================================================= */
-let agentsCache = null;
 
-let banksCache = null;
+let agentsCache =
+    null;
 
-let activeBank = "OVERALL";
 
-/* =========================================================
-   PERFORMANCE TABLE SEARCH
-========================================================= */
+let banksCache =
+    null;
 
-let performanceSearch = "";
+
+let activeBank =
+    "OVERALL";
+
+
+let performanceSearch =
+    "";
+
+
 /* =========================================================
    LEADER AUTO BANK ROTATION
 ========================================================= */
 
-let autoBankRotationTimer = null;function startAutoBankRotation(banks) {
+let autoBankRotationTimer =
+    null;
 
-    // Stop any existing rotation
-    if (autoBankRotationTimer) {
-        clearInterval(autoBankRotationTimer);
-        autoBankRotationTimer = null;
+
+function startAutoBankRotation(
+    banks
+) {
+
+    if (
+        autoBankRotationTimer
+    ) {
+
+        clearInterval(
+            autoBankRotationTimer
+        );
+
+        autoBankRotationTimer =
+            null;
     }
 
-    // Only leaders get automatic rotation
+
+    /*
+       Only leaders rotate.
+    */
+
     if (isAdmin) {
         return;
     }
 
+
     const bankNames = [
+
         "OVERALL",
-        ...banks.map(bank =>
-            String(bank.bank).toUpperCase()
+
+        ...banks.map(
+            bank =>
+                String(
+                    bank.bank
+                ).toUpperCase()
         )
+
     ];
 
-    const uniqueBanks = [
-        ...new Set(bankNames)
-    ];
 
-    if (uniqueBanks.length <= 1) {
+    const uniqueBanks =
+        [
+            ...new Set(
+                bankNames
+            )
+        ];
+
+
+    if (
+        uniqueBanks.length <= 1
+    ) {
+
         return;
     }
 
-    // Start from current bank
-    let currentIndex =
-        uniqueBanks.indexOf(activeBank);
 
-    if (currentIndex < 0) {
-        currentIndex = 0;
-        activeBank = uniqueBanks[0];
+    let currentIndex =
+        uniqueBanks.indexOf(
+            activeBank
+        );
+
+
+    if (
+        currentIndex < 0
+    ) {
+
+        currentIndex =
+            0;
+
+        activeBank =
+            uniqueBanks[0];
     }
 
-    autoBankRotationTimer = setInterval(
-        async () => {
 
-            currentIndex =
-                (currentIndex + 1) %
-                uniqueBanks.length;
+    autoBankRotationTimer =
+        setInterval(
+            async () => {
 
-            activeBank =
-                uniqueBanks[currentIndex];
-
-            // Re-render tabs
-            renderBankTabs(banks);
-
-            // Update target boxes
-            renderMonthlyTargets(banks);
+                currentIndex =
+                    (
+                        currentIndex +
+                        1
+                    ) %
+                    uniqueBanks.length;
 
 
+                activeBank =
+                    uniqueBanks[
+                        currentIndex
+                    ];
 
 
+                renderBankTabs(
+                    banks
+                );
 
 
-            // Update dashboard
-            await renderDashboard(false);
+                renderMonthlyTargets(
+                    banks
+                );
 
-        },
-       3 * 60 * 1000 // Rotate every 3 minutes   // Rotate every 5 minutes
-    );
+
+                await renderDashboard(
+                    false
+                );
+
+            },
+
+            3 * 60 * 1000
+        );
 }
+
 
 /* =========================================================
    AUTH DISPLAY
@@ -224,6 +317,7 @@ function showUserInfo() {
         $$(
             "#currentUsername, .current-username"
         );
+
 
     usernameEls.forEach(
         el => {
@@ -238,6 +332,7 @@ function showUserInfo() {
         $$(
             "#currentRole, .current-role"
         );
+
 
     roleEls.forEach(
         el => {
@@ -260,13 +355,9 @@ function applyRoleAccess() {
     }
 
 
-    /*
-       LEADER = DASHBOARD ONLY
-    */
-
-
     const performanceTable =
         $("#dataTable");
+
 
     if (performanceTable) {
 
@@ -274,6 +365,7 @@ function applyRoleAccess() {
             performanceTable.closest(
                 "section"
             );
+
 
         if (section) {
 
@@ -286,12 +378,14 @@ function applyRoleAccess() {
     const bankTable =
         $("#bankTable");
 
+
     if (bankTable) {
 
         const section =
             bankTable.closest(
                 "section"
             );
+
 
         if (section) {
 
@@ -326,11 +420,6 @@ function applyRoleAccess() {
         }
     );
 
-
-    /*
-       Hide common admin tabs
-       while keeping Dashboard.
-    */
 
     const tabSelectors = [
 
@@ -376,10 +465,11 @@ function logout() {
 }
 
 
-$("#logoutBtn")?.addEventListener(
-    "click",
-    logout
-);
+$("#logoutBtn")
+    ?.addEventListener(
+        "click",
+        logout
+    );
 
 
 /* =========================================================
@@ -402,27 +492,28 @@ async function getAgents(
     const {
         data,
         error
-    } = await sb
-        .from("agents")
-        .select(`
-            id,
-            name,
-            bank,
-            talk_actual,
-            rpc_actual,
-            nptp_actual,
-            npayment_actual,
-            message,
-            accent,
-            photo_data,
-            photo_url
-        `)
-        .order(
-            "name",
-            {
-                ascending: true
-            }
-        );
+    } =
+        await sb
+            .from("agents")
+            .select(`
+                id,
+                name,
+                bank,
+                talk_actual,
+                rpc_actual,
+                nptp_actual,
+                npayment_actual,
+                message,
+                accent,
+                photo_data,
+                photo_url
+            `)
+            .order(
+                "name",
+                {
+                    ascending: true
+                }
+            );
 
 
     if (error) {
@@ -432,10 +523,12 @@ async function getAgents(
             error
         );
 
+
         toast(
             "Cannot load agents: " +
             error.message
         );
+
 
         return [];
     }
@@ -469,15 +562,16 @@ async function getBanks(
     const {
         data,
         error
-    } = await sb
-        .from("bank_targets")
-        .select("*")
-        .order(
-            "bank",
-            {
-                ascending: true
-            }
-        );
+    } =
+        await sb
+            .from("bank_targets")
+            .select("*")
+            .order(
+                "bank",
+                {
+                    ascending: true
+                }
+            );
 
 
     if (error) {
@@ -487,10 +581,12 @@ async function getBanks(
             error
         );
 
+
         toast(
             "Cannot load banks: " +
             error.message
         );
+
 
         return [];
     }
@@ -508,10 +604,13 @@ async function getBanks(
    NUMBER
 ========================================================= */
 
-function number(value) {
+function number(
+    value
+) {
 
     const n =
         Number(value);
+
 
     return Number.isFinite(n)
         ? n
@@ -530,6 +629,7 @@ function percentage(
 
     actual =
         number(actual);
+
 
     target =
         number(target);
@@ -629,12 +729,14 @@ async function compressImage(
                             const maxWidth =
                                 500;
 
+
                             const maxHeight =
                                 500;
 
 
                             let width =
                                 image.width;
+
 
                             let height =
                                 image.height;
@@ -653,6 +755,7 @@ async function compressImage(
                                             width
                                         )
                                     );
+
 
                                 width =
                                     maxWidth;
@@ -673,6 +776,7 @@ async function compressImage(
                                         )
                                     );
 
+
                                 height =
                                     maxHeight;
                             }
@@ -686,6 +790,7 @@ async function compressImage(
 
                             canvas.width =
                                 width;
+
 
                             canvas.height =
                                 height;
@@ -751,43 +856,6 @@ async function compressImage(
 
 
 /* =========================================================
-   SHOW PHOTO
-========================================================= */
-
-function showPhoto(
-    photo,
-    container
-) {
-
-    if (!container) {
-        return;
-    }
-
-
-    if (!photo) {
-
-        container.innerHTML = `
-            <div class="profile-photo-placeholder">
-                👤
-            </div>
-        `;
-
-        return;
-    }
-
-
-    container.innerHTML = `
-        <img
-            class="profile-photo-preview"
-            src="${photo}"
-            alt="Agent photo"
-            style="display:block;"
-        >
-    `;
-}
-
-
-/* =========================================================
    GET PHOTO
 ========================================================= */
 
@@ -849,6 +917,114 @@ function targetValue(
     return number(
         target[field]
     );
+}
+
+
+/* =========================================================
+   OVERALL TARGETS
+========================================================= */
+
+function overallTargets(
+    banks
+) {
+
+    return {
+
+        talk_target:
+            banks.reduce(
+                (
+                    total,
+                    bank
+                ) =>
+                    total +
+                    number(
+                        bank.talk_target
+                    ),
+                0
+            ),
+
+
+        rpc_target:
+            banks.reduce(
+                (
+                    total,
+                    bank
+                ) =>
+                    total +
+                    number(
+                        bank.rpc_target
+                    ),
+                0
+            ),
+
+
+        nptp_target:
+            banks.reduce(
+                (
+                    total,
+                    bank
+                ) =>
+                    total +
+                    number(
+                        bank.nptp_target
+                    ),
+                0
+            ),
+
+
+        npayment_target:
+            banks.reduce(
+                (
+                    total,
+                    bank
+                ) =>
+                    total +
+                    number(
+                        bank.npayment_target
+                    ),
+                0
+            )
+
+    };
+}
+
+
+/* =========================================================
+   AGENT TARGET
+========================================================= */
+
+function getAgentTarget(
+    agent,
+    banks
+) {
+
+    if (
+        String(
+            activeBank
+        ).toUpperCase() ===
+        "OVERALL"
+    ) {
+
+        return overallTargets(
+            banks
+        );
+    }
+
+
+    return getBankTarget(
+        banks,
+        agent.bank
+    ) || {
+
+        talk_target: 0,
+
+        rpc_target: 0,
+
+        nptp_target: 0,
+
+        npayment_target: 0
+
+    };
 }
 
 
@@ -920,126 +1096,30 @@ function agentAchievement(
 
 
 /* =========================================================
-   OVERALL TARGETS
+   AGENT KPI
 ========================================================= */
 
-function overallTargets(
-    banks
-) {
-
-    return {
-
-        talk_target:
-            banks.reduce(
-                (
-                    total,
-                    bank
-                ) =>
-                    total +
-                    number(
-                        bank.talk_target
-                    ),
-                0
-            ),
-
-        rpc_target:
-            banks.reduce(
-                (
-                    total,
-                    bank
-                ) =>
-                    total +
-                    number(
-                        bank.rpc_target
-                    ),
-                0
-            ),
-
-        nptp_target:
-            banks.reduce(
-                (
-                    total,
-                    bank
-                ) =>
-                    total +
-                    number(
-                        bank.nptp_target
-                    ),
-                0
-            ),
-
-        npayment_target:
-            banks.reduce(
-                (
-                    total,
-                    bank
-                ) =>
-                    total +
-                    number(
-                        bank.npayment_target
-                    ),
-                0
-            )
-    };
-}
-
-
-/* =========================================================
-   AGENT TARGET
-========================================================= */
-
-function getAgentTarget(
-    agent,
-    banks
-) {
-
-    if (
-        String(
-            activeBank
-        ).toUpperCase() ===
-        "OVERALL"
-    ) {
-
-        return overallTargets(
-            banks
-        );
-    }
-
-
-    return getBankTarget(
-        banks,
-        agent.bank
-    ) || {
-        talk_target: 0,
-        rpc_target: 0,
-        nptp_target: 0,
-        npayment_target: 0
-    };
-}
-
-
-/* =========================================================
-   METRIC CARD
-========================================================= */
-
-function metricCard(
+function agentMetric(
     label,
     actual,
     target,
-    colorClass
+    type
 ) {
 
     const actualValue =
         number(actual);
 
+
     const targetValueNumber =
         number(target);
+
 
     const percent =
         percentage(
             actualValue,
             targetValueNumber
         );
+
 
     const capped =
         Math.max(
@@ -1050,79 +1130,72 @@ function metricCard(
             )
         );
 
-    const variance =
-        targetValueNumber -
-        actualValue;
 
     return `
-        <div class="metric-card ${colorClass}">
 
-            <div class="metric-main">
+        <div
+            class="
+                agent-kpi
+                agent-kpi-${type}
+            "
+        >
+
+            <div
+                class="agent-kpi-ring"
+                style="
+                    --ring-progress:
+                    ${capped * 3.6}deg;
+                "
+            >
 
                 <div
-                    class="metric-circle"
-                       style="
-        --circle-deg:${capped * 3.6}deg;
-    "
-
+                    class="agent-kpi-ring-inner"
                 >
+
                     <span>
-                        ${Math.round(percent)}%
+                        ${Math.round(
+                            percent
+                        )}%
                     </span>
-                </div>
-
-                <div class="metric-values">
-
-                    <div class="metric-line">
-                        <span>TARGET</span>
-
-                        <strong>
-                            ${formatNumber(
-                                targetValueNumber
-                            )}
-                        </strong>
-                    </div>
-
-                    <div class="metric-line">
-                        <span>ACTUAL</span>
-
-                        <strong>
-                            ${formatNumber(
-                                actualValue
-                            )}
-                        </strong>
-                    </div>
-
-                    <div class="metric-line">
-                        <span>VARIANCE</span>
-
-                        <strong>
-                            ${formatNumber(
-                                variance
-                            )}
-                        </strong>
-                    </div>
 
                 </div>
 
             </div>
 
-            <div class="metric-ratio">
-                ${formatNumber(actualValue)}
+
+            <div
+                class="agent-kpi-label"
+            >
+                ${label}
+            </div>
+
+
+            <div
+                class="agent-kpi-value"
+            >
+                ${formatNumber(
+                    actualValue
+                )}
                 /
-                ${formatNumber(targetValueNumber)}
+                ${formatNumber(
+                    targetValueNumber
+                )}
             </div>
 
         </div>
+
     `;
 }
+
 
 /* =========================================================
    AGENT DASHBOARD CARD
 ========================================================= */
 
 function agentCard(
-    agent
+    agent,
+    target,
+    featured = false
 ) {
 
     const photo =
@@ -1130,8 +1203,14 @@ function agentCard(
 
 
     return `
+
         <div
-            class="agent-card"
+            class="
+                agent-dashboard-card
+                ${featured
+                    ? "featured-agent"
+                    : ""}
+            "
             style="
                 --agent-accent:
                 ${escapeHTML(
@@ -1141,52 +1220,127 @@ function agentCard(
             "
         >
 
-            ${
-                photo
-                ?
-                `
-                    <img
-                        class="agent-photo"
-                        src="${photo}"
-                        alt="${escapeHTML(
-                            agent.name
-                        )}"
+            <div
+                class="agent-card-top"
+            >
+
+                <div
+                    class="agent-profile-area"
+                >
+
+                    ${
+                        photo
+                        ?
+
+                        `
+
+                            <img
+                                class="
+                                    agent-dashboard-photo
+                                "
+                                src="${photo}"
+                                alt="${escapeHTML(
+                                    agent.name
+                                )}"
+                            >
+
+                        `
+
+                        :
+
+                        `
+
+                            <div
+                                class="
+                                    agent-dashboard-photo
+                                    agent-dashboard-placeholder
+                                "
+                            >
+                                👤
+                            </div>
+
+                        `
+                    }
+
+                </div>
+
+
+                <div
+                    class="agent-card-info"
+                >
+
+                    <div
+                        class="posted-label"
                     >
-                `
-                :
-                `
-                    <div class="
-                        agent-photo
-                        placeholder
-                    ">
-                        👤
+                        POSTED :
                     </div>
-                `
-            }
 
 
-            <span class="agent-name">
-                ${escapeHTML(
-                    agent.name
+                    <div
+                        class="
+                            agent-dashboard-name
+                        "
+                    >
+                        ${escapeHTML(
+                            agent.name
+                        )}
+                    </div>
+
+
+                    <div
+                        class="
+                            agent-dashboard-ptp
+                        "
+                    >
+                        PTP
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                    agent-dashboard-metrics
+                "
+            >
+
+                ${agentMetric(
+                    "TALK TIME",
+                    agent.talk_actual,
+                    target.talk_target,
+                    "talk"
                 )}
-            </span>
 
 
-            <span class="agent-bank">
-                ${escapeHTML(
-                    agent.bank
+                ${agentMetric(
+                    "RPC",
+                    agent.rpc_actual,
+                    target.rpc_target,
+                    "rpc"
                 )}
-            </span>
 
 
-            <p class="agent-message">
-                ${escapeHTML(
-                    agent.message ||
-                    "KEEP GOING! 💙"
+                ${agentMetric(
+                    "NPTP",
+                    agent.nptp_actual,
+                    target.nptp_target,
+                    "nptp"
                 )}
-            </p>
+
+
+                ${agentMetric(
+                    "NPAYMENT",
+                    agent.npayment_actual,
+                    target.npayment_target,
+                    "npayment"
+                )}
+
+            </div>
 
         </div>
+
     `;
 }
 
@@ -1211,17 +1365,18 @@ async function renderDashboard(
     const [
         agents,
         banks
-    ] = await Promise.all([
+    ] =
+        await Promise.all([
 
-        getAgents(
-            forceRefresh
-        ),
+            getAgents(
+                forceRefresh
+            ),
 
-        getBanks(
-            forceRefresh
-        )
+            getBanks(
+                forceRefresh
+            )
 
-    ]);
+        ]);
 
 
     let visibleAgents =
@@ -1229,8 +1384,7 @@ async function renderDashboard(
 
 
     /*
-       OVERALL
-       shows all agents
+       BANK FILTER
     */
 
     if (
@@ -1269,6 +1423,7 @@ async function renderDashboard(
                             banks
                         );
 
+
                     const targetB =
                         getAgentTarget(
                             b,
@@ -1290,23 +1445,41 @@ async function renderDashboard(
             );
 
 
-    if (!visibleAgents.length) {
+    /*
+       EMPTY
+    */
+
+    if (
+        !visibleAgents.length
+    ) {
 
         rows.innerHTML = `
-            <div class="empty-state">
+
+            <div
+                class="empty-state"
+            >
                 No agents found.
             </div>
+
         `;
 
         return;
     }
 
 
-    rows.innerHTML = "";
+    rows.innerHTML =
+        "";
 
+
+    /*
+       CREATE CARDS
+    */
 
     visibleAgents.forEach(
-        agent => {
+        (
+            agent,
+            index
+        ) => {
 
             const target =
                 getAgentTarget(
@@ -1315,54 +1488,24 @@ async function renderDashboard(
                 );
 
 
-            const row =
+            const wrapper =
                 document.createElement(
                     "div"
                 );
 
 
-            row.className =
-                "dashboard-row";
-
-
-            row.innerHTML = `
-
-                ${agentCard(agent)}
-
-                ${metricCard(
-                    "TALKTIME",
-                    agent.talk_actual,
-                    target.talk_target,
-                    "metric-talk"
-                )}
-
-                ${metricCard(
-                    "RPC",
-                    agent.rpc_actual,
-                    target.rpc_target,
-                    "metric-rpc"
-                )}
-
-                ${metricCard(
-                    "NPTP",
-                    agent.nptp_actual,
-                    target.nptp_target,
-                    "metric-nptp"
-                )}
-
-                ${metricCard(
-                    "PAYMENT",
-                    agent.npayment_actual,
-                    target.npayment_target,
-                    "metric-npay"
-                )}
-
-            `;
+            wrapper.innerHTML =
+                agentCard(
+                    agent,
+                    target,
+                    index === 0
+                );
 
 
             rows.appendChild(
-                row
+                wrapper.firstElementChild
             );
+
         }
     );
 }
@@ -1386,18 +1529,25 @@ function renderBankTabs(
 
 
     const names = [
+
         "OVERALL",
+
         ...banks.map(
             bank =>
                 String(
                     bank.bank
                 ).toUpperCase()
         )
+
     ];
 
 
     const uniqueNames =
-        [...new Set(names)];
+        [
+            ...new Set(
+                names
+            )
+        ];
 
 
     container.innerHTML =
@@ -1406,11 +1556,14 @@ function renderBankTabs(
 
                 <button
                     type="button"
-                    class="bank-tab ${
-                        activeBank === bank
-                            ? "active"
-                            : ""
-                    }"
+                    class="
+                        bank-tab
+                        ${
+                            activeBank === bank
+                                ? "active"
+                                : ""
+                        }
+                    "
                     data-bank="${escapeHTML(
                         bank
                     )}"
@@ -1451,15 +1604,23 @@ function renderBankTabs(
                                         tab ===
                                         button
                                     );
+
                                 }
                             );
+
+
+                        renderMonthlyTargets(
+                            banks
+                        );
 
 
                         await renderDashboard(
                             false
                         );
+
                     }
                 );
+
             }
         );
 }
@@ -1502,11 +1663,32 @@ function renderMonthlyTargets(
                 banks,
                 activeBank
             ) || {
+
                 talk_target: 0,
+
                 rpc_target: 0,
+
                 nptp_target: 0,
+
                 npayment_target: 0
+
             };
+    }
+
+
+    const label =
+        $("#targetLabel");
+
+
+    if (label) {
+
+        label.textContent =
+            activeBank ===
+            "OVERALL"
+
+                ? "(all agents)"
+
+                : `(${activeBank})`;
     }
 
 
@@ -1578,17 +1760,18 @@ async function renderBankArea(
     const [
         agents,
         banks
-    ] = await Promise.all([
+    ] =
+        await Promise.all([
 
-        getAgents(
-            forceRefresh
-        ),
+            getAgents(
+                forceRefresh
+            ),
 
-        getBanks(
-            forceRefresh
-        )
+            getBanks(
+                forceRefresh
+            )
 
-    ]);
+        ]);
 
 
     renderBankTabs(
@@ -1600,11 +1783,6 @@ async function renderBankArea(
         banks
     );
 
-
-    /*
-       Render dashboard using
-       already cached data.
-    */
 
     await renderDashboard(
         false
@@ -1618,13 +1796,18 @@ async function renderBankArea(
 
 async function refreshDashboard() {
 
-    agentsCache = null;
+    agentsCache =
+        null;
 
-    banksCache = null;
+
+    banksCache =
+        null;
+
 
     await renderBankArea(
         true
     );
+
 
     toast(
         "Dashboard refreshed."
@@ -1689,19 +1872,21 @@ async function addAgent(
 
         photo_url:
             null
+
     };
 
 
     const {
         data,
         error
-    } = await sb
-        .from("agents")
-        .insert(
-            newAgent
-        )
-        .select()
-        .single();
+    } =
+        await sb
+            .from("agents")
+            .insert(
+                newAgent
+            )
+            .select()
+            .single();
 
 
     if (error) {
@@ -1711,16 +1896,19 @@ async function addAgent(
             error
         );
 
+
         toast(
             "Cannot add agent: " +
             error.message
         );
 
+
         return null;
     }
 
 
-    agentsCache = null;
+    agentsCache =
+        null;
 
 
     toast(
@@ -1753,15 +1941,16 @@ async function updateAgent(
 
     const {
         error
-    } = await sb
-        .from("agents")
-        .update(
-            values
-        )
-        .eq(
-            "id",
-            id
-        );
+    } =
+        await sb
+            .from("agents")
+            .update(
+                values
+            )
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
@@ -1771,16 +1960,19 @@ async function updateAgent(
             error
         );
 
+
         toast(
             "Cannot save agent: " +
             error.message
         );
 
+
         return false;
     }
 
 
-    agentsCache = null;
+    agentsCache =
+        null;
 
 
     toast(
@@ -1823,13 +2015,14 @@ async function deleteAgent(
 
     const {
         error
-    } = await sb
-        .from("agents")
-        .delete()
-        .eq(
-            "id",
-            id
-        );
+    } =
+        await sb
+            .from("agents")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
@@ -1839,16 +2032,19 @@ async function deleteAgent(
             error
         );
 
+
         toast(
             "Cannot delete agent: " +
             error.message
         );
 
+
         return;
     }
 
 
-    agentsCache = null;
+    agentsCache =
+        null;
 
 
     toast(
@@ -1863,7 +2059,7 @@ async function deleteAgent(
 
 
 /* =========================================================
-   SAVE PHOTO DIRECTLY TO AGENTS
+   SAVE PHOTO
 ========================================================= */
 
 async function saveAgentPhoto(
@@ -1910,21 +2106,22 @@ async function saveAgentPhoto(
 
         const {
             error
-        } = await sb
-            .from("agents")
-            .update({
+        } =
+            await sb
+                .from("agents")
+                .update({
 
-                photo_data:
-                    photoData,
+                    photo_data:
+                        photoData,
 
-                photo_url:
-                    null
+                    photo_url:
+                        null
 
-            })
-            .eq(
-                "id",
-                agentId
-            );
+                })
+                .eq(
+                    "id",
+                    agentId
+                );
 
 
         if (error) {
@@ -1934,16 +2131,19 @@ async function saveAgentPhoto(
                 error
             );
 
+
             toast(
                 "Cannot save photo: " +
                 error.message
             );
 
+
             return;
         }
 
 
-        agentsCache = null;
+        agentsCache =
+            null;
 
 
         toast(
@@ -1961,6 +2161,7 @@ async function saveAgentPhoto(
             "PHOTO ERROR:",
             error
         );
+
 
         toast(
             "Cannot save photo: " +
@@ -1985,21 +2186,22 @@ async function removeAgentPhoto(
 
     const {
         error
-    } = await sb
-        .from("agents")
-        .update({
+    } =
+        await sb
+            .from("agents")
+            .update({
 
-            photo_data:
-                null,
+                photo_data:
+                    null,
 
-            photo_url:
-                null
+                photo_url:
+                    null
 
-        })
-        .eq(
-            "id",
-            agentId
-        );
+            })
+            .eq(
+                "id",
+                agentId
+            );
 
 
     if (error) {
@@ -2013,7 +2215,8 @@ async function removeAgentPhoto(
     }
 
 
-    agentsCache = null;
+    agentsCache =
+        null;
 
 
     toast(
@@ -2065,19 +2268,21 @@ async function addBank(
             number(
                 bankData.npayment_target
             )
+
     };
 
 
     const {
         data,
         error
-    } = await sb
-        .from("bank_targets")
-        .insert(
-            newBank
-        )
-        .select()
-        .single();
+    } =
+        await sb
+            .from("bank_targets")
+            .insert(
+                newBank
+            )
+            .select()
+            .single();
 
 
     if (error) {
@@ -2087,16 +2292,19 @@ async function addBank(
             error
         );
 
+
         toast(
             "Cannot add bank: " +
             error.message
         );
 
+
         return null;
     }
 
 
-    banksCache = null;
+    banksCache =
+        null;
 
 
     toast(
@@ -2129,15 +2337,16 @@ async function updateBank(
 
     const {
         error
-    } = await sb
-        .from("bank_targets")
-        .update(
-            values
-        )
-        .eq(
-            "id",
-            id
-        );
+    } =
+        await sb
+            .from("bank_targets")
+            .update(
+                values
+            )
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
@@ -2147,16 +2356,19 @@ async function updateBank(
             error
         );
 
+
         toast(
             "Cannot save bank: " +
             error.message
         );
 
+
         return false;
     }
 
 
-    banksCache = null;
+    banksCache =
+        null;
 
 
     toast(
@@ -2199,13 +2411,14 @@ async function deleteBank(
 
     const {
         error
-    } = await sb
-        .from("bank_targets")
-        .delete()
-        .eq(
-            "id",
-            id
-        );
+    } =
+        await sb
+            .from("bank_targets")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
@@ -2215,16 +2428,19 @@ async function deleteBank(
             error
         );
 
+
         toast(
             "Cannot delete bank: " +
             error.message
         );
 
+
         return;
     }
 
 
-    banksCache = null;
+    banksCache =
+        null;
 
 
     toast(
@@ -2238,9 +2454,6 @@ async function deleteBank(
 }
 
 
-/* =========================================================
-   PERFORMANCE TABLE
-========================================================= */
 /* =========================================================
    PERFORMANCE TABLE
 ========================================================= */
@@ -2264,13 +2477,14 @@ async function renderPerformanceTable() {
     const [
         agents,
         banks
-    ] = await Promise.all([
+    ] =
+        await Promise.all([
 
-        getAgents(),
+            getAgents(),
 
-        getBanks()
+            getBanks()
 
-    ]);
+        ]);
 
 
     let tbody =
@@ -2292,16 +2506,13 @@ async function renderPerformanceTable() {
     }
 
 
-    /* =====================================================
-       SEARCH FILTER
-    ===================================================== */
-
     const search =
         String(
-            performanceSearch || ""
+            performanceSearch ||
+            ""
         )
-        .trim()
-        .toLowerCase();
+            .trim()
+            .toLowerCase();
 
 
     let filteredAgents =
@@ -2316,44 +2527,53 @@ async function renderPerformanceTable() {
 
                     const name =
                         String(
-                            agent.name || ""
-                        )
-                        .toLowerCase();
+                            agent.name ||
+                            ""
+                        ).toLowerCase();
 
 
                     const bank =
                         String(
-                            agent.bank || ""
-                        )
-                        .toLowerCase();
+                            agent.bank ||
+                            ""
+                        ).toLowerCase();
 
 
                     const profile =
                         String(
-                            agent.profile || ""
-                        )
-                        .toLowerCase();
+                            agent.profile ||
+                            ""
+                        ).toLowerCase();
 
 
                     return (
-                        name.includes(search) ||
-                        bank.includes(search) ||
-                        profile.includes(search)
-                    );
 
+                        name.includes(
+                            search
+                        ) ||
+
+                        bank.includes(
+                            search
+                        ) ||
+
+                        profile.includes(
+                            search
+                        )
+
+                    );
                 }
             );
     }
 
 
-    /* =====================================================
-       NO RESULTS
-    ===================================================== */
-
-    if (!filteredAgents.length) {
+    if (
+        !filteredAgents.length
+    ) {
 
         tbody.innerHTML = `
+
             <tr>
+
                 <td
                     colspan="20"
                     style="
@@ -2364,16 +2584,14 @@ async function renderPerformanceTable() {
                 >
                     No agents found.
                 </td>
+
             </tr>
+
         `;
 
         return;
     }
 
-
-    /* =====================================================
-       RENDER ROWS
-    ===================================================== */
 
     tbody.innerHTML =
         filteredAgents.map(
@@ -2426,21 +2644,25 @@ async function renderPerformanceTable() {
                                 )}
                             </option>
 
-                        `
+                            `
                         ).join("")}
 
                     </select>
 
                 </td>
 
-    <td
+
+                <td
                     class="profile-photo-cell"
                 >
 
                     ${
                         getPhoto(agent)
+
                         ?
+
                         `
+
                         <img
                             class="
                                 profile-photo-preview
@@ -2453,9 +2675,13 @@ async function renderPerformanceTable() {
                                 display:block;
                             "
                         >
+
                         `
+
                         :
+
                         `
+
                         <div
                             class="
                                 profile-photo-placeholder
@@ -2463,6 +2689,7 @@ async function renderPerformanceTable() {
                         >
                             👤
                         </div>
+
                         `
                     }
 
@@ -2494,6 +2721,7 @@ async function renderPerformanceTable() {
                     </button>
 
                 </td>
+
 
                 <td>
 
@@ -2574,8 +2802,6 @@ async function renderPerformanceTable() {
                 </td>
 
 
-            
-
                 <td>
 
                     <button
@@ -2600,10 +2826,6 @@ async function renderPerformanceTable() {
         `
         ).join("");
 
-
-    /* =====================================================
-       ROW EVENTS
-    ===================================================== */
 
     tbody
         .querySelectorAll(
@@ -2632,9 +2854,12 @@ async function renderPerformanceTable() {
                     "click",
                     () => {
 
-                        if (!adminOnly()) {
+                        if (
+                            !adminOnly()
+                        ) {
                             return;
                         }
+
 
                         photoFile?.click();
 
@@ -2684,7 +2909,9 @@ async function renderPerformanceTable() {
                     "click",
                     async () => {
 
-                        if (!adminOnly()) {
+                        if (
+                            !adminOnly()
+                        ) {
                             return;
                         }
 
@@ -2768,6 +2995,7 @@ async function renderPerformanceTable() {
                             id
                         );
 
+
                         await renderPerformanceTable();
 
                     }
@@ -2776,6 +3004,7 @@ async function renderPerformanceTable() {
             }
         );
 }
+
 
 /* =========================================================
    BANK TABLE
@@ -2906,7 +3135,10 @@ async function renderBankTable() {
 
                     <button
                         type="button"
-                        class="delete-btn delete-bank"
+                        class="
+                            delete-btn
+                            delete-bank
+                        "
                     >
                         Delete
                     </button>
@@ -2936,7 +3168,9 @@ async function renderBankTable() {
                     "click",
                     async () => {
 
-                        if (!adminOnly()) {
+                        if (
+                            !adminOnly()
+                        ) {
                             return;
                         }
 
@@ -2950,12 +3184,14 @@ async function renderBankTable() {
                                         ".bank-name"
                                     ).value.trim(),
 
+
                                 talk_target:
                                     number(
                                         row.querySelector(
                                             ".talkTarget"
                                         ).value
                                     ),
+
 
                                 rpc_target:
                                     number(
@@ -2964,6 +3200,7 @@ async function renderBankTable() {
                                         ).value
                                     ),
 
+
                                 nptp_target:
                                     number(
                                         row.querySelector(
@@ -2971,17 +3208,20 @@ async function renderBankTable() {
                                         ).value
                                     ),
 
+
                                 npayment_target:
                                     number(
                                         row.querySelector(
                                             ".paymentTarget"
                                         ).value
                                     )
+
                             }
                         );
 
 
                         await renderBankTable();
+
                     }
                 );
 
@@ -2996,167 +3236,192 @@ async function renderBankTable() {
                             id
                         );
 
+
                         await renderBankTable();
+
                     }
                 );
+
             }
         );
 }
-/* =========================================================
-   PERFORMANCE TABLE SEARCH
-========================================================= */
 
-$("#agentSearch")?.addEventListener(
-    "input",
-    event => {
-
-        performanceSearch =
-            event.target.value;
-
-        renderPerformanceTable();
-
-    }
-);
 
 /* =========================================================
-   ADD BUTTON
+   PERFORMANCE SEARCH
 ========================================================= */
 
-$("#addBtn")?.addEventListener(
-    "click",
-    async event => {
+$("#agentSearch")
+    ?.addEventListener(
+        "input",
+        event => {
 
-        event.preventDefault();
+            performanceSearch =
+                event.target.value;
 
 
-        if (!adminOnly()) {
-            return;
+            renderPerformanceTable();
+
         }
+    );
 
 
-        await addAgent({
+/* =========================================================
+   ADD AGENT BUTTON
+========================================================= */
 
-            name:
-                "New Agent",
+$("#addBtn")
+    ?.addEventListener(
+        "click",
+        async event => {
 
-            bank:
-                "ENBD",
-
-            talk_actual:
-                0,
-
-            rpc_actual:
-                0,
-
-            nptp_actual:
-                0,
-
-            npayment_actual:
-                0,
-
-            message:
-                "KEEP GOING! 💙",
-
-            accent:
-                "#1478c9"
-
-        });
+            event.preventDefault();
 
 
-        await renderPerformanceTable();
-    }
-);
+            if (
+                !adminOnly()
+            ) {
+                return;
+            }
+
+
+            await addAgent({
+
+                name:
+                    "New Agent",
+
+                bank:
+                    "ENBD",
+
+                talk_actual:
+                    0,
+
+                rpc_actual:
+                    0,
+
+                nptp_actual:
+                    0,
+
+                npayment_actual:
+                    0,
+
+                message:
+                    "KEEP GOING! 💙",
+
+                accent:
+                    "#1478c9"
+
+            });
+
+
+            await renderPerformanceTable();
+
+        }
+    );
 
 
 /* =========================================================
    ADD BANK BUTTON
 ========================================================= */
 
-$("#addBankBtn")?.addEventListener(
-    "click",
-    async event => {
+$("#addBankBtn")
+    ?.addEventListener(
+        "click",
+        async event => {
 
-        event.preventDefault();
+            event.preventDefault();
 
 
-        if (!adminOnly()) {
-            return;
+            if (
+                !adminOnly()
+            ) {
+                return;
+            }
+
+
+            await addBank({
+
+                bank:
+                    "NEW BANK",
+
+                talk_target:
+                    0,
+
+                rpc_target:
+                    0,
+
+                nptp_target:
+                    0,
+
+                npayment_target:
+                    0
+
+            });
+
+
+            await renderBankTable();
+
         }
-
-
-        await addBank({
-
-            bank:
-                "NEW BANK",
-
-            talk_target:
-                0,
-
-            rpc_target:
-                0,
-
-            nptp_target:
-                0,
-
-            npayment_target:
-                0
-
-        });
-
-
-        await renderBankTable();
-    }
-);
+    );
 
 
 /* =========================================================
    REFRESH BUTTON
 ========================================================= */
 
-$("#refreshBtn")?.addEventListener(
-    "click",
-    async event => {
+$("#refreshBtn")
+    ?.addEventListener(
+        "click",
+        async event => {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        await refreshDashboard();
 
-        if (isAdmin) {
+            await refreshDashboard();
 
-            await renderPerformanceTable();
+
+            if (isAdmin) {
+
+                await renderPerformanceTable();
+
+            }
 
         }
-    }
-);
+    );
 
 
 /* =========================================================
    REFRESH BANK BUTTON
 ========================================================= */
 
-$("#refreshBankBtn")?.addEventListener(
-    "click",
-    async event => {
+$("#refreshBankBtn")
+    ?.addEventListener(
+        "click",
+        async event => {
 
-        event.preventDefault();
+            event.preventDefault();
 
 
-        if (!adminOnly()) {
-            return;
+            if (
+                !adminOnly()
+            ) {
+                return;
+            }
+
+
+            banksCache =
+                null;
+
+
+            await renderBankArea(
+                true
+            );
+
+
+            await renderBankTable();
+
         }
-
-
-        banksCache = null;
-
-
-        await renderBankArea(
-            true
-        );
-
-
-        await renderBankTable();
-    }
-);
+    );
 
 
 /* =========================================================
@@ -3169,45 +3434,55 @@ async function startApp() {
 
         showUserInfo();
 
+
         applyRoleAccess();
 
 
         const [
             agents,
             banks
-        ] = await Promise.all([
+        ] =
+            await Promise.all([
 
-            getAgents(),
+                getAgents(),
 
-            getBanks()
+                getBanks()
 
-        ]);
+            ]);
 
 
         renderBankTabs(
-    banks
-);
+            banks
+        );
 
-renderMonthlyTargets(
-    banks
-);
 
-await renderDashboard(
-    false
-);
+        renderMonthlyTargets(
+            banks
+        );
 
-// Leader bank rotation every 10 minutes
-startAutoBankRotation(
-    banks
-);
+
+        await renderDashboard(
+            false
+        );
+
+
+        /*
+           LEADER:
+           rotate every 3 minutes
+        */
+
+        startAutoBankRotation(
+            banks
+        );
+
 
         if (isAdmin) {
 
             await renderPerformanceTable();
 
             await renderBankTable();
-        }
 
+        }
 
     } catch (error) {
 
@@ -3216,9 +3491,11 @@ startAutoBankRotation(
             error
         );
 
+
         toast(
             "Unable to load dashboard."
         );
+
     }
 }
 
